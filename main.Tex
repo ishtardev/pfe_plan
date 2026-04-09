@@ -1,0 +1,279 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{xcolor}
+
+% --- Professional Color Palette ---
+\definecolor{primary}{RGB}{33, 150, 243}   % A clean, modern Blue
+\definecolor{secondary}{RGB}{75, 75, 75}  % A deep Charcoal for contrast
+\definecolor{accent}{RGB}{0, 150, 136}    % A Teal accent for icons/bullets
+\geometry{margin=2.2cm, top=2cm, bottom=2cm}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+% ---- HEADER ----
+\begin{center}
+{\small Université Abdelmalek Essaâdi - FSJES Tétouan \quad|\quad Master FADS \quad|\quad 2025--2026}\\[6pt]
+\vspace{6pt}
+{\large \textbf{L'apport de l'intelligence artificielle dans la prévision budgétaire :}}\\[0.5pt]
+{\large \textbf{cas du ministère de la Justice du Maroc}}\\[6pt]
+\rule{\textwidth}{0.4pt}
+\end{center}
+
+\vspace{2pt}
+{\small\textbf{Problématique :} \textit{Dans quelle mesure les approches d'intelligence artificielle peuvent-elles améliorer la précision de la prévision budgétaire au sein du ministère de la Justice du Maroc, par rapport aux méthodes traditionnelles de programmation ?}}
+
+\vspace{6pt}
+\rule{\textwidth}{0.4pt}
+\vspace{4pt}
+
+% ---- INTRODUCTION ----
+{\large \textbf{INTRODUCTION GÉNÉRALE}}
+
+\vspace{6pt}
+
+\begin{itemize}[label={}, leftmargin=2cm, itemsep=6pt]
+    \item \textbf{Contexte :} Réforme des finances publiques (LOF 130-13)
+    \item \textbf{Problématique :} Amélioration de la précision budgétaire
+    \item \textbf{Hypothèses :} IA vs Méthodes traditionnelles
+    \item \textbf{Méthodologie :} Approches économétriques, ML et DL
+    \item \textbf{Intérêt :} Apports théoriques et opérationnels
+    \item \textbf{Structure :} Organisation du manuscrit
+\end{itemize}
+
+\vspace{16pt}
+
+% ---- PARTIE I ----
+\colorbox{black!8}{\parbox{\dimexpr\textwidth-2\fboxsep}{%
+\centering\vspace{5pt}{\large \textbf{Partie I : Cadre théorique et institutionnel}}\vspace{5pt}}}
+
+\vspace{14pt}
+
+% ---- CHAPITRE 1 ----
+{\large \textbf{Chapitre 1 : Prévision budgétaire publique et intelligence artificielle}}
+
+\vspace{8pt}
+
+\textbf{1.1 \quad Le cadre budgétaire marocain}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 1.1.1 \quad La LOF 130-13 : principes et apports
+    \item 1.1.2 \quad La budgétisation par programmes et la gestion budgétaire orientée résultats (GBO)
+_    \item 1.1.3 \quad Les autorisations budgétaires : AE et CP
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{1.2 \quad La programmation budgétaire triennale}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 1.2.1 \quad Mécanismes et horizon glissant (N, N+1, N+2)
+    \item 1.2.2 \quad Les écarts prévision-exécution : typologie et causes
+    \item 1.2.3 \quad Limites des méthodes classiques de prévision budgétaire
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{1.3 \quad L'intelligence artificielle au service de la prévision financière}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 1.3.1 \quad Définitions : IA, Machine Learning, Deep Learning
+    \item 1.3.2 \quad État de l'art : IA et prévision budgétaire dans le secteur public
+    \item 1.3.3 \quad Approches économétriques vs ML vs DL : synthèse comparative
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{1.4 \quad Travaux connexes et positionnement de l'étude}
+
+\vspace{18pt}
+
+% ---- CHAPITRE 2 ----
+{\large \textbf{Chapitre 2 : Contexte institutionnel : Le ministère de la Justice}}
+
+\vspace{8pt}
+
+\textbf{2.1 \quad Présentation du ministère de la Justice}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 2.1.1 \quad Missions et organisation générale
+    \item 2.1.2 \quad La Direction du Budget : rôle et positionnement dans la chaîne de dépense
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{2.2 \quad Le processus budgétaire au sein du ministère}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 2.2.1 \quad Cycle de préparation et d'exécution
+    \item 2.2.2 \quad Outils et pratiques actuels
+    \item 2.2.3 \quad Diagnostic de l'existant : forces et limites
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{2.3 \quad L'IA dans les systèmes judiciaires : panorama international}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 2.3.1 \quad France (DataJust, Predictice)
+    \item 2.3.2 \quad Canada et États-Unis
+    \item 2.3.3 \quad Enseignements pour le contexte marocain
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{2.4 \quad Contexte du stage et cadrage du projet}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 2.4.1 \quad Enjeux identifiés
+    \item 2.4.2 \quad Objectifs du projet
+\end{itemize}
+
+\vspace{18pt}
+
+% ---- PARTIE II ----
+\colorbox{black!8}{\parbox{\dimexpr\textwidth-2\fboxsep}{%
+\centering\vspace{5pt}{\large \textbf{Partie II : Modélisation et analyse empirique}}\vspace{5pt}}}
+
+\vspace{14pt}
+
+% ---- CHAPITRE 3 ----
+{\large \textbf{Chapitre 3 : Données et méthodologie}}
+
+\vspace{8pt}
+
+\textbf{3.1 \quad Sources de données et stratégie de collecte}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 3.1.1 \quad Les morasses budgétaires : structure et contenu
+    \item 3.1.2 \quad Variables budgétaires extraites (crédits ouverts, engagés, ordonnancés, taux de consommation, restes à payer)
+    \item 3.1.3 \quad Variables exogènes (HCP : inflation, PIB, démographie)
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{3.2 \quad Analyse exploratoire des données (EDA)}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 3.2.1 \quad Statistiques descriptives
+    \item 3.2.2 \quad Visualisations et tendances
+    \item 3.2.3 \quad Détection d'anomalies et saisonnalités
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{3.3 \quad Préparation et feature engineering}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 3.3.1 \quad Nettoyage et traitement des valeurs manquantes
+    \item 3.3.2 \quad Transformation et création de variables
+    \item 3.3.3 \quad Stationnarité et tests statistiques
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{3.4 \quad Protocole expérimental}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 3.4.1 \quad Découpage train / test
+    \item 3.4.2 \quad Validation croisée temporelle
+    \item 3.4.3 \quad Métriques d'évaluation (MAE, RMSE, MAPE, R²)
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{3.5 \quad Environnement technique}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item Python, bibliothèques utilisées, architecture du code
+\end{itemize}
+
+\vspace{18pt}
+
+% ---- CHAPITRE 4 ----
+{\large \textbf{Chapitre 4 : Modélisation comparative}}
+     (Le choix des modèles sera affiné en fonction des données disponibles)
+\vspace{8pt}
+
+\textbf{4.1 \quad Approche économétrique}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 4.1.1 \quad ARIMA / SARIMA
+    \item 4.1.2 \quad VAR (Vector Autoregression)
+    \item 4.1.3 \quad Résultats et interprétation
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{4.2 \quad Approche Machine Learning}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 4.2.1 \quad Random Forest
+    \item 4.2.2 \quad XGBoost
+    \item 4.2.3 \quad Résultats et interprétation
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{4.3 \quad Approche Deep Learning}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 4.3.1 \quad LSTM / GRU
+    \item 4.3.2 \quad Architecture et hyperparamètres
+    \item 4.3.3 \quad Résultats et interprétation
+\end{itemize}
+
+\vspace{18pt}
+
+% ---- CHAPITRE 5 ----
+{\large \textbf{Chapitre 5 : Résultats, discussion et recommandations}}
+
+\vspace{8pt}
+
+\textbf{5.1 \quad Comparaison des performances des modèles}
+
+\vspace{6pt}
+
+\textbf{5.2 \quad Analyse de scénarios budgétaires}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 5.2.1 \quad Scénario optimiste / central / pessimiste
+    \item 5.2.2 \quad Quantification de l'incertitude (intervalles de confiance)
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{5.3 \quad Interprétabilité des modèles}
+\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
+    \item 5.3.1 \quad Feature importance
+    \item 5.3.2 \quad SHAP values
+\end{itemize}
+
+\vspace{6pt}
+
+\textbf{5.4 \quad Limites de l'étude}
+
+\vspace{6pt}
+
+\textbf{5.5 \quad Recommandations pour le ministère}
+
+\vspace{20pt}
+\vspace{10pt}
+
+% ---- CONCLUSION ----
+{\large \textbf{CONCLUSION GÉNÉRALE}}
+
+\vspace{6pt}
+
+\begin{itemize}[label={}, leftmargin=2cm, itemsep=6pt]
+    \item Synthèse des résultats
+    \item Réponse à la problématique
+    \item Apports du mémoire
+    \item Perspectives futures
+\end{itemize}
+
+\vspace{14pt}
+
+% ---- COMPLÉMENTS ----
+{\large \textbf{Éléments complémentaires}}
+
+\vspace{6pt}
+
+\begin{itemize}[label={}, leftmargin=2cm, itemsep=6pt]
+    \item Bibliographie
+    \item Liste des figures
+    \item Liste des tableaux
+    \item Annexes
+\end{itemize}
+
+\end{document}
