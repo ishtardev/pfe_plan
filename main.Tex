@@ -5,14 +5,35 @@
 \usepackage{geometry}
 \usepackage{enumitem}
 \usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{csquotes}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{parskip}
 
 % --- Professional Color Palette ---
 \definecolor{primary}{RGB}{33, 150, 243}
 \definecolor{secondary}{RGB}{75, 75, 75}
 \definecolor{accent}{RGB}{0, 150, 136}
-\geometry{margin=2.2cm, top=2cm, bottom=2cm}
-\pagestyle{empty}
+\geometry{margin=2.5cm, top=2.5cm, bottom=2.5cm}
 \setlength{\parindent}{0pt}
+\onehalfspacing
+
+% --- Section title formatting ---
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{}{0em}{}
+
+% --- Hyperref setup ---
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+
+% --- Bibliography style ---
+\bibliographystyle{apalike}
 
 \begin{document}
 
@@ -59,7 +80,7 @@
 
 \vspace{8pt}
 
-\textbf{1.1 \quad Le cadre budgétaire marocain}
+\textbf{1.1 \quad Le cadre budgétaire marocain : architecture et instruments}
 \begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
     \item 1.1.1 \quad La LOF 130-13 : principes et apports
     \item 1.1.2 \quad Architecture budgétaire : missions, programmes et actions - budgétisation par programmes et GBO
@@ -68,9 +89,9 @@
 
 \vspace{6pt}
 
-\textbf{1.2 \quad La programmation budgétaire triennale}
+\textbf{1.2 \quad La programmation pluriannuelle : planification, écarts et limites}
 \begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 1.2.1 \quad Mécanismes et horizon glissant (N, N+1, N+2)
+    \item 1.2.1 \quad Fonctionnement et horizon glissant (N, N+1, N+2)
     \item 1.2.2 \quad Les écarts prévision-exécution : typologie et causes
     \item 1.2.3 \quad Vers de nouvelles approches : justification du recours à l'IA
 \end{itemize}
@@ -282,5 +303,11 @@
     \item Liste des tableaux
     \item Annexes
 \end{itemize}
+
+\newpage
+\include{chapters/chapter1}
+
+\newpage
+\bibliography{references}
 
 \end{document}
