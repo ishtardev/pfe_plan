@@ -1,0 +1,489 @@
+\section*{Chapitre 3 : Données et méthodologie}
+\addcontentsline{toc}{section}{Chapitre 3 : Données et méthodologie}
+
+\bigskip
+
+Ce chapitre présente la démarche méthodologique qui structure l'ensemble de notre étude empirique. Il répond à la question du \textit{comment} : comment avons-nous constitué notre base de données, comment avons-nous préparé et transformé ces données, et selon quel protocole avons-nous construit, entraîné et évalué les modèles de prévision ? La transparence méthodologique est ici un impératif essentiel : une recherche en sciences de gestion appliquée n'a de valeur opérationnelle que si ses résultats sont reproductibles et ses choix explicitement justifiés.
+
+%================================================================
+\subsection*{3.1 \quad Sources de données et stratégie de collecte}
+\addcontentsline{toc}{subsection}{3.1 Sources de données et stratégie de collecte}
+%================================================================
+
+%----------------------------------------------------------------
+\subsubsection*{3.1.1 \quad Les morasses budgétaires : nature et structure}
+%----------------------------------------------------------------
+
+La morasse budgétaire --- terme issu de la pratique administrative française et inscrit dans l'usage courant des services financiers marocains --- désigne un état d'exécution budgétaire mensuel détaillé, produit par extraction du système GID à la fin de chaque période. Elle constitue le document de référence pour le suivi opérationnel de la consommation des crédits au sein des ministères, et représente la source de données primaire de notre étude.
+
+\paragraph{Nature du document.}
+
+La morasse est un état tabulaire structuré qui présente, pour chaque ligne budgétaire (programme, sous-programme, article de nature de dépense, unité gestionnaire), les montants cumulés des différentes phases du cycle de la dépense depuis l'ouverture de l'exercice. Sa périodicité mensuelle lui confère une granularité temporelle suffisamment fine pour la construction de séries temporelles à usage de modélisation, tout en restant alignée sur le rythme institutionnel du reporting budgétaire.
+
+Chaque morasse mensuelle fournit une photographie cumulative de l'exécution à date : en soustrayant deux morasses consécutives, on reconstitue les flux mensuels réels de dépenses par ligne et par programme. Cette opération de différentiation constitue l'une des premières étapes de la chaîne de traitement des données.
+
+\paragraph{Structure et variables disponibles.}
+
+Pour chaque ligne budgétaire, la morasse renseigne les informations suivantes, exprimées en milliers de dirhams :
+
+\begin{itemize}
+    \item \textbf{Crédits ouverts (CO)} : montant total des crédits autorisés par la Loi de Finances pour la ligne concernée, y compris les éventuels virements, reports et ajustements en cours d'exercice.
+    \item \textbf{Crédits délégués (CD)} : portion des crédits ouverts effectivement délégués aux ordonnateurs secondaires déconcentrés.
+    \item \textbf{Engagements (ENG)} : montant cumulé des dépenses juridiquement engagées (marchés signés, décisions de recrutement, bons de commande), dans la limite des crédits ouverts.
+    \item \textbf{Liquidations (LIQ)} : montant cumulé des dépenses dont le service fait a été constaté et le montant définitif arrêté par le service gestionnaire.
+    \item \textbf{Ordonnancements (ORD)} : montant cumulé des ordres de payer émis par l'ordonnateur au comptable public.
+    \item \textbf{Paiements (PAY)} : lorsque disponibles, montant cumulé des règlements effectivement opérés par le comptable public.
+\end{itemize}
+
+De ces variables brutes sont dérivés plusieurs indicateurs synthétiques de pilotage budgétaire :
+
+\begin{align}
+    \text{Taux d'engagement}       &= \frac{\text{ENG}}{\text{CO}} \times 100 \label{eq:taux_eng} \\[6pt]
+    \text{Taux d'ordonnancement}   &= \frac{\text{ORD}}{\text{CO}} \times 100 \label{eq:taux_ord} \\[6pt]
+    \text{Taux de consommation}    &= \frac{\text{PAY}}{\text{CO}} \times 100 \label{eq:taux_conso} \\[6pt]
+    \text{Restes \`a payer (RAP)} &= \text{ENG} - \text{PAY} \label{eq:rap}
+\end{align}
+
+Ces indicateurs constituent à la fois des variables d'état de l'exécution budgétaire et des features potentiellement pertinentes pour nos modèles de prévision.
+
+\paragraph{Période d'étude et périmètre des données.}
+
+Les morasses utilisées dans cette étude couvrent les exercices budgétaires post-LOF, soit depuis l'exercice 2016 --- premier exercice d'application de la LOF 130-13 --- jusqu'à l'exercice le plus récent disponible au moment de l'extraction des données lors du stage. Ce corpus offre un historique mensuel homogène d'un point de vue institutionnel (même structure budgétaire par programmes sur toute la période), ce qui est une condition importante pour la comparabilité longitudinale des séries.
+
+Il convient de noter que les exercices 2020 et 2021, marqués par les effets de la pandémie de COVID-19 et les mesures d'état d'urgence sanitaire, présentent des profils d'exécution atypiques. Ces observations seront traitées avec le soin méthodologique approprié lors de la phase d'analyse exploratoire et de préparation des données (section 3.3).
+
+%----------------------------------------------------------------
+\subsubsection*{3.1.2 \quad Variables budgétaires retenues}
+%----------------------------------------------------------------
+
+La sélection des variables budgétaires à retenir dans nos modèles résulte d'une démarche conjointe d'exploration des données et de consultation des praticiens de la DAFB. Elle vise à trouver un équilibre entre exhaustivité analytique et parcimonie modélisatrice \citep{Hyndman2021}.
+
+\paragraph{Variable cible.}
+
+La variable cible principale de nos modèles de prévision est le \textbf{montant mensuel des ordonnancements (ORD)} par programme, exprimé en milliers de dirhams courants. Ce choix est motivé par plusieurs considérations :
+
+\begin{itemize}
+    \item Les ordonnancements représentent le stade de la dépense le plus directement contrôlable par les gestionnaires ordonnateurs et le plus pertinent pour le pilotage budgétaire infra-annuel.
+    \item Contrairement aux paiements, qui dépendent également de la disponibilité et des contraintes du comptable public, les ordonnancements reflètent la consommation effective des crédits du côté ordonnateur.
+    \item Les données d'ordonnancement sont systématiquement et complètement disponibles dans les morasses GID, sans les problèmes d'exhaustivité qui peuvent affecter les données de paiement, notamment en fin d'exercice.
+\end{itemize}
+
+À titre de robustesse et pour valider la généralité des conclusions, nous conduisons également des estimations parallèles sur les \textbf{engagements mensuels (ENG)}, qui constituent la variable la plus en amont du cycle de dépense et donc la plus utile pour des prévisions à horizon N+1 et N+2 dans le cadre de la PBT.
+
+\paragraph{Variables explicatives budgétaires endogènes.}
+
+Outre les valeurs retardées de la variable cible (composante autorégressive), nous mobilisons les variables budgétaires suivantes comme features :
+
+\begin{itemize}
+    \item \textbf{Crédits ouverts (CO)} : ils définissent le plafond légal de la dépense possible et constituent une contrainte institutionnelle forte sur toute la dynamique d'exécution.
+    \item \textbf{Taux d'exécution historiques} : les taux d'engagement et d'ordonnancement des mois précédents capturent la dynamique d'exécution et les effets d'inertie administrative.
+    \item \textbf{Restes à payer en début de période} : ils reflètent les engagements pluriannuels accumulés et exercent une pression significative sur les crédits de paiement disponibles.
+    \item \textbf{Profil saisonnier historique} : la part moyenne de chaque mois dans le total annuel, calculée sur l'historique disponible, constitue un signal puissant de la saisonnalité structurelle de la dépense.
+\end{itemize}
+
+%----------------------------------------------------------------
+\subsubsection*{3.1.3 \quad Variables exogènes}
+%----------------------------------------------------------------
+
+Pour respecter la troisième hypothèse de recherche (H3 : l'intégration de variables exogènes améliore les performances des modèles), nous enrichissons le jeu de données avec des variables macroéconomiques et sectorielles tirées de sources officielles.
+
+\paragraph{Variables macroéconomiques.}
+
+Les variables macroéconomiques retenues couvrent les principaux déterminants exogènes de la dépense publique sectorielle \citep{Leal2008} :
+
+\begin{itemize}
+    \item \textbf{Taux d'inflation mensuel} (source : Haut-Commissariat au Plan -- HCP) : affecte le pouvoir d'achat réel des dotations budgétaires et les coûts de fonctionnement (alimentation pénitentiaire, services, fournitures).
+    \item \textbf{Taux de croissance du PIB trimestriel} (source : HCP/comptes nationaux) : indicateur de l'environnement économique global, utilisé comme variable de contexte macrofiscal.
+    \item \textbf{Indice des prix à la consommation (IPC)} (source : HCP) : utilisé comme déflateur pour exprimer certaines séries en termes réels lorsque nécessaire.
+    \item \textbf{Taux directeur de Bank Al-Maghrib} : signal des conditions de financement de l'État, pertinent pour les dépenses d'investissement et les frais financiers.
+\end{itemize}
+
+\paragraph{Variables sectorielles spécifiques à la Justice.}
+
+Ces variables capturent les déterminants propres à l'activité judiciaire et pénitentiaire du ministère, qui ne peuvent être appréhendés par les seules variables macroéconomiques \citep{MJMaroc2023} :
+
+\begin{itemize}
+    \item \textbf{Population carcérale mensuelle} : variable clé pour les dépenses d'alimentation, de santé et de sécurité relevant de la DGAPR, qui représentent une part significative du budget total du programme 3.
+    \item \textbf{Nombre d'affaires judiciaires traitées} : indicateur de la charge d'activité des juridictions, utile pour prévoir les besoins en ressources des tribunaux (fonctionnement, actes de procédure, frais de justice).
+    \item \textbf{Effectifs du personnel} (sources : DRH ministerielle) : déterminant direct de la masse salariale, variable la plus prévisible mais aussi la plus lourde du budget.
+    \item \textbf{Nombre de marchés publics passés et leur montant} : indicateur d'activité d'engagement en amont des dépenses d'investissement.
+\end{itemize}
+
+\paragraph{Variables calendaires et saisonnières.}
+
+L'encodage de la temporalité dans nos modèles passe par des variables catégorielles et cycliques :
+
+\begin{itemize}
+    \item Mois de l'année (encodé en variables cycliques $\sin(2\pi m/12)$ et $\cos(2\pi m/12)$ pour les modèles DL sensibles à la circularité, et en indicatrices pour les modèles ML)
+    \item Numéro du trimestre (T1 à T4) et indicateur de fin de trimestre
+    \item Indicateurs de fin d'exercice budgétaire (mois 11 et 12)
+    \item Nombre de jours ouvrés dans le mois (variable de capacité opérationnelle)
+    \item Variable binaire de crise COVID-19 (exercices 2020-2021)
+    \item Millésime de l'exercice (variable d'ancienneté depuis 2016, capturant les effets d'apprentissage institutionnel post-LOF)
+\end{itemize}
+
+%================================================================
+\subsection*{3.2 \quad Analyse exploratoire des données}
+\addcontentsline{toc}{subsection}{3.2 Analyse exploratoire des données}
+%================================================================
+
+L'analyse exploratoire des données (EDA --- Exploratory Data Analysis) constitue une étape indispensable avant toute modélisation. Elle vise à comprendre la structure statistique des séries, à identifier les patterns temporels et les régularités saisonnières, et à déceler les anomalies ou ruptures structurelles susceptibles d'affecter le comportement des modèles.
+
+%----------------------------------------------------------------
+\subsubsection*{3.2.1 \quad Statistiques descriptives et profil budgétaire}
+%----------------------------------------------------------------
+
+Les statistiques descriptives sont calculées pour l'ensemble des variables budgétaires retenues sur la totalité de la période d'étude. Pour chaque programme et chaque variable (CO, ENG, ORD, RAP), sont calculées les mesures suivantes :
+
+\begin{itemize}
+    \item \textbf{Tendance centrale} : moyenne arithmétique, médiane, et mode des distributions mensuelles.
+    \item \textbf{Dispersion} : écart-type, coefficient de variation (CV = $\sigma / \mu$), intervalle interquartile (IQR).
+    \item \textbf{Forme de la distribution} : coefficient d'asymétrie (skewness) et d'aplatissement (kurtosis), permettant d'évaluer la normalité des distributions et d'orienter les choix de transformation.
+\end{itemize}
+
+Le coefficient de variation est particulièrement instructif dans ce contexte budgétaire : les dépenses de personnel, par nature rigides et prévisibles, présentent structurellement un CV faible, tandis que les dépenses d'investissement affichent une volatilité nettement plus élevée, confirmant les intuitions théoriques de la section 1.2.2. Cette hétérogénéité de volatilité entre catégories de dépenses motive l'adoption de modèles distincts --- ou à défaut, de pondérations différenciées --- selon le programme ou la nature de dépense analysée.
+
+L'analyse de corrélation entre les variables budgétaires et les variables exogènes est conduite à deux niveaux. Une \textbf{matrice de corrélation de Pearson} fournit une première vue de la co-variation linéaire entre variables. Des \textbf{fonctions d'autocorrélation (ACF) et d'autocorrélation partielle (PACF)} sont calculées pour chaque série temporelle afin d'identifier les ordres de retard pertinents pour les modèles autorégressifs et de guider la sélection des features de lag \citep{Hyndman2021}.
+
+%----------------------------------------------------------------
+\subsubsection*{3.2.2 \quad Décomposition saisonnière et analyse des tendances}
+%----------------------------------------------------------------
+
+L'analyse de la structure temporelle des séries de dépenses repose sur la décomposition de chaque série en ses composantes fondamentales : tendance ($T_t$), saisonnalité ($S_t$) et résidu ($R_t$). Soit $y_t$ la série observée :
+
+\begin{equation}
+    y_t = T_t + S_t + R_t \quad \text{(modèle additif)}
+    \label{eq:decomp}
+\end{equation}
+
+ou, si la variance de la série croît proportionnellement à son niveau :
+
+\begin{equation}
+    y_t = T_t \cdot S_t \cdot R_t \quad \text{(modèle multiplicatif)}
+    \label{eq:decomp_mult}
+\end{equation}
+
+Nous appliquons la méthode \textbf{STL (Seasonal and Trend decomposition using Loess)}, qui présente l'avantage d'être robuste aux valeurs aberrantes et d'autoriser une saisonnalité variable au cours du temps --- propriété particulièrement adaptée à des séries budgétaires susceptibles d'avoir évolué suite à la mise en œuvre de la LOF \citep{Hyndman2021}.
+
+\paragraph{Tendance.}
+
+La composante de tendance extrait l'évolution de long terme des dépenses, intimement liée aux trajectoires des enveloppes budgétaires pluriannuelles et aux priorités stratégiques du ministère. On anticipe une tendance légèrement croissante reflétant l'augmentation progressive des dotations, interrompue par un plateau ou une inflexion en 2020-2021.
+
+\paragraph{Saisonnalité.}
+
+La composante saisonnière est particulièrement prononcée dans les séries budgétaires publiques. Le pattern attendu, confirmé par la littérature sur le ``rush budgétaire'' de fin d'exercice \citep{Frankel2011}, comprend :
+
+\begin{itemize}
+    \item Une faible activité en début d'année (janvier-mars), correspondant aux délais d'installation administrative et de délégation de crédits après la promulgation de la Loi de Finances.
+    \item Une montée en puissance au deuxième trimestre lors du lancement des marchés d'investissement annuels et de l'intensification des engagements.
+    \item Une accélération au troisième trimestre pour les liquidations et ordonnancements des marchés engagés.
+    \item Un pic prononcé en fin d'exercice (novembre-décembre) pour les dépenses d'investissement, traduisant la pression à consommer les crédits disponibles avant la clôture comptable.
+\end{itemize}
+
+Ce pattern saisonnier constitue l'une des informations les plus précieuses pour la prévision, et sa bonne capture par les modèles est l'un des critères de sélection les plus importants.
+
+\paragraph{Résidus.}
+
+Après décomposition STL, les résidus permettent d'identifier les observations atypiques non expliquées par la tendance ou la saisonnalité. Les pics résiduels correspondent aux années COVID, aux éventuels virements budgétaires exceptionnels, ou aux années de transition LOF avec changements de périmètre de programmes.
+
+%----------------------------------------------------------------
+\subsubsection*{3.2.3 \quad Détection d'anomalies et ruptures structurelles}
+%----------------------------------------------------------------
+
+La détection des anomalies et ruptures structurelles revêt une importance particulière compte tenu de deux événements majeurs survenus au cours de la période d'étude.
+
+\paragraph{La mise en œuvre progressive de la LOF 130-13 (2016--2020).}
+
+Le basculement progressif vers la nouvelle architecture budgétaire peut avoir introduit des discontinuités ou des changements de régime dans les séries historiques, notamment en ce qui concerne les définitions et périmètres des programmes, les méthodes d'imputation des dépenses, et les comportements d'engagement des gestionnaires. Un \textbf{test de Chow} est appliqué aux points de rupture présumés (2016, 2018) pour détecter formellement des changements structurels dans les paramètres des séries au seuil de 5\%.
+
+\paragraph{La pandémie de COVID-19 (2020--2021).}
+
+L'état d'urgence sanitaire a eu un impact direct sur l'activité judiciaire (suspension temporaire des audiences entre mars et juin 2020, réorganisation des audiences), sur la population pénitentiaire (libérations exceptionnelles de certains détenus en 2020), et sur l'exécution budgétaire générale (gel de certains programmes d'investissement, dépenses de santé pénitentiaires extraordinaires). Ces observations constituent des \textit{outliers} structurels qui, si non traités, peuvent biaiser l'apprentissage des modèles vers des relations aberrantes.
+
+\paragraph{Stratégie de traitement des anomalies.}
+
+La détection des observations atypiques repose sur une approche combinée :
+
+\begin{itemize}
+    \item \textbf{Méthode STL augmentée} : un point est flaggé comme anomalie si son résidu de décomposition dépasse le seuil de $\pm 3\,\hat{\sigma}_R$, où $\hat{\sigma}_R$ est l'écart-type robuste des résidus.
+    \item \textbf{Méthode IQR} : pour les distributions non gaussiennes, tout point en dehors de l'intervalle $[Q_1 - 1.5 \cdot \text{IQR}\,,\, Q_3 + 1.5 \cdot \text{IQR}]$ est considéré comme aberrant.
+\end{itemize}
+
+Les anomalies détectées sont traitées différemment selon leur nature : les anomalies structurelles liées à des changements institutionnels sont conservées et accompagnées d'une variable indicatrice dans les modèles ML/DL ; les erreurs manifestes sont corrigées par interpolation.
+
+%================================================================
+\subsection*{3.3 \quad Préparation des données et feature engineering}
+\addcontentsline{toc}{subsection}{3.3 Préparation des données et feature engineering}
+%================================================================
+
+%----------------------------------------------------------------
+\subsubsection*{3.3.1 \quad Nettoyage et traitement des valeurs manquantes}
+%----------------------------------------------------------------
+
+Les données issues des morasses budgétaires bénéficient généralement d'un bon niveau de qualité intrinsèque, l'un des avantages des données administratives produites par un système d'information structuré tel que le GID. Néanmoins, certaines situations requièrent un traitement préalable explicite.
+
+\paragraph{Valeurs manquantes.}
+
+Les valeurs manquantes peuvent survenir dans les situations suivantes : nouvelles lignes budgétaires créées en cours de période (absence d'historique pour les premiers mois), lignes désactivées en cours de période (programmes restructurés), ou extractions incomplètes pour des mois particuliers. La stratégie d'imputation adoptée est la suivante :
+
+\begin{itemize}
+    \item \textbf{Séquences courtes} ($\leqslant 3$ mois consécutifs) : imputation par interpolation linéaire, en cohérence avec la continuité habituelle des flux budgétaires.
+    \item \textbf{Séquences longues} ($> 3$ mois) : imputation par la médiane saisonnielle de la même ligne sur les années adjacentes, qui préserve le pattern saisonnier tout en étant robuste aux valeurs extrêmes.
+    \item \textbf{Lignes entièrement absentes avant une date donnée} : exclusion du périmètre d'analyse pour les modèles nécessitant un historique complet, et traitement séparé pour les modèles capables de gérer des historiques partiels.
+\end{itemize}
+
+\paragraph{Incohérences comptables.}
+
+Des valeurs manifestement incohérentes au regard des règles budgétaires (ordonnancement cumulé supérieur aux crédits ouverts, engagements négatifs) sont identifiées et corrigées par référence croisée avec les morasses des mois adjacents et les règles de contrôle interne de la comptabilité publique.
+
+\paragraph{Harmonisation des séries temporelles.}
+
+Lorsque des redéfinitions de programmes ou de lignes budgétaires sont intervenues au cours de la période d'étude, une reventilation rétrospective est appliquée pour assurer la cohérence longitudinale des séries. Cette opération, conduite en concertation avec les agents de la DAFB, consiste à réallouer les crédits des anciennes nomenclatures vers la nomenclature en vigueur en fin de période, en utilisant les clés de répartition documentées dans les notes techniques de la Direction du Budget.
+
+%----------------------------------------------------------------
+\subsubsection*{3.3.2 \quad Construction des features (feature engineering)}
+%----------------------------------------------------------------
+
+Le feature engineering constitue l'une des étapes les plus déterminantes pour les performances des modèles de Machine Learning appliqués aux séries temporelles \citep{Hastie2009}. L'objectif est de créer, à partir des variables brutes, des représentations enrichies qui capturent explicitement les structures pertinentes pour la prévision --- persistance temporelle, tendance locale, saisonnalité, momentum --- et que les algorithmes ML n'auraient pas la capacité de déduire spontanément à partir des valeurs brutes seules.
+
+\paragraph{Features de lag (composante autorégressive).}
+
+Pour capturer la persistance et les dépendances temporelles des séries de dépenses, nous créons des variables de retard (lag features) sur la variable cible. Le choix des ordres de retard est guidé par les fonctions ACF et PACF analysées à la section 3.2.1 :
+
+\begin{itemize}
+    \item $y_{t-1}$ : valeur du mois $t-1$ (persistance immédiate, forte dans les dépenses de personnel)
+    \item $y_{t-2}$, $y_{t-3}$ : valeurs des deux et trois mois précédents (dynamique de court terme)
+    \item $y_{t-6}$ : valeur il y a six mois (demi-cycle budgétaire semestriel)
+    \item $y_{t-12}$ : valeur du même mois de l'exercice précédent (capture le pattern saisonnier annuel, particulièrement informatif pour les séries budgétaires)
+\end{itemize}
+
+\paragraph{Features de fenêtres glissantes (rolling features).}
+
+Des statistiques calculées sur des fenêtres temporelles glissantes apportent une dimension de tendance locale et de volatilité récente :
+
+\begin{itemize}
+    \item Moyenne mobile sur 3 mois~: $\overline{y}_{3m,t} = \frac{1}{3}\sum_{k=1}^{3} y_{t-k}$
+    \item Moyenne mobile sur 6 et 12 mois (tendance de moyen et long terme)
+    \item Écart-type glissant sur 3 et 6 mois (mesure de la volatilité locale de l'exécution)
+    \item Taux de croissance glissant ($y_{t-1} / y_{t-13} - 1$) : variation annuelle glissante
+\end{itemize}
+
+\paragraph{Features de taux et ratios budgétaires.}
+
+\begin{itemize}
+    \item Taux d'engagement cumulé au mois $t$ par rapport aux crédits ouverts annuels (mesure l'avancement relatif de la consommation)
+    \item Reste à engager en proportion des crédits ouverts ($1 - \text{Taux d'engagement}$) : mesure la ``pression'' budgétaire restante à couvrir
+    \item Pente locale d'exécution (coefficient $\beta$ de la régression linéaire de $y$ sur les 3 derniers mois)
+\end{itemize}
+
+\paragraph{Features temporelles et calendaires.}
+
+L'encodage de la temporalité est adapté à la nature de chaque modèle :
+
+\begin{itemize}
+    \item Pour les \textbf{modèles ML} (RF, XGBoost) : variables indicatrices binaires pour chaque mois de l'année (dummy encoding), indicateurs de trimestre, et indicateur de fin d'exercice.
+    \item Pour les \textbf{modèles DL} (LSTM, GRU) : encodage cyclique via $\sin(2\pi m/12)$ et $\cos(2\pi m/12)$ qui préserve la circularité du calendrier et évite les discontinuités artificielles entre décembre et janvier.
+    \item Nombre de jours ouvrés dans le mois (variable de capacité opérationnelle administrative)
+    \item Variable binaire COVID-19 (valeur 1 pour les mois de mars 2020 à décembre 2021)
+    \item Ancienneté du programme dans le nouveau référentiel LOF (nombre d'exercices écoulés depuis 2016)
+\end{itemize}
+
+%----------------------------------------------------------------
+\subsubsection*{3.3.3 \quad Tests de stationnarité et transformations}
+%----------------------------------------------------------------
+
+La stationnarité d'une série temporelle --- c'est-à-dire la stabilité de ses propriétés statistiques (moyenne, variance, structure d'autocovariance) dans le temps --- est une condition fondamentale pour les modèles économétriques de type ARIMA, et une propriété pratiquement souhaitable pour améliorer la convergence et les performances des modèles ML/DL.
+
+\paragraph{Test de Dickey-Fuller augmenté (ADF).}
+
+Le test ADF \citep{Dickey1979} s'écrit comme suit. Pour une série $y_t$, on estime le modèle :
+
+\begin{equation}
+    \Delta y_t = \alpha + \beta t + \gamma y_{t-1} + \sum_{j=1}^{p} \delta_j \Delta y_{t-j} + \varepsilon_t
+    \label{eq:adf}
+\end{equation}
+
+et on teste $H_0 : \gamma = 0$ (racine unitaire, non-stationnarité) contre $H_1 : \gamma < 0$ (stationnarité). L'ordre de retard $p$ est sélectionné par le critère d'information AIC. Le test est réalisé à trois spécifications (sans constante, avec constante, avec constante et tendance), selon la nature présumée de la série.
+
+\paragraph{Test KPSS.}
+
+Le test de Kwiatkowski-Phillips-Schmidt-Shin \citep{Kwiatkowski1992} procède dans la direction inverse : l'hypothèse nulle est la stationnarité autour d'une tendance déterministe, contre l'alternative d'une racine unitaire. L'utilisation conjointe des tests ADF et KPSS permet une décision plus robuste sur la nature réelle de la série :
+
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{ADF ($H_0$ rejeté ?)} & \textbf{KPSS ($H_0$ rejeté ?)} & \textbf{Conclusion} \\
+\midrule
+Oui & Non & Stationnarité confirmée \\
+Non & Oui & Non-stationnarité confirmée (racine unitaire) \\
+Non & Non & Ambiguïté (série faiblement non stationnaire) \\
+Oui & Oui & Ambiguïté (possible stationnarité fractionnaire) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{4pt}
+{\small\textit{Tableau 3.1 --- Grille d'interprétation conjointe des tests ADF et KPSS}}
+
+\paragraph{Transformations appliquées.}
+
+Selon les résultats des tests de stationnarité, les transformations suivantes sont appliquées de manière sélective et documentée par série :
+
+\begin{itemize}
+    \item \textbf{Différenciation d'ordre 1} ($\Delta y_t = y_t - y_{t-1}$) pour éliminer les tendances stochastiques (racines unitaires simples).
+    \item \textbf{Différenciation saisonnière} ($\Delta_{12} y_t = y_t - y_{t-12}$) pour neutraliser la saisonnalité déterministe forte.
+    \item \textbf{Transformation logarithmique} ($\tilde{y}_t = \log(y_t + 1)$) pour stabiliser la variance des séries dont l'écart-type croît proportionnellement à la moyenne.
+    \item \textbf{Normalisation Min-Max} $\left([0, 1]\right)$ pour les inputs des modèles DL, dont l'optimisation par descente de gradient est sensible à l'échelle des features.
+    \item \textbf{Standardisation Z-score} pour les features des modèles ML, afin d'assurer leur comparabilité en termes d'importance.
+\end{itemize}
+
+%================================================================
+\subsection*{3.4 \quad Protocole expérimental}
+\addcontentsline{toc}{subsection}{3.4 Protocole expérimental}
+%================================================================
+
+%----------------------------------------------------------------
+\subsubsection*{3.4.1 \quad Stratégie de découpage et validation temporelle}
+%----------------------------------------------------------------
+
+La conception du découpage des données en ensembles d'entraînement et de test constitue l'un des points méthodologiques les plus critiques en prévision de séries temporelles. Contrairement aux problèmes de régression sur données cross-sectionnelles, les séries temporelles imposent une contrainte absolue : \textbf{les données futures ne doivent jamais être accessibles lors de l'entraînement du modèle}, sous peine d'introduire un biais de \textit{data leakage} qui invaliderait toute évaluation de performance \citep{Hyndman2021}.
+
+\paragraph{Approche walk-forward avec fenêtre expansive.}
+
+Nous adoptons une stratégie de validation \textit{walk-forward} (aussi appelée \textit{rolling origin evaluation}) avec fenêtre d'entraînement expansive. Le principe est le suivant : à chaque étape $k$, le modèle est entraîné sur toutes les données disponibles jusqu'au mois $t_k$, puis évalué sur les $h = 12$ mois suivants (correspondant à un exercice budgétaire complet). La procédure est répétée pour plusieurs valeurs de $t_k$, correspondant à des points de coupe successifs en fin d'exercice budgétaire.
+
+\begin{equation}
+    \hat{y}_{t_k + j} = f\!\left(\mathcal{D}_{1:t_k}\right), \quad j = 1, 2, \ldots, h \quad \text{avec} \quad h = 12
+    \label{eq:walkforward}
+\end{equation}
+
+où $\mathcal{D}_{1:t_k}$ désigne l'ensemble des données depuis le début de la série jusqu'au mois $t_k$ inclus, et $f(\cdot)$ représente le modèle entraîné sur cet ensemble.
+
+Cette approche présente trois avantages décisifs dans notre contexte :
+
+\begin{itemize}
+    \item Elle simule fidèlement les conditions réelles de prévision budgétaire (on prédit l'exercice N+1 à partir de l'historique disponible à la fin de l'exercice N).
+    \item L'utilisation d'une fenêtre expansive plutôt que glissante maximise la quantité de données d'entraînement à chaque étape, ce qui est important avec un historique de taille modérée.
+    \item Elle permet d'observer l'évolution des performances du modèle au fil du temps et d'identifier d'éventuelles dégradations.
+\end{itemize}
+
+\paragraph{Ensemble de test hors-échantillon final.}
+
+L'évaluation conclusive des modèles est conduite sur un \textbf{ensemble de test hors-échantillon} constitué des 12 à 24 derniers mois de la série (selon la disponibilité des données), strictement isolés et n'ayant jamais été consultés pendant les phases d'entraînement, de sélection des features, ou d'optimisation des hyperparamètres.
+
+%----------------------------------------------------------------
+\subsubsection*{3.4.2 \quad Sélection des hyperparamètres}
+%----------------------------------------------------------------
+
+Chaque famille de modèles fait l'objet d'une procédure spécifique de sélection des hyperparamètres, conduite exclusivement sur les données d'entraînement pour éviter toute contamination par les données de test.
+
+\paragraph{Modèles économétriques (ARIMA/SARIMA, VAR).}
+
+Pour les modèles ARIMA, l'ordre $(p, d, q)$ est sélectionné par la procédure de sélection automatique d'Hyndman-Khandakar fondée sur le critère d'information AICc (Akaike corrigé pour les petits échantillons), implémentée via la bibliothèque \texttt{pmdarima} \citep{Hyndman2021}. La composante saisonnière $(P, D, Q)_{12}$ est ajoutée lorsque la décomposition STL révèle une saisonnalité significative au test de Friedman ($p < 0.05$). Pour Prophet \citep{Taylor2018}, les paramètres de flexibilité de la tendance (\texttt{changepoint\_prior\_scale}) et de scale saisonnelle (\texttt{seasonality\_prior\_scale}) sont sélectionnés par validation croisée sur fenêtre temporelle.
+
+\paragraph{Random Forest.}
+
+La sélection des hyperparamètres du Random Forest \citep{Breiman2001} porte sur le nombre d'arbres ($n\_\text{estimators}$), la profondeur maximale ($\texttt{max\_depth}$), le nombre minimum d'observations par feuille ($\texttt{min\_samples\_leaf}$), et la proportion de features considérées à chaque nœud ($\texttt{max\_features}$). Une recherche sur grille (\textit{grid search}) combinée à une validation croisée temporelle à 5 folds est utilisée, avec la MAE comme critère de sélection.
+
+\paragraph{XGBoost.}
+
+Pour XGBoost \citep{Chen2016}, les hyperparamètres clés sont le taux d'apprentissage ($\eta$), la profondeur maximale des arbres ($\texttt{max\_depth}$), le taux de sous-échantillonnage par arbre ($\texttt{subsample}$), et les coefficients de régularisation L1 et L2 ($\alpha$ et $\lambda$). Compte tenu de l'espace de recherche plus étendu, une \textit{recherche aléatoire} (random search) suivie d'une \textit{optimisation bayésienne} via la bibliothèque \texttt{Optuna} est appliquée pour une exploration plus efficace.
+
+\paragraph{LSTM et GRU.}
+
+L'architecture des réseaux récurrents est définie par cinq hyperparamètres principaux : le nombre de couches récurrentes empilées, le nombre de cellules (unités) par couche, le taux de régularisation par dropout, le taux d'apprentissage initial de l'optimiseur Adam, et la taille du lot (\textit{batch size}). Ces paramètres sont optimisés par une recherche bayésienne dans un espace limité par les contraintes de la taille du corpus, en s'appuyant sur les recommandations de \citet{Hochreiter1997} et \citet{Cho2014} pour des séries temporelles de longueur comparable. Un mécanisme d'\textit{early stopping} sur la perte de validation est systématiquement utilisé pour prévenir le surapprentissage.
+
+%----------------------------------------------------------------
+\subsubsection*{3.4.3 \quad Métriques d'évaluation et comparaison statistique}
+%----------------------------------------------------------------
+
+La comparaison des performances des modèles s'appuie sur un éventail de métriques complémentaires \citep{Botchkarev2019}, permettant une évaluation multidimensionnelle des erreurs de prévision.
+
+\paragraph{Erreur absolue moyenne (MAE).}
+
+\begin{equation}
+    \text{MAE} = \frac{1}{h} \sum_{t=1}^{h} \left|y_t - \hat{y}_t\right|
+    \label{eq:mae}
+\end{equation}
+
+Exprimée en milliers de dirhams, la MAE mesure l'erreur moyenne en valeur absolue. Elle est robuste aux valeurs extrêmes isolées et constitue la métrique la plus directement interprétable pour les praticiens de la DAFB.
+
+\paragraph{Racine de l'erreur quadratique moyenne (RMSE).}
+
+\begin{equation}
+    \text{RMSE} = \sqrt{\frac{1}{h} \sum_{t=1}^{h} \left(y_t - \hat{y}_t\right)^2}
+    \label{eq:rmse}
+\end{equation}
+
+Également exprimée en milliers de dirhams, la RMSE pénalise davantage les grandes erreurs de prévision par rapport à la MAE. Dans un contexte budgétaire public où les dépassements importants ont des conséquences institutionnelles significatives, cette propriété de la RMSE est analytiquement pertinente.
+
+\paragraph{Erreur absolue moyenne en pourcentage (MAPE).}
+
+\begin{equation}
+    \text{MAPE} = \frac{1}{h} \sum_{t=1}^{h} \left|\frac{y_t - \hat{y}_t}{y_t}\right| \times 100
+    \label{eq:mape}
+\end{equation}
+
+La MAPE normalise l'erreur par la valeur réelle, ce qui permet la comparaison des performances entre programmes de tailles très différentes (programme 3 - pénitentiaire vs programme 4 - investissement) et facilite l'interprétation par les décideurs non statisticiens.
+
+\paragraph{Coefficient de détermination ($R^2$).}
+
+\begin{equation}
+    R^2 = 1 - \frac{\displaystyle\sum_{t=1}^{h} (y_t - \hat{y}_t)^2}{\displaystyle\sum_{t=1}^{h} (y_t - \bar{y})^2}
+    \label{eq:r2}
+\end{equation}
+
+Le $R^2$ mesure la fraction de la variance totale de la variable cible expliquée par le modèle. Il fournit une mesure de l'adéquation globale du modèle à la structure de la série.
+
+\paragraph{Test de Diebold-Mariano (DM).}
+
+Au-delà des métriques ponctuelles, nous recourons au test de Diebold-Mariano \citep{DieboldMariano1995} pour tester formellement si les différences de performance entre deux modèles sont statistiquement significatives. Soit $e_t^{(i)} = y_t - \hat{y}_t^{(i)}$ l'erreur de prévision du modèle $i$, et $d_t = g\!\left(e_t^{(1)}\right) - g\!\left(e_t^{(2)}\right)$ la différence des pertes (avec $g(e) = e^2$ pour la MSE). La statistique DM est :
+
+\begin{equation}
+    \text{DM} = \frac{\bar{d}}{\sqrt{\hat{V}(\bar{d})\,/\,h}} \xrightarrow{d} \mathcal{N}(0, 1)
+    \label{eq:dm}
+\end{equation}
+
+Le test DM est appliqué à l'ensemble des paires modèle-IA vs modèle-économétrique de référence au seuil $\alpha = 5\%$, permettant de valider ou non les hypothèses H1 et H2 de notre recherche sur un fondement statistique rigoureux.
+
+%================================================================
+\subsection*{3.5 \quad Environnement technique et organisation du code}
+\addcontentsline{toc}{subsection}{3.5 Environnement technique et organisation du code}
+%================================================================
+
+L'ensemble de la chaîne de traitement --- de la collecte des données à la production des résultats finaux --- est implémenté en \textbf{Python 3.11}, choix justifié par la richesse et la maturité de son écosystème en matière de science des données et d'apprentissage automatique, ainsi que par sa communauté académique active facilitant la reproductibilité \citep{Pedregosa2011}.
+
+\paragraph{Bibliothèques principales.}
+
+\begin{itemize}
+    \item \textbf{Manipulation et analyse des données}~: \texttt{pandas} (manipulation de DataFrames et séries temporelles indexées), \texttt{numpy} (calcul numérique vectorisé haute performance).
+
+    \item \textbf{Modèles économétriques}~: \texttt{statsmodels} (ARIMA, SARIMA, VAR, tests ADF/KPSS, ACF/PACF), \texttt{pmdarima} (sélection automatique de l'ordre ARIMA), \texttt{prophet} (modèle Prophet de Meta \citep{Taylor2018}).
+
+    \item \textbf{Machine Learning}~: \texttt{scikit-learn} \citep{Pedregosa2011} (pipelines de prétraitement, Random Forest, métriques, validation croisée temporelle), \texttt{xgboost} (implémentation XGBoost de \citet{Chen2016}), \texttt{optuna} (optimisation bayésienne des hyperparamètres).
+
+    \item \textbf{Deep Learning}~: \texttt{TensorFlow 2.x} / \texttt{Keras} (architecture LSTM et GRU, optimiseur Adam, callbacks d'early stopping et de réduction du taux d'apprentissage).
+
+    \item \textbf{Visualisation}~: \texttt{matplotlib} et \texttt{seaborn} (graphiques statiques de haute qualité pour les figures du mémoire), \texttt{plotly} (graphiques interactifs pour le prototype Streamlit).
+
+    \item \textbf{Interprétabilité des modèles}~: \texttt{shap} \citep{Lundberg2017} (calcul des valeurs SHAP (SHapley Additive exPlanations) pour l'analyse de l'importance et de la contribution des features dans les modèles RF et XGBoost).
+
+    \item \textbf{Prototype de visualisation et de déploiement}~: \texttt{streamlit} (interface web légère permettant d'exposer les prévisions du modèle sélectionné aux équipes de la DAFB dans un format interactif et compréhensible).
+\end{itemize}
+
+\paragraph{Organisation du code source.}
+
+Le code source est organisé selon une architecture modulaire s'inspirant du gabarit \textit{Cookiecutter Data Science}, qui garantit une séparation claire entre les différentes étapes de la pipeline d'analyse et facilite la reproductibilité :
+
+\begin{itemize}
+    \item \texttt{data/raw/} : Données brutes (morasses au format Excel/CSV) non modifiées, conservées intactes comme source de vérité.
+    \item \texttt{data/processed/} : Données après nettoyage, harmonisation et feature engineering, prêtes pour la modélisation.
+    \item \texttt{src/features/} : Scripts de transformation et de construction des features (feature engineering).
+    \item \texttt{src/models/} : Implémentations, entraînement, sélection des hyperparamètres et sauvegarde des modèles.
+    \item \texttt{src/evaluation/} : Calcul des métriques de performance, tests statistiques (DM), et génération des tableaux de comparaison.
+    \item \texttt{notebooks/} : Cahiers Jupyter pour les analyses exploratoires et la visualisation des résultats intermédiaires.
+    \item \texttt{app/} : Application Streamlit pour la visualisation interactive et la présentation des résultats aux décideurs.
+    \item \texttt{reports/figures/} : Graphiques exportés en haute résolution pour intégration dans le mémoire.
+\end{itemize}
+
+L'ensemble du code est versionné sous Git et documenté par des commentaires en ligne et un fichier \texttt{README.md} décrivant les étapes d'installation et d'exécution. La gestion des dépendances est assurée par un fichier \texttt{requirements.txt} fixant les versions exactes des bibliothèques, garantissant la reproductibilité complète de l'environnement d'exécution.

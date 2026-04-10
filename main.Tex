@@ -14,6 +14,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{parskip}
 
 % --- Professional Color Palette ---
@@ -30,7 +31,7 @@
 \titleformat{\subsubsection}{\normalsize\itshape}{}{0em}{}
 
 % --- Hyperref setup ---
-\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=black, urlcolor=blue}
 
 % --- Bibliography style ---
 \bibliographystyle{apalike}
@@ -52,6 +53,11 @@
 \vspace{6pt}
 \rule{\textwidth}{0.4pt}
 \vspace{4pt}
+
+% ---- TABLE OF CONTENTS ----
+\newpage
+\tableofcontents
+\newpage
 
 % ---- INTRODUCTION ----
 {\large \textbf{INTRODUCTION GÉNÉRALE}}
@@ -318,6 +324,12 @@
 
 \newpage
 \include{chapters/chapter1}
+
+\newpage
+\include{chapters/chapter2}
+
+\newpage
+\include{chapters/chapter3}
 
 \newpage
 \bibliography{references}
