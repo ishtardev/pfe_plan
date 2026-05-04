@@ -1,0 +1,1096 @@
+GUIDE DE CONSTRUCTION DES
+PROGRAMMES BUDGETAIRES
+http://lof.finances.gov.ma
+[Guide de construction des programmes budgétaires]
+1
+Ce guide a été réalisé par la Direction du
+Budget relevant du ministère de
+l’Economie et des Finances dans le cadre
+du jumelage d’appui à la mise en œuvre de
+la réforme de la loi organique relative à la
+loi de finances au Maroc avec Expertise
+France et qui est une composante du projet
+d’appui à la mise en œuvre du nouveau
+cadre de gouvernance mené avec la Banque
+mondiale.
+Il a bénéficié des enseignements tirés de
+toutes les expérimentations menées par les
+ministères préfigurateurs depuis 2014 et
+des observations recueillies auprès d’eux au
+cours de son élaboration.
+[Loi Organique n°130-13 relative à la loi de Finances]
+2
+Sommaire
+PREFACE…………………………………………………………….……3
+INTRODUCTION……………………………………………………… ..6
+1ère PARTIE - PERIMETRE ET CONTENU DES DIFFERENTS TYPES
+DE ROGRAMMES………………………………………………………...11
+I – La nouvelle nomenclature budgétaire………………………….……..11
+II – Les principes communs à la construction des programmes…………19
+III – Les programmes présentant une politique publique……………….22
+IV – Les programmes de soutien (ou support)……………….…….……24
+V – Les questions à se poser lors de la construction d’un programme
+budgétaire……………………………………………………………….26
+VI - Les risques en cas de mauvaise construction d’un
+programme……………………………………………………………...28
+VII - Les gages de qualité d’une bonne construction des
+programmes…………………………………………………………….29
+2ème PARTIE – LA MISE EN ŒUVRE DE LA BONNE
+GOUVERNANCE DES PROGRAMMES……………………….….…30
+I – Le responsable de programme désigné par le ministre doit être capable
+d’exercer sa fonction…………………………………………...………..31
+II – Le mode de gouvernance du programme doit être précisément
+défini……………………………………………………...…………….32
+III – La pyramide de pilotage du programme doit être mise en
+place……………………………………………………………………33
+IV - Les risques associés à ces questions si les réponses sont
+négatives…………………………………………...……………………34
+V - Les gages de qualité liés à la construction des programmes………....34
+[Guide de construction des programmes budgétaires]
+3
+PREFACE
+Ce guide fait partie d’un ensemble de guides élaborés à
+l’occasion de la mise en œuvre de la réforme budgétaire
+résultant de la loi organique n° 130-13 relative à la loi de
+finances promulguée par le dahir n°1-15-62 du 14 chaabane
+1436 (2 juin 2015) et du décret n° 2-15-426 du 28 ramadan
+1436 (15 juillet 2015) relatif à l’élaboration et à l’exécution
+des lois de finances.
+La liste de ces guides, publiés ou en cours d’élaboration, est
+la suivante :
+ Guide de construction des programmes
+budgétaires ;
+ Guide de la performance ;
+ Guide des déterminants de la dépense ;
+ Guide du dialogue de gestion et du pilotage
+opérationnel ;
+ Guide de performance des établissements
+publics ;
+ La LOF expliquée au grand public;
+ Guide sur la programmation budgétaire
+triennale.
+Le présent guide de construction des programmes
+budgétaires est composé d’une introduction qui détaille les
+trois dimensions des programmes budgétaires à prendre en
+compte lors de leur construction.
+[Loi Organique n°130-13 relative à la loi de Finances]
+4
+La première dimension « dimension budgétaire » fait
+l’objet de la première partie complétée de deux annexes. La
+1
+ère annexe détaille les 2 axes de la nouvelle nomenclature
+budgétaire marocaine : le 1er axe (qui peut être qualifié de
+vertical) détaille les niveaux juridiques de la nomenclature
+dont les 6 premiers sont présentés dans les morasses
+budgétaires ; le 2ème axe (qui peut être qualifié d’horizontal)
+détaille la nomenclature budgétaire telle qu’elle est
+présentée dans les projets de performance. La 2ème
+annexe
+porte sur la définition de la notion de « projets/actions » au
+sein du programme.
+La deuxième dimension « la dimension managériale » est
+présentée dans la seconde partie consacrée à la mise en
+œuvre de la bonne gouvernance des programmes par les
+nouveaux acteurs de la gestion publique que sont les
+responsables de programmes et qui doivent notamment
+mettre en place une pyramide de pilotage efficace.
+La troisième dimension « la dimension relative à la
+performance publique » n’est pas présentée dans ce guide
+car elle fait l’objet du guide de la performance auquel il faut
+se référer à l’occasion des travaux relatifs à la performance,
+en particulier lors de l’élaboration du projet de performance
+ministériel.
+Dans chacune des deux parties sont énoncées des règles
+issues de la loi organique relative à la loi de finances
+organique et du décret relatif à l’élaboration et à l’exécution
+des lois de finances (par exemple, un programme est
+[Guide de construction des programmes budgétaires]
+5
+ministériel et un responsable doit être désigné à sa tête) et
+des préconisations issues des expérimentations tant
+nationales qu’internationales (par exemple, un programme
+doit avoir une taille critique). Elles se terminent chacune
+par un questionnement logique élaboré pour aider les
+ministères à se poser les bonnes questions au moment de la
+mise en œuvre de la réforme, mais également après sa mise
+en œuvre pour apporter des mesures correctives aux
+défaillances ou faiblesses qui apparaissent souvent dans les
+premiers temps de la réforme.
+[Loi Organique n°130-13 relative à la loi de Finances]
+6
+INTRODUCTION
+Un des changements majeurs opérés par la loi organique
+relative à la loi de finances (LOF) consiste dans la
+structuration du budget en programmes budgétaires qui
+sont présentés dans les projets de performance (PdP)
+élaborés par chaque département ministériel ou institution
+concerné et transmis à la commission parlementaire
+compétente en accompagnement du projet de budget
+(morasse). Ces programmes comprennent à la fois les
+crédits du budget général (BG), des services de l’Etat gérés
+de manière autonome (SEGMA) et des comptes
+d’affectation spéciale (CAS). Il est rendu compte de
+l’exécution des programmes budgétaires dans un rapport de
+performance.
+Les projets de performance sont la présentation de la
+démarche de performance conduite au sein des
+programmes dans le cadre d’une stratégie
+ministérielle ;
+En résumé, cette démarche consiste à faire mieux avec
+autant, voire moins, de crédits que les années
+précédentes.
+Les projets de performance ne sont donc ni un support
+« publicitaire » ni un document tendant à obtenir ou
+justifier une augmentation des crédits. Leur objet est de
+présenter la stratégie du ministère, les objectifs poursuivis
+et l’amélioration des résultats escomptés grâce aux
+[Guide de construction des programmes budgétaires]
+7
+différents leviers mis en œuvre : mobilisation du personnel,
+pertinence des actions et des projets retenus, meilleure
+organisation administrative, gains de productivité….
+De ce fait, les programmes budgétaires ont à la fois :
+1° Une dimension budgétaire. Chaque programme
+correspond à des enveloppes de crédits consacrées à une
+politique publique définie (programme de politique
+publique) ou au soutien de ces politiques publiques
+(programmes support).
+Le programme constitue le 4
+ème niveau de la nomenclature
+budgétaire (cf. ci-dessous la 1ère partie – I. la nouvelle
+architecture du BG, des SEGMA et des CAS issue de la
+LOF) dont les crédits sont répartis entre plusieurs titres et
+chapitres et, le cas échéant, entre le budget général, les
+SEGMA et les CAS.
+Les projets de performance présentent les crédits du BG,
+des SEGMA et des CAS selon un axe horizontal qui
+permet d’appréhender la totalité des enveloppes de crédits
+consacrées à un programme.
+La constitution et le suivi de ces enveloppes correspondent
+donc à une vision transversale du 4
+ème niveau de la
+nomenclature budgétaire des trois supports (BG, SEGMA,
+CAS) de la loi de finances.
+2° Une dimension managériale. La réforme budgétaire a
+aussi pour conséquence une nouvelle organisation du
+[Loi Organique n°130-13 relative à la loi de Finances]
+8
+pilotage d’une politique publique ou des fonctions de
+soutien.
+La LOF dispose (article 39) qu’un « responsable par
+programme, désigné au sein de chaque département
+ministériel ou institution, est chargé de définir les objectifs
+et indicateurs dudit programme et d’assurer le suivi de sa
+mise en œuvre. »
+Il revient à ce responsable de programme de préciser, tant
+au niveau central que déconcentré, l’organisation et les
+procédures de pilotage permettant de définir puis
+d’atteindre les objectifs énoncés pour son programme.
+En effet, le responsable de programme n’est que le sommet
+de la pyramide de pilotage du programme. Il faut donc
+préciser d’une part comment est structurée cette pyramide
+(combien de niveaux) et quels sont les responsables des
+actions et des projets qui, au niveau central ou déconcentré,
+vont piloter la réalisation des différents projets/actions.
+3° Une dimension relative à la performance de l’action
+publique car les programmes sont le cadre de la
+présentation et de la conduite de la nouvelle démarche
+de performance.
+L’article 39 de la LOF précise qu’un « programme est un
+ensemble cohérent de projets ou actions […] auquel sont
+associés des objectifs définis en fonction des finalités
+[Guide de construction des programmes budgétaires]
+9
+d’intérêt général ainsi que des indicateurs chiffrés
+permettant de mesurer les résultats escomptés… »
+* *
+ *
+Ce guide a pour objet d’aider à la construction des
+deux premières dimensions des programmes
+budgétaires des ministères : les dimensions budgétaires
+et managériales. La dimension relative à la
+performance est traitée dans le « Guide de la
+performance » auquel le lecteur est invité à se référer.
+Dans ce guide l’ordre de présentation des trois
+dimensions n’a pas de signification particulière et ne
+doit pas être interprété comme décrivant les étapes
+successives de construction des programmes. Au
+contraire, la réflexion sur les trois dimensions des
+programmes budgétaires doit être menée en parallèle
+car elles ont des interactions entre-elles.
+Ainsi, la définition du périmètre et du contenu en
+crédits des différents programmes, objet de la 1ère
+partie, doit se fonder sur les missions confiées à chaque
+ministère et la stratégie qui a été définie pour les mettre
+en œuvre compte tenu des moyens alloués.
+De la même manière, la construction des programmes
+ne doit pas être systématiquement calquée sur
+[Loi Organique n°130-13 relative à la loi de Finances]
+10
+l’organisation administrative existante des ministères.
+La nouvelle fonction de responsable de programme
+permet de dépasser les cloisonnements existants.
+[Guide de construction des programmes budgétaires]
+11
+1ère PARTIE - PERIMETRE ET CONTENU
+DES DIFFERENTS TYPES DE
+PROGRAMMES
+La définition de la stratégie ministérielle pour accomplir les
+missions qui sont dévolues à chaque département
+ministériel par les décrets d’attribution est une étape
+préalable et indispensable avant la structuration du budget
+ministériel en programmes budgétaires. En principe, un
+programme budgétaire correspond à une politique
+publique. Cependant, la construction des programmes
+budgétaires doit tenir compte du montant des crédits en jeu
+et du gain d’efficacité qui est attendu d’une globalisation
+des crédits au sein des programmes d’une taille suffisante.
+Ainsi, un programme peut regrouper, par exception,
+plusieurs politiques publiques conduites par le ministère
+lorsque le montant des crédits alloués à chacune de ces
+politiques publiques ne justifie pas la constitution d’un
+programme spécifique et à condition que ces politiques
+publiques soient voisines ou complémentaires. Dans ce cas,
+les différentes politiques publiques contenues dans le
+programme budgétaire peuvent être explicitées au travers
+des objectifs du programme.
+I – La nouvelle nomenclature budgétaire
+La LOF définit les différents niveaux de la nomenclature
+budgétaire de présentation et d’exécution expliqués cidessous.
+[Loi Organique n°130-13 relative à la loi de Finances]
+12
+Les principes de codification (nombre de caractères ou
+digit, signification des séries…) de cette nomenclature ainsi
+que des nomenclatures associées (nomenclature
+fonctionnelle, nomenclature comptable…) sont en cours
+d’élaboration par la direction du budget. Ils seront
+présentés aux ministères et directions intéressés dès que les
+travaux préparatoires seront achevés.
+Ces travaux permettront d’adapter les systèmes
+d’information, principalement e-budget et GID, et de
+répondre ainsi aux exigences de la réforme budgétaire.
+Les niveaux de la nomenclature budgétaire de
+présentation sont au nombre de 6 auxquels s’ajoute un
+7
+ème niveau en exécution :
+ 1° Les titres (article 38 de la LOF). C’est le 1
+er niveau
+de la nomenclature budgétaire.
+Il y a 3 titres différents :
+ Titre I – Dépenses de fonctionnement ;
+ Titre II – Dépenses d’investissement ;
+ Titre III – Dépenses relatives au service de la
+dette publique.
+Les ministères autres que celui de l’Economie et des
+Finances ne sont concernés que par les titres I et II.
+[Guide de construction des programmes budgétaires]
+13
+ 2° Les ministères ou institutions (articles 38 et 39 de
+la LOF). Ils constituent le 2
+ème niveau de
+l’arborescence de la nomenclature budgétaire au sein de
+chaque titre.
+ 3° Les chapitres (article 38 de la LOF). Ils constituent
+le 3
+ème niveau de l’arborescence de la nomenclature
+budgétaire.
+Bien que les ministères ne figurent pas dans l’énumération
+du 2ème paragraphe de l’article 38, ils constituent en fait le
+deuxième niveau de l’arborescence de la nomenclature
+budgétaire de présentation au sein de chaque titre.
+En effet, le 3ème paragraphe de l’article 38 précise que
+« Pour chaque département ministériel ou institution, il est
+prévu, en ce qui concerne les dépenses de fonctionnement,
+un chapitre pour le personnel et un chapitre pour le
+matériel et les dépenses diverses. Il est prévu pour les
+dépenses d’investissement un chapitre par département
+ministériel ou institution ». Cette règle a pour effet d’obliger
+l’insertion d’un niveau « ministère ou institution » dans
+l’arborescence de la nomenclature entre les titres et les
+chapitres.
+Ainsi, il y a, au sein de chaque ministère deux chapitres de
+dépenses de fonctionnement : le chapitre des dépenses de
+personnel et le chapitre des dépenses pour le matériel et les
+[Loi Organique n°130-13 relative à la loi de Finances]
+14
+dépenses diverses et un chapitre pour les dépenses
+d’investissement.
+Sauf pour les dépenses de personnel qui ne concernent que
+le BG, les chapitres de MDD et d’investissement peuvent
+comprendre trois supports de crédits : les crédits du BG,
+ceux des SEGMA et ceux des CAS.
+ 4° Les programmes (article 39 de la LOF). Ils
+constituent le 4
+ème niveau de l’arborescence de la
+nomenclature.
+Les crédits d’un programme sont répartis entre plusieurs
+chapitres d’un même ministère. Ils peuvent également être
+répartis entre le BG et les SEGMA ainsi que les CAS.
+La vision complète des crédits d’un programme nécessite
+donc une approche transversale consistant à reconstituer, à
+partir des morasses, les crédits répartis au sein des chapitres
+d’un même ministère et qui peuvent comprendre des
+crédits du budget général, des SEGMA et des CAS.
+ 5° Les régions (article 38 de la LOF). Elles constituent
+le 5
+ème niveau de l’arborescence de la nomenclature
+budgétaire qui renseigne ainsi sur le niveau
+géographique de la gestion des crédits. Les crédits qui
+sont gérés directement par les administrations centrales
+ne doivent pas être répartis entre les régions. De même,
+[Guide de construction des programmes budgétaires]
+15
+les crédits dont la répartition par région n’est pas
+identifiée lors de la préparation du projet de la loi de
+finances, peuvent n’être répartis qu’après le vote de la
+loi de finances, en cours de gestion.
+ 6° Les actions ou projets (articles 38 et 40 de la
+LOF). C’est le 6
+ème niveau de l’arborescence de la
+nomenclature budgétaire. Il permet:
+- de préciser la destination de la dépense au sein du
+programme (projet/action) correspondant à un
+service public, un dispositif d’intervention (ou une
+même catégorie de dispositifs d’intervention) ou à
+une fonction administrative ;
+- ou d’identifier un très grand projet d’investissement
+(infrastructure), ou une même catégorie de projets
+d’investissement ou encore une activité de
+l’administration gérée et suivie en « mode projet ».
+Les actions ou projets constituent un niveau de détail de la
+destination des crédits. Ces crédits peuvent donc n’être que
+d’une seule grande nature de dépense (par exemple, ça ne
+peut n’être que du MDD ou de l’investissement) ou de
+plusieurs natures de dépense (par exemple, personnel et
+MDD ou MDD et investissement, ou même de toutes les
+natures) ; dans ce dernier cas, la même action ou le même
+projet se retrouvera dans les deux ou les trois chapitres
+regroupant les crédits par grande nature (personnel, MDD,
+investissement).
+[Loi Organique n°130-13 relative à la loi de Finances]
+16
+Dans la mesure où la loi organique dispose qu'il y a une
+fongibilité totale entre les différents projets/actions (niveau
+du paragraphe actuel), ce niveau de nomenclature bien que
+marquant une spécialité obligatoire des crédits est de fait
+une nomenclature très indicative ; la liberté totale de
+redéploiement pour le ministère gestionnaire sans
+demander l'autorisation au ministère de l’Economie et des
+Finances fait que l’exécution budgétaire peut être très
+différente de la prévision initiale.
+Quelques conseils sont proposés pour définir les
+projets/actions :
+- Les projets/actions doivent être conçus de façon
+pérenne ou du moins se déroulant sur plusieurs
+années dans la mesure où il s’agit de « morceaux » du
+programme (au niveau central ou de la région)
+mettant en œuvre de façon quasi permanente une
+politique publique ;
+- Le nombre de projets/actions ne doit pas avoir pour
+conséquence la fragmentation excessive de la
+nomenclature budgétaire car cela risque de la rendre
+difficilement lisible et d’en complexifier la gestion ;
+- Les noms des projets/actions doivent être lisibles,
+expressifs et facilement compréhensibles pour un
+lecteur non averti de façon à montrer précisément
+la finalité des crédits budgétaires. C’est un élément
+de la transparence budgétaire ;
+[Guide de construction des programmes budgétaires]
+17
+- Il est conseillé de ne pas utiliser d'adverbes ou de
+verbes qui sont plutôt réservés aux objectifs même si
+parfois le choix n’est pas facile ;
+- La totalité des crédits doit bien évidemment être
+répartie sur les différents projets/actions ;
+- Les crédits doivent être en totalité répartis de façon
+homogène s’ils ont le même objet dans une action car
+le but n’est pas de faire une comptabilité analytique ;
+- des actions supports peuvent être prévues dans un
+programme opérationnel s’il n’y a pas de programme
+support du ministère en tant que tel ou s’il s’agit d’un
+support exclusif de cette politique opérationnelle.
+Cette notion de « Projets/actions » est illustrée en annexe 2.
+ 7° Les lignes budgétaires (article 41 de la LOF). C’est
+le 7ème et dernier niveau de l’arborescence de la
+nomenclature budgétaire. C’est un niveau de la
+nomenclature d’exécution qui n’est pas présenté dans
+les morasses déposées au niveau des commissions
+parlementaires concernées ni dans les projets de
+performance mais seulement dans le projet de loi de
+règlement.
+Elles permettent de renseigner sur la « nature économique »
+de la dépense au sens budgétaire.
+En effet, le terme de « nature économique » de la dépense
+renvoie, en général, à la comptabilité générale et aux classes
+2 et 6 du plan comptable de l’Etat. Toutefois, il a été décidé
+[Loi Organique n°130-13 relative à la loi de Finances]
+18
+de conserver l’utilisation budgétaire de ce 7ème niveau
+pour :
+- Continuer à suivre les dépenses selon des
+regroupements qui ne correspondent pas forcément à
+des natures économiques au sens de la comptabilité
+générale mais qui ont un intérêt pour la maîtrise ou la
+compréhension de la dépense (frais de déplacement,
+frais de réception, dépenses d’informatique…) ;
+- Maîtriser la dépense sur certaines lignes budgétaires
+(dites lignes sensibles) en évitant que ces lignes soient
+alimentées par des crédits provenant d’autres lignes
+budgétaires.
+Pour cela le niveau de la ligne budgétaire répondra à deux
+objectifs:
+- Un suivi de la nature de la dépense au sens
+budgétaire avec une nomenclature des lignes
+budgétaires établie par la direction du budget en
+concertation avec la Trésorerie Générale du Royaume
+(TGR) et les ministères ;
+- Un suivi de la nature économique de la dépense au
+sens de la comptabilité générale avec une codification
+du plan comptable de l’Etat établi par la TGR en
+concertation avec la direction du budget et les
+ministères. Les codes de cette nomenclature
+économique seront appareillés avec les lignes
+budgétaires. Autrement dit, un code de la
+[Guide de construction des programmes budgétaires]
+19
+nomenclature économique devra être associé à
+chaque ligne budgétaire pour permettre l’alimentation
+de la comptabilité générale de l’Etat marocain.
+La budgétisation par programme nécessite donc d’établir et
+de tenir une situation des crédits selon deux axes (Cf.
+Annexe 1) :
+- Un axe juridique (vertical) selon l’arborescence
+définie par les articles 38 à 41 de la LOF détaillée
+ci-dessus et qui est présentée dans les morasses ;
+- Un axe programmatique (horizontal) qui est
+présenté dans les projets de performance,
+permettant de reconstituer tous les crédits d’un
+même programme, qui peuvent être de 3 chapitres
+différents et de 3 supports différents : budget
+général, SEGMA et CAS. Ces crédits d’un
+programme se subdivisent ensuite en régions,
+projets/actions et en lignes budgétaires en
+exécution, pour des montants identiques dans les
+deux axes.
+II – Les principes communs à la construction
+des programmes
+Des principes doivent être pris en compte lors de la
+construction des programmes :
+[Loi Organique n°130-13 relative à la loi de Finances]
+20
+ 1° Un programme est ministériel
+L’article 39 de la LOF précise qu’ « un programme est un
+ensemble cohérent de projets ou actions relevant d’un
+même département ministériel… ». Il n’y a donc pas de
+programmes interministériels.
+ 2° Un programme doit être simple à gérer
+Un programme budgétaire doit toujours être facilement
+gérable en exécution. Il ne doit jamais être construit de
+manière analytique, au sens de la comptabilité analytique, ni
+pour des raisons d’affichage ou de communication.
+Deux règles doivent toujours être respectées lors de
+l’exécution des crédits d’un programme :
+- La rémunération d’un agent (statutaire ou
+contractuel) ne s’impute que sur un programme et
+un seul ;
+- Une facture (dépenses de fonctionnement ou
+d’investissement) ne s’impute que sur un
+programme et un seul.
+ 3° Un programme doit avoir une taille critique
+La 3ème règle permettant d’assurer le caractère gérable
+facilement en exécution d’un programme est celle de sa
+taille critique. Plus le nombre de programmes est réduit,
+plus les enveloppes de crédits sont importantes, plus les
+gestionnaires auront des marges de manœuvre (fongibilité).
+En outre, la réduction du nombre de programmes permet
+de réduire les coûts de gestion (moins de mouvements de
+[Guide de construction des programmes budgétaires]
+21
+crédits, moins de visas, moins de marchés à passer, moins
+de factures à traiter…).
+ 4° L’inscription des crédits dans les grandes
+catégories (Personnel ; matériel et dépenses
+diverses ; investissement) doit toujours respecter
+les principes relatifs aux grandes natures
+économiques de la dépense
+Ainsi, tous les crédits relatifs aux dépenses de personnel
+doivent être inscrits dans les chapitres de personnel. Aucun
+agent de l’Etat ne doit être rémunéré à partir de crédits
+inscrits sur un chapitre de MDD ou d’investissement.
+De même, tous les crédits correspondant à l’acquisition
+d’immobilisations destinées à demeurer dans le patrimoine
+de l’Etat (terrains, immeubles, systèmes d’information,
+véhicules…) doivent être inscrits dans le chapitre
+d’investissement.
+Les crédits inscrits dans les chapitres MDD des ministères
+correspondent aux charges autres que du personnel du
+point de vue de la comptabilité générale et qui peuvent être
+des dépenses de fonctionnement (biens consommés au
+premier usage – ce qui les distingue des immobilisations –
+et qui correspondent à l’acquisition de fournitures de
+marchandises, d’approvisionnement ou de services
+consommés directement par les administrations au titre de
+leur activité ordinaire) ou des transferts.
+[Loi Organique n°130-13 relative à la loi de Finances]
+22
+III – Les programmes présentant une
+politique publique
+ 1° Le principe de base de construction des
+programmes est que ceux-ci regroupent les crédits
+de personnel, de fonctionnement et
+d’investissement consacrés à une politique
+publique ou à un ensemble cohérent de politiques
+publiques, qu’ils soient inscrits sur le BG, des
+SEGMA ou des CAS
+Toutefois, ce principe de base doit être concilié avec les
+règles communes énoncées ci-dessus (la rémunération d’un
+agent ainsi que toute facture doit être imputée sur un
+programme et un seul) ainsi que le respect de la taille
+critique. Cette dernière règle oblige très souvent à
+constituer des programmes concourant à plusieurs missions
+dévolues à un département ministériel ou regroupant
+plusieurs politiques d’intervention.
+ 2° La budgétisation des dépenses indivises au sein
+d’un programme de politique publique :
+ Les dépenses de matériel et dépenses
+diverses
+Dans de nombreux cas, les dépenses de MDD peuvent être
+imputées directement sur une action ou un projet au sein
+d’un programme. C’est notamment le cas lorsqu’une
+administration ou un service, disposant d’une autonomie de
+[Guide de construction des programmes budgétaires]
+23
+gestion, ne concourt qu’à une action de politique publique
+ou lorsqu’il s’agit de dépenses spécifiques facilement
+rattachables (études, colloques, communication…)
+Mais, sauf rares exceptions, il y a toujours des dépenses
+indivises (qui sont communes à toutes les actions ou à tous
+les projets) au sein d’un programme qui doivent être
+imputées, soit sur une action de soutien (support) qui doit
+être prévue au niveau de chaque programme, soit au sein
+du programme support de chaque ministère (cf. IV cidessous).
+En particulier, dès qu’un bâtiment administratif héberge du
+personnel dont l’activité concourt à plusieurs actions ou
+projets du programme, ses dépenses d’entretien et de
+fonctionnement doivent être imputées sur une action
+soutien.
+ La budgétisation des dépenses de personnel
+La rémunération d’un agent doit être rattachée à une action
+ou un projet.
+Dès lors qu’un agent concourt à la réalisation de plusieurs
+actions ou projets au sein d’un programme, sa
+rémunération doit être rattachée à l’action de soutien du
+programme.
+Si l’agent concourt à la réalisation d’actions ou projets
+relevant de plusieurs programmes du ministère, sa
+[Loi Organique n°130-13 relative à la loi de Finances]
+24
+rémunération doit être rattachée au programme de soutien
+du ministère (cf. IV ci-dessous).
+IV – Les programmes de soutien (ou support)
+Plusieurs dépenses de fonctionnement (MDD et
+personnel) peuvent ne pas être rattachables à un
+programme de politique publique.
+Il s’agit :
+ 1° Des dépenses « d’état-major » qui regroupent
+essentiellement les ministres et leurs collaborateurs
+directs (cabinets), les secrétariats généraux ainsi que les
+inspections générales ministérielles (non spécifiques à
+un métier ou une politique publique).
+En effet, dès lors qu’un département ministériel conduit
+plusieurs politiques publiques se traduisant par plusieurs
+programmes, il est nécessaire de grouper les fonctions
+« d’état-major » dans un programme de soutien car le
+ministre, ses collaborateurs et l’inspection générale
+concourent à la mise en œuvre de toutes les politiques
+publiques du département ministériel.
+ 2° Des dépenses des directions de soutien à
+l’ensemble du département ministériel.
+Il s’agit souvent des directions des affaires financières, des
+directions des ressources humaines, des directions des
+systèmes d’information, des directions des affaires
+[Guide de construction des programmes budgétaires]
+25
+juridiques, des directions de la communication et des
+services de la logistique. Dès lors que ces directions, qui
+peuvent être regroupées ou non au sein des secrétariats
+généraux, gèrent les moyens (financiers, humains,
+matériels…) de plusieurs autres directions « métiers » qui
+ont la charge de la mise en œuvre d’une politique publique,
+il est nécessaire d’inscrire les crédits de ces directions ou
+services dans le programme de soutien du département
+ministériel.
+ 3° Des dépenses des services déconcentrés
+polyvalents.
+Le personnel de certains services déconcentrés des
+départements ministériels concoure à la mise en œuvre de
+plusieurs politiques publiques dont les crédits sont inscrits
+dans plusieurs programmes.
+La rémunération d’un agent ne devant jamais être éclatée
+entre plusieurs programmes, il est nécessaire dans le cas des
+services polyvalents d’inscrire leurs crédits dans le
+programme soutien du ministère.
+Les limites à respecter dans la constitution des programmes
+de soutien :
+- Ne constituer qu’un programme soutien par
+département ministériel pour éviter une grande
+fragmentation des crédits qui n’aurait d’autre but
+que de « coller » à l’organigramme du département
+ministériel ; et pour permettre un pilotage de
+[Loi Organique n°130-13 relative à la loi de Finances]
+26
+l’ensemble des moyens communs par le hautresponsable hiérarchique désigné par le ministre
+comme responsable de ce programme ;
+- N’inclure que les crédits des services transversaux.
+Il peut y avoir des directions administratives et
+financières, des directions de ressources
+humaines…ou des inspections générales propres à
+un programme de politique publique ;
+- Ne pas constituer des programmes ne comportant
+qu’une nature de crédits (uniquement du personnel
+ou uniquement de l’investissement, par exemple).
+Ces programmes ministériels de soutien peuvent être, en
+général, intitulés « Conduite et pilotage des politiques du
+département ministériel de …. ».
+V – Les questions à se poser lors de la
+construction d’un programme budgétaire
+1° Le périmètre de chaque programme correspond-il
+bien aux missions confiées au département ministériel
+ou à l’institution en question et à la stratégie qu’il a
+définie ?
+Il convient d’abord de vérifier que les programmes
+présentés dans le projet de performance (PdP) du ministère
+sont cohérents avec :
+- Le décret relatif aux attributions et à l'organisation
+du ministère ;
+[Guide de construction des programmes budgétaires]
+27
+- La stratégie du ministère qu’il a préalablement
+définie, par exemple les stratégies sectorielles.
+2° Le périmètre du programme et sa décomposition en
+projets ou actions sont-ils lisibles et cohérents ?
+Les points successifs à examiner sont :
+ Le périmètre du programme intègre-t-il bien tous
+les moyens et activités du département ministériel
+qui contribuent à la politique qui le sous-tend ?
+- A quelle politique publique le programme répond-til ? Est-ce clairement expliqué ?
+- Y-a-t-il des programmes associés, proches, dans le
+même département ministériel ou dans un autre
+département ministériel ? Si oui, les frontières
+respectives de ces programmes sont-elles claires et
+lisibles ?
+- Existe-t-il un dispositif de coordination avec les
+autres programmes qui participent ou contribuent à
+la même « grande » politique publique ?
+- Si des crédits du personnel sont inscrits au niveau
+du programme, le personnel est-il bien dévolu
+uniquement aux projets ou actions du programme
+ou à leur soutien, ou s’agit-il de personnel
+polyvalent ou de soutien à tous les programmes ?
+- Comment le problème des fonctions supports est-il
+traité ?
+[Loi Organique n°130-13 relative à la loi de Finances]
+28
+ Le découpage du programme en projets ou actions
+est-il clair, lisible, et cohérent ?
+- Les projets ou actions sont-ils bien une déclinaison
+cohérente des programmes, c'est-à-dire
+correspondent-ils bien à ses finalités ou constituentils bien ses leviers d’action ?
+- Si le programme contient une action support, celleci est-elle bien circonscrite aux seules dépenses
+indivises du programme ?
+VI - Les risques en cas de mauvaise
+construction d’un programme
+1° Les programmes du département ministériel n’ont été
+définis qu’en fonction de l’organigramme existant ;
+2° Un décalage est constaté entre l’identification d’une
+politique publique, le périmètre du programme et le
+contenu des crédits affectés au programme ;
+3° Une réflexion insuffisante sur l’articulation avec
+d’éventuels programmes connexes ou associés ;
+4° Intégration insuffisante du personnel dédié au
+programme, ou à l’inverse intégration du personnel dont
+l’activité déborde le périmètre du programme ;
+5° Mauvaise prise en compte des fonctions supports ;
+[Guide de construction des programmes budgétaires]
+29
+Les éventuels défauts énoncés ci-dessus peuvent entraîner
+un risque de mauvaise imputation des crédits et donc une
+mauvaise information sur la réalité de la dépense publique
+ainsi qu’un pilotage défaillant de la politique publique et
+donc une inefficacité de l’action publique.
+VII - Les gages de qualité d’une bonne
+construction des programmes
+1° La mise à jour régulière de la stratégie du département
+ministériel ;
+2° Les réflexions menées sur l’organigramme du
+département ministériel en parallèle à la construction des
+programmes ou en conséquence des choix arrêtés ;
+3° La connaissance précise de l’activité des agents
+(organigrammes fonctionnels détaillés et mises à jour,
+existence ou non d’enquêtes-temps).
+[Loi Organique n°130-13 relative à la loi de Finances]
+30
+2ème
+ PARTIE – LA MISE EN ŒUVRE DE
+LA BONNE GOUVERNANCE DES
+PROGRAMMES
+Le 2ème alinéa de l’article 39 de la LOF dispose « qu’un
+responsable par programme, désigné au sein de chaque
+département ministériel ou institution, est chargé de définir
+les objectifs et indicateurs dudit programme et d’assurer le
+suivi de sa mise en œuvre. »
+Un programme peut rassembler les crédits d’une seule
+direction d’administration centrale, dans ce cas, il est
+logique que le directeur d’administration centrale en soit le
+responsable.
+Mais, il y a des cas dans lesquels un programme regroupe
+les crédits de plusieurs directions de l’administration
+centrale (DAC). Dans ce cas, le ministre concerné doit
+désigner parmi les directeurs de l’administration centrale
+celui qui assure la fonction de responsable de programme.
+Le fait qu’un directeur soit désigné responsable de
+programme ne remet pas en cause les fonctions des autres
+directeurs. En effet, chaque directeur de l’administration
+centrale est nommé et dispose des attributions de direction
+de son administration. Le responsable de programme
+désigné par le ministre se voit attribué le travail consistant
+à piloter la démarche de performance mise en œuvre de
+[Guide de construction des programmes budgétaires]
+31
+manière collégiale avec les autres directeurs de
+l’administration centrale.
+S’agissant des programmes de soutien qui peuvent contenir
+les fonctions d’état-major (Ministre, Cabinet, inspections
+générales), de soutien (DAF, DRH, DSI..) et les services
+polyvalents (en général les réseaux déconcentrés), il est
+possible de désigner les secrétaires généraux des ministères
+comme responsables de programmes.
+Les points à traiter successivement pour mettre en place
+une gouvernance efficace des programmes sont les
+suivants :
+I – Le responsable de programme désigné par
+le ministre doit être capable d’exercer sa
+fonction
+ Il doit être officiellement désigné par le ministre ;
+ Il doit recevoir une lettre de mission précisant ses
+attributions en tant que responsable de programme ;
+ Il est préférable que le responsable d’un programme
+ait un lien avec les administrations en charge de ce
+programme. Autrement dit, il est préférable qu’il soit
+au moins directeur de l’administration chargée de
+mettre en œuvre le programme ou une partie du
+programme ;
+[Loi Organique n°130-13 relative à la loi de Finances]
+32
+ Il est également recommandé que chaque
+responsable de programme dispose au moins d’un
+collaborateur pour le seconder dans son rôle de
+responsable de programme, surtout quand une
+coordination doit être menée entre plusieurs
+directions ou organismes.
+II – Le mode de gouvernance du programme
+doit être précisément défini
+Il est fortement recommandé d’établir une charte de
+gestion du programme précisant :
+ Les modalités de concertation et de coopération
+entre le responsable de programme et les autres
+directeurs d’administration centrale lorsque ceux-ci
+sont associés au même programme ;
+ Les relations entre le responsable de programme et
+la DRH et la DAF, surtout quand celle-ci est
+ordonnateur des crédits ;
+ Les relations du responsable de programme avec les
+organismes sous tutelle qui participent à la mise en
+œuvre du programme.
+[Guide de construction des programmes budgétaires]
+33
+III – La pyramide de pilotage du programme
+doit être mise en place
+ Le responsable de programme constitue le sommet
+de la pyramide de pilotage du programme. Il doit
+déléguer à d’autres collaborateurs le soin de diriger la
+mise en œuvre des actions ou des projets du
+programme. Selon les cas, ces collaborateurs
+peuvent également avoir besoin de déléguer une
+partie de pilotage à des agents subordonnés ;
+ Cette chaîne de responsabilité, une fois précisée,
+permet d’établir la pyramide du pilotage de chaque
+programme et de connaître les différents acteurs
+participant au dialogue de gestion ;
+ Cette pyramide de pilotage doit être à la fois réelle,
+complète et efficace. Réelle, cela veut dire que les
+agents désignés dans cette pyramide exercent
+réellement les responsabilités décrites ; complète
+veut dire que la pyramide comprend bien tous les
+agents nécessaires au pilotage de la politique portée
+par le programme ; efficace suppose que la chaîne de
+commandement ne soit pas trop longue (éviter les
+redondances, les points de passage inutiles ou
+bloquants) et qu’elle soit réactive.
+[Loi Organique n°130-13 relative à la loi de Finances]
+34
+IV - Les risques associés à ces questions si les
+réponses sont négatives
+ Absence de réflexion préalable à la définition du
+programme sur l’organisation optimale de la chaîne
+de responsabilité : « dilution » des responsabilités et
+de concurrence du fait de la coexistence de plusieurs
+responsables de même niveau, écarts entre la chaîne
+de commandement affichée et la réalité ;
+ Absence de délégation avec pour conséquence un
+risque de blocage;
+ Absence de pilotage de la mise en œuvre effective de
+la démarche de performance.
+V - Les gages de qualité liés à la construction
+des programmes
+ Structuration des responsabilités sur la base d’une
+analyse des missions et des fonctions de chaque
+acteur intervenant dans le programme ;
+ Animation par le responsable de programme de tous
+les acteurs du programme (comité de pilotage,
+réunions périodiques…) ;
+ Tableaux de bord du pilotage du programme.
+Annexes
+[ANNEXES]
+Annexe 1 : La nouvelle nomenclature budgétaire marocaine
+Premier axe : Axe vertical présenté dans les morasses
+*Pour les CAS il n’y a pas de distinction entre fonctionnement et investissement
+1er
+niveau Titre I Fonctionnement Titre II - Dépenses d'investissement
+Nomenclature de présentation dans les morasses
+2ème
+niveau Ministère A Ministère
+X… Ministère A Ministère
+X…
+3ème
+niveau Chapitre Personnel Chapitre Matériel et dépenses diverses Chapitre
+Person.. Chapitre Investissement Ch.
+Investis.
+4ème
+niveau
+Programme 1
+Prog. n… Programme 1
+dont Budget général :
+dont SEGMA alpha :
+dont SEGMA n…
+dont CAS* n°1 :
+dont CAS* n…
+Prog. n… Progr. Programme 1
+dont Budget général :
+dont SEGMA alpha :
+dont SEGMA n…
+dont CAS* n°1 :
+dont CAS* n…
+Prog. n… Progr.
+5ème
+niveau Région 1 Région 2 Région 1 Région 1 Région 2 Région
+n…
+Région
+…
+Région 1 Région
+n..
+Région 1 Région…
+6ème
+niveau
+Action/
+projet 1
+A/P
+n…
+A/P 1 A/P n…
+Action
+/
+projet
+1
+Action/
+projet n… A/P 1 A/P n…
+Action/
+projet
+…
+Action/p
+rojet 1
+A/P
+n….
+A/P 1 ou
+n
+A/P…
+Exécution
+7ème
+niveau Lignes Lignes Lignes Lignes Lignes Lignes Lignes Lignes Lignes Lignes Lignes Lignes Lignes Lignes
+[ANNEXES]
+Deuxième axe : Axe horizontal (programmatique) présenté dans les Projets de performance
+Projet de performance du ministère A
+Personnel MDD Total
+MDD Investissement Total
+Investis. CAS Totaux
+BG SEGMA BG SEGMA
+Programme 1
+Région 1
+Action/Projet 1
+A/P n
+Région n
+A/P 1
+A/Pn
+Total Programme 1
+Programme n…
+Région 1
+Action/Projet 1
+A/P n
+Région n
+A/P 1
+A/P n
+Total Pn
+[ANNEXES]
+Annexe 2 : Illustration de la notion de
+« Projets/actions » au sein des programmes
+Rappel : Les actions ou projets (articles 38 et 40 de la
+LOF) sont le 6ème niveau de l’arborescence de la
+nomenclature budgétaire. Ce niveau de nomenclature
+permet :
+- soit de préciser la destination de la dépense au sein
+du programme correspondant à un service public,
+un dispositif d’intervention (ou une même catégorie
+de dispositifs d’intervention) ou à une fonction
+administrative ;
+- soit d’identifier un très grand projet
+d’investissement (infrastructure), ou une même
+catégorie de projets d’investissement ou encore une
+activité de l’administration gérée et suivie en « mode
+projet ».
+Les actions ou projets ne sont pas une simple
+description littéraire de la destination de la dépense
+dans les projets de performance et les rapports de
+performance. C’est un niveau de nomenclature de
+prévision de la morasse et d’exécution suivi dans GID.
+Cela veut dire qu’à chaque action ou projet doit
+correspondre un montant de crédits (loi de finances de
+l’année) et que toute dépense budgétaire doit pouvoir
+être imputée sur une action ou un projet (exécution).
+C’est pourquoi, les intitulés des actions ou projets à
+l’intérieur d’un programme doivent être suffisamment
+larges ou génériques pour permettre l’imputation de
+toutes les dépenses du programme sur une action ou
+un projet composant le programme.
+[ANNEXES]
+Programmes de politique publique
+S’agissant des programmes de politique publique, le niveau
+des projets/actions permet de détailler (préciser) la
+destination de la dépense :
+ En détaillant les services publics rendus ou les
+activités sous-jacentes au service public rendu.
+Par exemple, le programme « Appui social aux étudiants »
+du ministère de l’Enseignement Supérieur, de la Recherche
+Scientifique et de la Formation des Cadres comporte les 3
+actions de service public suivantes :
+- Bourses ;
+- Hébergement et restauration des étudiants ;
+- Amélioration et renforcement des cités et
+restaurants universitaires.
+Deuxième exemple, le programme « Protection et
+sécurisation du domaine forestier » du Haut-Commissariat
+aux Eaux et Forêts et à la Lutte Contre la Désertification
+qui comprend 3 actions correspondant à des services
+rendus à la population (libellés simplifiés) :
+- Sécurisation du domaine forestier ;
+- Renforcement des infrastructures et équipement ;
+- Sécurité et surveillance des domaines forestiers.
+[ANNEXES]
+Troisième exemple, le programme «Météorologie » du
+Ministère Délégué, Chargé de l’Eau qui détaille l’activité du
+service public de la météorologie en 5 actions :
+- Modernisation de l'administration ;
+- Extension et développement du réseau
+météorologique ;
+- Amélioration et développement de l'exploitation
+météorologique ;
+- Maintenance et conservation du patrimoine ;
+- Développement des moyens et systèmes d'alerte et
+de veille météorologiques pour la lutte contre les
+effets des catastrophes naturelles.
+ En affinant les populations cibles bénéficiaires des
+interventions de l’Etat et/ou en détaillant les
+catégories de dispositifs d’intervention.
+Par exemple, les contenus des deux programmes de
+politique publique du Département de la Pêche Maritime
+sont détaillés par des actions qui précisent très bien la
+destination de la dépense.
+Ainsi, le Programme «Développement de la pêche et
+aquaculture et valorisation de la ressource » comprend les 4
+actions suivantes :
+- Protection de la ressource halieutique et
+développement de la pêche et aquaculture ;
+- Contrôle des pêches ;
+- Valorisation des produits de la pêche ;
+- Projets aménagés intégrés de la pêche artisanale.
+[ANNEXES]
+Et le programme «Qualification, promotionsocioprofessionnelle et sécurité des gens de mer » qui
+comprend 3 actions :
+- Appui aux établissements de formation maritime ;
+- Promotion socioprofessionnelle du secteur de la
+pêche maritime ;
+- Recherche et sauvetage des vies humaines en mer.
+Autre exemple, le programme « Gestion, préservation et
+développement de l’eau » du Ministère Délégué Chargé de
+l’Eau qui comprend les 7 actions suivantes :
+- Gestion et préservation de l’eau ;
+- Connaissance et évaluation des ressources en eau ;
+- Eau potable et assainissement en milieu rural ;
+- Appui aux agences de bassins hydrauliques et
+développement du partenariat ;
+- Maintenance et conservation du patrimoine ;
+- Extension et aménagement du patrimoine ;
+- Aménagement des cours d’eau et protection contre
+les inondations.
+ En précisant les grands projets ou catégories de
+grands projets financés par le programme qui
+peuvent être des infrastructures ou des projets
+structurants (systèmes d’information par exemple).
+Par exemple, le programme « Aménagement et
+développement forestier » du Haut-Commissariat aux Eaux
+et Forêts et à la Lutte Contre la Désertification comporte
+trois catégories de projets :
+[ANNEXES]
+1. Projet portant sur la reconstitution des
+écosystèmes forestiers ;
+2. Projet portant sur l’étude d’aménagement des
+forêts ;
+3. Projet d’aménagement et de gestion des forêts
+urbaines et périurbaines.
+Autre exemple du même Haut-Commissariat, le
+programme « Lutte contre la désertification et protection
+de la nature » se décompose en 4 projets :
+1. Projet d’aménagement des bassins versants, de
+la conservation des sols et de lutte contre
+l’ensablement ;
+2. Projet de protection de la biodiversité ;
+3. Projet de lutte contre les incendies ;
+4. Projet de chasse et pêche continentale.
+II - Programmes supports ou de soutien
+S’agissant des programmes support le niveau des
+projets/actions permet de détailler le plus souvent les
+grandes fonctions assurées par les directions dont les
+moyens sont regroupés dans ces programmes.
+Par exemple, le programme « Pilotage et
+gouvernance/Administration générale » du Ministère
+Délégué Chargé de l’Eau est détaillé selon les 4 actions
+suivantes :
+1. Soutien aux missions ;
+2. Formation et stages ;
+3. Systèmes d’information et d’organisation ;
+[ANNEXES]
+4. Adaptation du patrimoine administratif.
+Autre exemple, le programme « Pilotage et gouvernance du
+Département de la Pêche Maritime est détaillé selon les 3
+actions suivantes :
+Action 1 : Aménagement et équipement de
+l’Administration (Aménagement des services centraux ;
+Equipements en bureautique et informatique) ;
+Action 2 : Appui aux services extérieurs (Construction,
+aménagement des services extérieurs ; Equipements en
+bureautique et informatique) ;
+Action 3 : Formation continue (Renforcement des
+compétences ; Knowledge management).
+http://lof.finances.gov.ma
+DIRECTION DU BUDGET
+Bd Mohammed V, Quartier administratif - Rabat - Chellah
+Téléphone : (212) (0) 5 37 67 72 67
+Télécopie : (212) (0) 5 37 67 75 30

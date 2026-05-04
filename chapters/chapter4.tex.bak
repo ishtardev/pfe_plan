@@ -1,0 +1,662 @@
+\phantomsection
+\section*{Chapitre 4 : Donn\'ees et Construction du Panel}
+\addcontentsline{toc}{section}{Chapitre 4 : Données et Construction du Panel}
+
+\bigskip
+
+Ce chapitre pr\'esente l'int\'egralit\'e de la cha\^ine de construction des donn\'ees~: les sources r\'eelles mobilis\'ees, le panel agr\'eg\'e extrait des rapports TGR, la m\'ethodologie de simulation calibr\'ee au niveau ligne, et la pr\'eparation des variables explicatives. Cette d\'emarche de constitution des donn\'ees constitue une contribution m\'ethodologique en soi~: en l'absence de donn\'ees d\'esagr\'eg\'ees publiques, la simulation calibr\'ee sur agr\'egats officiels permet de reconstituer un panel ligne-par-ligne qui pr\'eserve fid\`element les taux r\'eels publi\'es par la TGR.
+
+%================================================================
+\phantomsection
+\subsection*{4.1 \quad Sources de donn\'ees}
+\addcontentsline{toc}{subsection}{4.1 Sources de données}
+%================================================================
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.1.1 \quad Rapports trimestriels TGR~: source principale}
+\addcontentsline{toc}{subsubsection}{4.1.1 Rapports trimestriels TGR : source principale}
+%----------------------------------------------------------------
+
+Conform\'ement aux dispositions de la LOF~130-13, le minist\`ere de la Justice engage et liquide ses d\'epenses tout au long de l'exercice budg\'etaire~; la TGR publie trimestriellement le taux de r\'ealisation par cat\'egorie de d\'epense \citep{MEF2015, DPB2020}. La source primaire de notre \'etude est constitu\'ee des \textbf{Rapports trimestriels sur l'ex\'ecution de la loi de finances}, publi\'es par la Tr\'esorerie G\'en\'erale du Royaume (TGR) et accessibles publiquement sur le portail du minist\`ere de l'\'Economie et des Finances.
+
+\paragraph{Structure des rapports.}
+
+Chaque rapport trimestriel fournit, pour le minist\`ere de la Justice, les informations suivantes, exprim\'ees en millions de dirhams~:
+
+\begin{itemize}
+    \item \textbf{Loi de Finances (LF)}~: montant initial des cr\'edits autoris\'es pour l'ann\'ee en cours.
+    \item \textbf{R\'ealisations cumul\'ees \`a la fin du trimestre}~: montant effectivement ex\'ecut\'e depuis le d\'ebut de l'exercice.
+    \item \textbf{Taux de r\'ealisation}~: rapport entre r\'ealisations cumul\'ees et cr\'edits LF.
+\end{itemize}
+
+Ces informations sont disponibles s\'epar\'ement pour trois cat\'egories de d\'epenses~: \textbf{d\'epenses de personnel}, \textbf{d\'epenses de mat\'eriel et d\'epenses diverses}, et \textbf{d\'epenses d'investissement}.
+
+\paragraph{Couverture temporelle.}
+
+Les rapports disponibles couvrent la p\'eriode \textbf{2020~T1 -- 2025~T4}, soit \textbf{24~observations trimestrielles} par cat\'egorie. L'ensemble de la s\'erie est post\'erieur \`a l'entr\'ee en vigueur effective de la LOF~130-13 (2016), garantissant une homog\'en\'eit\'e institutionnelle du cadre budg\'etaire.
+
+\paragraph{Exclusion des rapports ant\'erieurs \`a 2020.}
+
+La TGR publiait \'egalement des rapports sur l'ex\'ecution de la loi de finances pour la p\'eriode 2017--2019, mais sous une \textbf{fr\'equence semestrielle} (S1 et S2) plut\^ot que trimestrielle. Ces donn\'ees ont \'et\'e \textbf{d\'elib\'er\'ement exclues} pour deux raisons cumul\'ees~:
+
+\begin{enumerate}
+    \item \textbf{Incompatibilit\'e de granularit\'e}~: un taux semestriel (T1+T2 ou T3+T4 fusionn\'es) ne peut pas \'etre directement compar\'e ni converti en taux trimestriels sans hypoth\`eses arbitraires sur la r\'epartition infra-semestrielle des d\'epenses. Les features cl\'es du mod\`ele --- notamment \texttt{taux\_lag4} (m\^eme trimestre, ann\'ee pr\'ec\'edente) et \texttt{taux\_lag1} (trimestre pr\'ec\'edent) --- seraient impossibles \`a calculer de fa\c{c}on fiable.
+
+    \item \textbf{Rupture structurelle de mesure}~: le passage du reporting semestriel au reporting trimestriel en 2020 refl\`ete tr\`es probablement une \'evolution dans les pratiques de suivi et de contr\^ole interne de la TGR, pas uniquement un changement de fr\'equence de publication. Les conventions comptables, les p\'erim\`etres de rattachement des d\'epenses et les d\'elais d'ordonnancement peuvent ne pas \^etre directement comparables entre les deux r\'egimes de reporting. Int\'egrer ces ann\'ees constituerait un risque de biais syst\'ematique difficult\`a quantifier.
+\end{enumerate}
+
+Cette exclusion est coh\'erente avec les recommandations m\'ethodologiques relatives aux ruptures de s\'eries temporelles~: en pr\'esence d'une discontinuit\'e structurelle, il est pr\'ef\'erable de sacrifier des observations historiques plut\^ot que de compromettre la stationnarit\'e et la comparabilit\'e de la s\'erie \citep{Hyndman2021}.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.1.2 \quad P\'erim\`etre des donn\'ees retenues}
+\addcontentsline{toc}{subsubsection}{4.1.2 Périmètre des données retenues}
+%----------------------------------------------------------------
+
+Les donn\'ees disponibles dans les rapports TGR sont de nature \textbf{agr\'eg\'ee par cat\'egorie}~: elles ne fournissent pas la ventilation infra-annuelle par programme budg\'etaire (programmes~300, 301, 302, 303). Les morasses budg\'etaires annuelles, qui contiennent cette ventilation d\'etaill\'ee, sont des documents PDF non structur\'es dont l'extraction syst\'ematique pour l'ensemble de la p\'eriode 2020--2025 d\'epasse le cadre de ce m\'emoire. Par cons\'equent, les variables explicatives de niveau programmatique (parts relatives des programmes, indicateurs de concentration) ne sont pas int\'egr\'ees dans cette version du mod\`ele.
+
+Le panel retenu comprend ainsi, pour chacune des \textbf{3~cat\'egories} et \textbf{6~exercices} (2020 \`a 2025), les quatre observations trimestrielles des rapports TGR disponibles publiquement~: \textbf{72~observations brutes} au total. Cette base constitue la seule source de donn\'ees quantitatives de notre \'etude.
+
+%================================================================
+\phantomsection
+\subsection*{4.2 \quad Panel agr\'eg\'e et p\'erim\`etre}
+\addcontentsline{toc}{subsection}{4.2 Panel agrégé et périmètre}
+%================================================================
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.2.1 \quad Variable cible}
+\addcontentsline{toc}{subsubsection}{4.2.1 Variable cible}
+%----------------------------------------------------------------
+
+La \textbf{variable cible} est le taux de r\'ealisation trimestriel cumul\'e, not\'e $y_{c,t}$ pour la cat\'egorie $c$ au trimestre $t$~:
+
+$$y_{c,t} = \frac{\text{R\'ealisations cumul\'ees \`a la fin du trimestre }t \text{ (cat\'egorie }c)}{\text{Cr\'edits LF de l'ann\'ee (cat\'egorie }c)}$$
+
+Cette variable est directement disponible dans les rapports TGR. Sa valeur au T4 (taux d'ex\'ecution annuel final) est l'indicateur de performance central du RAP transmis au Parlement conform\'ement \`a la LOF~130-13.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.2.2 \quad Panel trimestriel et features}
+\addcontentsline{toc}{subsubsection}{4.2.2 Panel trimestriel et features}
+%----------------------------------------------------------------
+
+\paragraph{Structure du panel.}
+
+Les 72~observations brutes sont organis\'ees en un panel en format long~: chaque ligne repr\'esente une combinaison unique (ann\'ee, trimestre, cat\'egorie). Les colonnes retenues apr\`es traitement sont~: ann\'ee, trimestre, num\'ero du trimestre, cat\'egorie, LF (en MDH), r\'ealisations cumul\'ees (en MDH), taux d'ex\'ecution, et les features d\'eriv\'ees d\'ecrites ci-dessous.
+
+\paragraph{Features retenues.}
+
+Pour chaque observation $(c, t)$, le vecteur de features $\mathbf{x}_{c,t}$ comprend les cinq variables suivantes~:
+
+\begin{itemize}
+    \item \textbf{Num\'ero du trimestre} (\texttt{quarter\_num} $\in \{1, 2, 3, 4\}$)~: variable ordinale capturant la saisonnalit\'e. C'est le signal calendaire principal~: les taux T4 sont syst\'ematiquement sup\'erieurs aux taux T1.
+
+    \item \textbf{Cat\'egorie encod\'ee} (\texttt{cat\_enc} $\in \{0, 1, 2\}$)~: encodage ordinal des trois cat\'egories (INVESTISSEMENT~= 0, MAT\'ERIEL~= 1, PERSONNEL~= 2). Cette variable permet au mod\`ele de distinguer les profils d'ex\'ecution tr\`es diff\'erenci\'es entre cat\'egories.
+
+    \item \textbf{Taux lag-1} (\texttt{taux\_lag1})~: taux d'ex\'ecution du trimestre pr\'ec\'edent, dans la m\^eme cat\'egorie et la m\^eme ann\'ee. Capture la dynamique de court terme~: un T2 \'elev\'e indique g\'en\'eralement un T3 \'elev\'e.
+
+    \item \textbf{Taux lag-4} (\texttt{taux\_lag4})~: taux d'ex\'ecution du m\^eme trimestre de l'ann\'ee pr\'ec\'edente. C'est la feature saisonni\`ere centrale~: elle repr\'esente le \og{}\textit{m\^eme trimestre, l'ann\'ee d'avant}\fg{} et capture la persistance inter-annuelle du profil d'ex\'ecution.
+
+    \item \textbf{Ratio LF} (\texttt{lf\_ratio})~: rapport entre l'enveloppe LF de l'ann\'ee et la moyenne des enveloppes LF sur l'ensemble de la p\'eriode, pour la m\^eme cat\'egorie. Un ratio $> 1$ signale une ann\'ee dotation-forte~; un ratio $< 1$ une ann\'ee de contrainte budg\'etaire. Cette variable permet au mod\`ele de moduler ses pr\'evisions en fonction de l'effort budg\'etaire relatif.
+\end{itemize}
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.2.3 \quad Traitement des observations manquantes}
+\addcontentsline{toc}{subsubsection}{4.2.3 Traitement des observations manquantes}
+%----------------------------------------------------------------
+
+La construction des features autorégr\'essives g\'en\`ere des valeurs manquantes dans deux cas~:
+
+\begin{enumerate}
+    \item \textbf{Les trimestres~T1 de chaque ann\'ee}~: par construction, \texttt{taux\_lag1} est ind\'efini pour T1 (il n'existe pas de T0 dans le panel). Ces observations sont exclues de l'ensemble d'entra\^inement et de test.
+
+    \item \textbf{L'ann\'ee 2020}~: aucune donn\'ee 2019 n'est disponible, rendant \texttt{taux\_lag4} ind\'efini pour l'ensemble des quatre trimestres 2020. Toutes les observations 2020 sont donc exclues.
+\end{enumerate}
+
+Apr\`es exclusion de ces lignes, le panel utilis\'e pour la mod\'elisation comprend \textbf{45~observations}~: 5~ann\'ees (2021 \`a 2025) $\times$ 3~catégories $\times$ 3~trimestres par an (T2, T3, T4).
+
+%================================================================
+\phantomsection
+\subsection*{4.3 \quad Construction de la base ligne par ligne}
+\addcontentsline{toc}{subsection}{4.3 Construction de la base ligne par ligne}
+%================================================================
+
+Les rapports TGR ne fournissant des donn\'ees qu\`a la maille cat\'egorielle, la reconstitution d'un panel d\'esagr\'eg\'e par ligne budg\'etaire n\'ecessite une approche de \'simulation calibr\'ee. La d\'emarche suit trois \'etapes~: (1)~extraire la structure de la morasse, (2)~affecter des profils d'ex\'ecution par nature de ligne, puis (3)~calibrer par contrainte sur les agr\'egats TGR.
+
+%================================================================
+\phantomsection
+\subsection*{4.4 \quad Feature engineering}
+\addcontentsline{toc}{subsection}{4.4 Feature engineering}
+%================================================================
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.4.1 \quad Variable cible}
+\addcontentsline{toc}{subsubsection}{4.4.1 Variable cible}
+%----------------------------------------------------------------
+
+La \textbf{variable cible} du mod\`ele de pr\'evision par ligne est le taux de r\'ealisation cumul\'e au 31~d\'ecembre (T4), not\'e $y_{i,Y}$ pour la ligne~$i$ et l'exercice~$Y$~:
+
+$$y_{i,Y} = \frac{\text{R\'ealisations cumul\'ees ligne }i\text{ \'a T4 de l'ann\'ee }Y}{\text{Cr\'edits LF ligne }i\text{, ann\'ee }Y}$$
+
+Le mod\`ele utilise un \textbf{snapshot T2} (informations disponibles au 30~juin) pour pr\'evoir ce taux T4 cinq \'a six mois \'a l'avance --- \'a l'horizon utile pour d\'eclencher des mesures correctives avant la fermeture de la r\'egie en novembre.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.4.2 \quad Features retenues}
+\addcontentsline{toc}{subsubsection}{4.4.2 Features retenues}
+%----------------------------------------------------------------
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.3.1 \quad Statistiques descriptives par cat\'egorie}
+\addcontentsline{toc}{subsubsection}{4.3.1 Statistiques descriptives par catégorie}
+%----------------------------------------------------------------
+
+Le tableau~\ref{tab:desc} pr\'esente les statistiques descriptives des taux d'ex\'ecution trimestriels sur la p\'eriode 2020--2025, par cat\'egorie et par num\'ero de trimestre.
+
+\begin{table}[H]
+\centering
+\caption{Taux d'ex\'ecution moyen par trimestre et par cat\'egorie (2020--2025)}
+\label{tab:desc}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Cat\'egorie} & \textbf{T1} & \textbf{T2} & \textbf{T3} & \textbf{T4} \\
+\midrule
+Investissement & 1{,}2\,\% & 14{,}6\,\% & 40{,}6\,\% & 86{,}3\,\% \\
+Mat\'eriel & 29{,}0\,\% & 50{,}6\,\% & 69{,}9\,\% & 101{,}1\,\% \\
+Personnel & 24{,}2\,\% & 49{,}4\,\% & 74{,}2\,\% & 99{,}4\,\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Trois profils se distinguent clairement~:
+
+\begin{itemize}
+    \item \textbf{D\'epenses de personnel}~: profil quasi-lin\'eaire, tr\`es stable inter-annuellement. La moyenne par trimestre varie de 24,2\,\% (T1) \`a 99,4\,\% (T4), avec un \'ecart-type inf\'erieur \`a 1~point de pourcentage par trimestre. Ce profil r\'egulier s'explique par la nature m\'ecanique des d\'epenses de personnel~: les salaires sont vers\'es selon un calendrier fixe, ind\'ependant des al\'eas de gestion.
+
+    \item \textbf{D\'epenses de mat\'eriel}~: profil croissant avec une variabilit\'e mod\'er\'ee ($\sigma_{\text{T1}} \approx 8{,}5\,\text{pp}$, $\sigma_{\text{T4}} \approx 9{,}3\,\text{pp}$). L'ann\'ee 2024 constitue un outlier notable~: le taux T4 atteint 120\%, r\'ev\'elant des paiements sur reports ou sur cr\'edits de gestion suppl\'ementaires ouverts en fin d'exercice.
+
+    \item \textbf{D\'epenses d'investissement}~: profil tr\`es marqu\'e et volatil. Le taux T1 est quasi-nul (0 \`a 2,6\,\%), reflet direct de l'absence de march\'es ex\'ecut\'es au premier trimestre ; le taux T4 oscille entre 70,8\,\% (2020) et 106,5\,\% (2025), soit une amplitude de 36~points de pourcentage pour un m\^eme trimestre. Cette cat\'egorie est l'enjeu central de la pr\'evision budg\'etaire.
+\end{itemize}
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.3.2 \quad Profil saisonnier}
+\addcontentsline{toc}{subsubsection}{4.3.2 Profil saisonnier}
+%----------------------------------------------------------------
+
+La figure~\ref{fig:seasonality} illustre le profil saisonnier des taux d'ex\'ecution pour les trois cat\'egories sur la p\'eriode 2021--2025 (2020 sur certaines cat\'egories est inclus \`a titre indicatif). Les courbes confirment les patterns identifi\'es dans la section pr\'ec\'edente.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/seasonality.png}
+    \caption{Profil saisonnier du taux d'ex\'ecution par cat\'egorie (2020--2025).}
+    \label{fig:seasonality}
+\end{figure}
+
+Pour les d\'epenses d'investissement, la concentration des paiements en fin d'exercice (\textit{quatri\`eme trimestre} = octobre--d\'ecembre) est syst\'ematique et s'explique par les d\'elais incompressibles du cycle de la commande publique~: passation des march\'es (T1--T2), r\'ealisation des travaux (T2--T3), ordonnancement et paiement (T3--T4) \citep{CourDesComptes2016}. Cette configuration cr\'ee pr\'ecis\'ement le risque de sous-consommation chronique que notre mod\`ele cherche \`a anticiper.
+
+%================================================================
+\phantomsection
+\subsection*{4.5 \quad Analyse exploratoire}
+\addcontentsline{toc}{subsection}{4.5 Analyse exploratoire}
+%================================================================
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.5.1 \quad Statistiques descriptives par cat\'egorie}
+\addcontentsline{toc}{subsubsection}{4.5.1 Statistiques descriptives par catégorie}
+%----------------------------------------------------------------
+
+Avec seulement 45~observations utilisables, la division fixe entra\^inement/test (67\,\%/33\,\%) produirait une \'evaluation trop instable. Pour obvier \`a ce probl\`eme tout en respectant strictement la causalit\'e temporelle, nous adoptons un protocole de \textbf{validation walk-forward \`a fen\^etre expansive}, recommand\'e pour l'\'{e}valuation des mod\`eles de s\'eries temporelles \citep{Hyndman2021}.
+
+Le principe est le suivant~: pour chaque ann\'ee de test $Y \in \{2022, 2023, 2024, 2025\}$, le mod\`ele est entra\^in\'e uniquement sur les ann\'ees \textit{strictement ant\'erieures} \`a~$Y$, puis \'evalu\'e sur les 9~observations de l'ann\'ee~$Y$ (3~cat\'egories $\times$ 3~trimestres T2--T4). La taille du jeu d'entra\^inement cro\^it \`a chaque fold~: 9~observations pour tester 2022, 18~pour tester 2023, 27~pour tester 2024 et 36~pour tester 2025. L'ann\'ee~2021 est exclue des folds de test faute de donn\'ees ant\'erieures disponibles. Cette proc\'edure fournit \textbf{4~estimations ind\'ependantes} de la performance.
+
+\paragraph{Avantages du protocole walk-forward.}
+
+\begin{itemize}
+    \item \textbf{Absence totale de data leakage}~: pour chaque fold, le jeu d'entra\^inement ne contient aucune donn\'ee post\'erieure \`a la date de test. C'est la propri\'et\'e fondamentale que la validation LOYO classique ne garantit pas --- en retirant une ann\'ee centrale (ex.~: 2022), LOYO entra\^ine inadvertamment sur des ann\'ees futures (2023, 2024, 2025), biaisant l'estimation de performance pour les premiers plis.
+    \item \textbf{Coh\'erence avec le d\'eploiement r\'eel}~: chaque fold simule exactement la situation op\'erationnelle~: le gestionnaire dispose de toutes les donn\'ees pass\'ees et cherche \`a pr\'evoir l'ann\'ee courante.
+    \item \textbf{R\'ev\'elateur de la courbe d'apprentissage}~: l'am\'elioration syst\'ematique de la pr\'ecision entre le fold 2022 (9~points d'entra\^inement) et le fold 2025 (36~points) quantifie directement la valeur de chaque ann\'ee de donn\'ees suppl\'ementaire.
+\end{itemize}
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.4.2 \quad Benchmarks de r\'ef\'erence}
+\addcontentsline{toc}{subsubsection}{4.4.2 Benchmarks de référence}
+%----------------------------------------------------------------
+
+Deux pr\'evisions de r\'ef\'erence sont construites~: tout mod\`ele ML doit les surpasser pour justifier sa valeur op\'erationnelle.
+
+\paragraph{Moyenne historique saisonni\`ere (Hist\_mean).}
+
+Pour chaque combinaison (categorie, trimestre), la pr\'evision est la moyenne des taux observ\'es lors de toutes les ann\'ees d'entra\^inement disponibles pour ce m\^eme trimestre~:
+
+$$\hat{y}_{c,t}^{\text{hist}} = \frac{1}{|\mathcal{T}_{\text{train}}|} \sum_{Y \in \mathcal{T}_{\text{train}}} y_{c,Q(t),Y}$$
+
+o\`u $Q(t) \in \{2, 3, 4\}$ est le num\'ero du trimestre et $\mathcal{T}_{\text{train}}$ l'ensemble des ann\'ees d'entra\^inement. Ce benchmark capture la saisonnalit\'e pure sans aucun apprentissage~; il constitue la r\'ef\'erence op\'erationnelle minimale.
+
+\paragraph{Na\"\i f saisonnier (Naive\_lag4).}
+
+La pr\'evision est simplement le taux observ\'e au m\^eme trimestre de l'ann\'ee pr\'ec\'edente~:
+
+$$\hat{y}_{c,t}^{\text{na\"\i f}} = y_{c,Q(t),Y-1}$$
+
+Ce benchmark est le plus simple et souvent difficile \`a battre sur des donn\'ees \`a forte saisonnalit\'e \citep{Leal2008}.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.4.3 \quad Calibration des mod\`eles ML}
+\addcontentsline{toc}{subsubsection}{4.4.3 Calibration des modèles ML}
+%----------------------------------------------------------------
+
+\paragraph{Random Forest.}
+
+Les hyperparamd\`etres retenus apr\`es ajustement au contexte (petit \'echantillon)~: $B = 200$~arbres, profondeur maximale $= 3$, \texttt{min\_samples\_leaf} $= 2$, graine al\'eatoire $= 42$. La profondeur limit\'ee \`a 3~niveaux pr\'evient le sur-apprentissage sur un \'echantillon de seulement 36~observations d'entra\^inement.
+
+\paragraph{XGBoost.}
+
+Hyperparamd\`etres retenus~: $B = 200$~arbres, profondeur $= 2$, taux d'apprentissage $\eta = 0{,}05$, sous-\'echantillonnage $= 0{,}8$, r\'egularisation $L_1$ (\texttt{reg\_alpha} $= 0{,}1$), graine al\'eatoire $= 42$. La profondeur tr\`es faible (2~niveaux) et la r\'egularisation forte sont les garanties anti-overfitting adapt\'ees \`a notre petite taille d'\'echantillon.
+
+\paragraph{Note sur les mod\`eles exclus.}
+
+Les mod\`eles ARIMA/SARIMA et les architectures de Deep Learning (LSTM, GRU) \'evoqu\'es dans la revue de litt\'erature n'ont pas \'et\'e impl\'ement\'es dans cette \'etude. Avec 45~observations dont 36~au maximum pour l'entra\^inement, la s\'election des ordres ARIMA par AIC/BIC serait statistiquement peu fiable, et l'entra\^inement de mod\`eles r\'ecurrents ne r\'epondrait pas aux conditions minimales de validit\'e (plusieurs centaines d'observations typ\-iquement requises). Cette exclusion ne constitue pas une limite pour les conclusions op\'erationnelles, les mod\`eles RF et XGBoost \'etant reconnus comme les plus adapt\'es aux jeux de donn\'ees tabulaires de taille mod\'er\'ee \citep{Chen2016}.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.4.4 \quad M\'etriques d'\'evaluation}
+\addcontentsline{toc}{subsubsection}{4.4.4 Métriques d'évaluation}
+%----------------------------------------------------------------
+
+Trois m\'etriques compl\'ementaires sont retenues \citep{Botchkarev2019}~:
+
+\begin{align}
+    \text{RMSE} &= \sqrt{\frac{1}{n}\sum_{t=1}^{n}(y_t - \hat{y}_t)^2} \label{eq:rmse4} \\[6pt]
+    \text{MAE}  &= \frac{1}{n}\sum_{t=1}^{n}|y_t - \hat{y}_t| \label{eq:mae4} \\[6pt]
+    \text{MAPE} &= \frac{100}{n}\sum_{t=1}^{n}\left|\frac{y_t - \hat{y}_t}{y_t}\right| \label{eq:mape4}
+\end{align}
+
+Le \textbf{RMSE} est la m\'etrique principale~: il p\'enalise davantage les grands \'ecarts et constitue la r\'ef\'erence standard dans la litt\'erature de pr\'evision des finances publiques. Le \textbf{MAE} offre une interpr\'etation directe en points de pourcentage. Le \textbf{MAPE} est pr\'esent\'e pour la comparabilit\'e, mais doit \^etre interpr\'et\'e avec pr\'ecaution pour les d\'epenses d'investissement dont le taux T1 est quasi-nul~: en pr\'esence d'un taux r\'eel proche de z\'ero, la moindre erreur absolue g\'en\`ere un MAPE consid\'erable.
+
+%================================================================
+\phantomsection
+\subsection*{4.5 \quad R\'esultats empiriques}
+\addcontentsline{toc}{subsection}{4.5 Résultats empiriques}
+%================================================================
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.5.1 \quad Performance comparative des mod\`eles}
+\addcontentsline{toc}{subsubsection}{4.5.1 Performance comparative des modèles}
+%----------------------------------------------------------------
+
+Le tableau~\ref{tab:results} pr\'esente les m\'etriques de performance moyenn\'ees sur les 4~folds walk-forward (2022--2025), pour chaque mod\`ele et chaque cat\'egorie de d\'epense.
+
+\begin{table}[H]
+\centering
+\caption{R\'esultats de la validation walk-forward --- RMSE, MAE et MAPE par mod\`ele et cat\'egorie (moyenne sur 4~folds, 2022--2025)}
+\label{tab:results}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Mod\`ele} & \textbf{Cat\'egorie} & \textbf{RMSE} & \textbf{MAE} & \textbf{MAPE (\%)} \\
+\midrule
+\multirow{3}{*}{Hist\_mean (benchmark)} 
+  & Investissement & 0{,}1491 & 0{,}1317 & 46{,}48 \\
+  & Mat\'eriel     & \textbf{0{,}0825} & \textbf{0{,}0786} & \textbf{10{,}21} \\
+  & Personnel      & \textbf{0{,}0120} & \textbf{0{,}0106} & \textbf{1{,}44} \\
+\midrule
+\multirow{3}{*}{Na\"\i f lag-4 (benchmark)}
+  & Investissement & 0{,}1614 & 0{,}1470 & 47{,}84 \\
+  & Mat\'eriel     & 0{,}1012 & 0{,}0954 & 13{,}15 \\
+  & Personnel      & 0{,}0152 & 0{,}0133 &  1{,}71 \\
+\midrule
+\multirow{3}{*}{Random Forest}
+  & Investissement & 0{,}1587 & 0{,}1382 & 62{,}61 \\
+  & Mat\'eriel     & 0{,}0878 & 0{,}0780 & 11{,}10 \\
+  & Personnel      & 0{,}0215 & 0{,}0199 &  2{,}76 \\
+\midrule
+\multirow{3}{*}{\textbf{XGBoost}}
+  & \textbf{Investissement} & \textbf{0{,}1480} & \textbf{0{,}1247} & 52{,}67 \\
+  & Mat\'eriel              & 0{,}1060 & 0{,}0926 & 13{,}23 \\
+  & Personnel               & 0{,}0186 & 0{,}0171 &  2{,}61 \\
+\bottomrule
+\end{tabular}
+\begin{flushleft}
+\footnotesize En gras~: la meilleure performance par m\'etrique et par cat\'egorie.
+\end{flushleft}
+\end{table}
+
+Trois constats structurent la lecture de ces r\'esultats~:
+
+\begin{enumerate}
+    \item \textbf{XGBoost domine pour les d\'epenses d'investissement.} C'est la seule cat\'egorie o\`u un mod\`ele ML surpasse les benchmarks~: XGBoost atteint un RMSE de 0{,}148 et un MAE de 0{,}125, contre 0{,}149 et 0{,}132 pour Hist\_mean. Le gain est \textit{marginal en valeur absolue} mais \textit{consistant} sur l'ensemble des folds.
+
+    \item \textbf{Les benchmarks dominent pour les cat\'egories stables.} Pour les d\'epenses de mat\'eriel et de personnel, la moyenne historique saisonni\`ere (Hist\_mean) obtient les meilleurs r\'esultats. Ce r\'esultat est th\'eoriquement coh\'erent~: quand le signal saisonnier est tr\`es r\'egulier et la variabilit\'e inter-annuelle faible, la moyenne historique par trimestre est l'estimateur optimal~; tout mod\`ele plus complexe ajoute du bruit sans r\'eduire le biais.
+
+    \item \textbf{Le MAPE est inadapt\'e pour les d\'epenses d'investissement.} Les valeurs MAPE entre 47\,\% et 63\,\% pour l'investissement ne t\'emoignent pas d'une pr\'evision m\'ediocre~: elles sont m\'ecaniquement induites par les taux T1 quasi-nuls (de 0,8\,\% \`a 2,6\,\%), qui induisent des erreurs relatives \'enormes pour des erreurs absolues mod\'er\'ees. Le RMSE et le MAE sont les m\'etriques pertinentes pour cette cat\'egorie.
+\end{enumerate}
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.5.2 \quad Importance des variables}
+\addcontentsline{toc}{subsubsection}{4.5.2 Importance des variables}
+%----------------------------------------------------------------
+
+La figure~\ref{fig:feat_imp} pr\'esente les importances des features pour les deux mod\`eles ML, estim\'ees sur l'ensemble du panel (entra\^inement sur toutes les ann\'ees).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/feature_importance.png}
+    \caption{Importance des variables --- Random Forest (Gini) et XGBoost (Gain)}
+    \label{fig:feat_imp}
+\end{figure}
+
+Les deux mod\`eles concordent sur la hi\'erarchie des features~:
+
+\begin{itemize}
+    \item \textbf{Taux lag-4 ($\approx$65\,\% d'importance)}~: le taux d'ex\'ecution du m\^eme trimestre de l'ann\'ee pr\'ec\'edente est de tr\`es loin le prédicteur dominant. Ce r\'esultat confirme la forte persistance saisonni\`ere inter-annuelle des profils d'ex\'ecution~: chaque trimestre suit approximativement la m\^eme trajectoire que l'ann\'ee pr\'ec\'edente.
+
+    \item \textbf{Taux lag-1 ($\approx$27\,\% pour RF, $\approx$13\,\% pour XGBoost)}~: le taux du trimestre pr\'ec\'edent (dans la m\^eme ann\'ee) apporte une information incr\'ementale sur la dynamique intra-annuelle. XGBoost lui attribue un poids moindre car il dispose de la feature \texttt{cat\_enc} pour discriminer les profils cat\'egoriels.
+
+    \item \textbf{Cat\'egorie, trimestre, ratio LF}~: ces trois features contribuent de fa\c{c}on secondaire ($<$15\,\% chacune). Leur faible importance individuelle s'explique~: l'information cat\'egorielle est d\'ej\`a captur\'ee implicitement par les lags (qui sont cat\'egorie-sp\'ecifiques), et le ratio LF ne varie que mod\'er\'ement entre ann\'ees.
+\end{itemize}
+
+La dominance du lag-4 valide l'\textbf{hypoth\`ese~H2} dans sa version r\'evis\'ee~: la persistance saisonni\`ere inter-annuelle est le facteur explicatif pr\'epondérant, et non les variables programmatiques issues des morasses (non disponibles dans ce travail). Ce r\'esultat sugg\`ere \'egalement qu'un mod\`ele statistiquement minimal --- fond\'e sur le seul lag-4 --- capture d\'ej\`a l'essentiel de la structure pr\'edictive, ce qui explique la difficult\'e des mod\`eles ML \`a d\'epasser les benchmarks saisonniers pour les cat\'egories stables.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.5.3 \quad Analyse des pr\'evisions --- d\'epenses d'investissement}
+\addcontentsline{toc}{subsubsection}{4.5.3 Analyse des prévisions — dépenses d'investissement}
+%----------------------------------------------------------------
+
+La figure~\ref{fig:avp} compare les pr\'evisions des deux mod\`eles ML et des deux benchmarks aux valeurs r\'ealis\'ees, pour les d\'epenses d'investissement sur la p\'eriode de validation walk-forward (2022~T2 -- 2025~T4).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/actual_vs_predicted_investissement.png}
+    \caption{Taux d'ex\'ecution r\'ealis\'e vs.\ pr\'evu --- D\'epenses d'investissement, validation walk-forward (fen\^etre expansive 2022--2025)}
+    \label{fig:avp}
+\end{figure}
+
+Plusieurs observations s'imposent \`a l'examen du graphique~:
+
+\begin{itemize}
+    \item \textbf{La saisonnalit\'e en dents de scie est globalement captur\'ee}~: les trois mod\`eles reproduisent le rythme T4-haut / T2-bas caract\'eristique des d\'epenses d'investissement. Aucun mod\`ele ne pr\'edit un profil plat.
+
+    \item \textbf{XGBoost et RF sous-estiment les T4 extr\^emes}~: les ann\'ees o\`u le taux d'ex\'ecution T4 d\'epasse 90\,\% (2022, 2024, 2025), les mod\`eles ont tendance \`a pr\'evoir des valeurs inf\'erieures. Ceci s'explique par la r\'egularisation forte qui limite les pr\'evisions aux valeurs observ\'ees historiquement mean-revert\'ees.
+
+    \item \textbf{Le benchmark na\"\i f (lag-4) peut produire des erreurs importantes}~: l'ann\'ee 2023~T3 (taux r\'eel~$\approx$21\,\%) succ\`ede \`a un T3~2022 particuli\`erement \'elev\'e (57,9\,\%), induisant une surestimation marqu\'ee du na\"\i f. XGBoost corrige partiellement cet \'ecart.
+
+    \item \textbf{L'ann\'ee 2024 constitue le cas le plus instructif}~: le taux T1 est quasi-nul (0,8\,\%), suivi d'un T3 exceptionnel (50,5\,\%) et d'un T4 de 92,3\,\%. XGBoost et RF capturent mieux la mont\'ee en charge rapide T3--T4 que le benchmark.
+
+    \item \textbf{La pr\'ecision s'am\'eliore avec la taille du jeu d'entra\^inement}~: les erreurs les plus \'elev\'ees se concentrent sur les premiers plis de la validation (2021--2022), o\`u le mod\`ele dispose de seulement 3~\`a 6~observations. Le pli~2025 --- entra\^in\'e sur l'int\'egralit\'e de 2020--2024 (16~points) --- produit les pr\'evisions les plus proches du r\'ealis\'e. Ce gradient confirme que chaque ann\'ee suppl\'ementaire de collecte am\'eliore m\'ecaniquement la qualit\'e des pr\'evisions futures.
+\end{itemize}
+
+%================================================================
+\phantomsection
+\subsection*{4.6 \quad Discussion et limites}
+\addcontentsline{toc}{subsection}{4.6 Discussion et limites}
+%================================================================
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.6.1 \quad Interpr\'etation des r\'esultats}
+\addcontentsline{toc}{subsubsection}{4.6.1 Interprétation des résultats}
+%----------------------------------------------------------------
+
+\paragraph{Question centrale --- r\'eponse nuanc\'ee et constructive.}
+
+Les mod\`eles ML (RF, XGBoost) ne surpassent pas syst\'ematiquement les benchmarks statistiques sur l'ensemble des cat\'egories de d\'epense~: pour le Personnel et le Mat\'eriel, la moyenne historique reste comp\'etitive. Ce r\'esultat est conforme aux conclusions de la litt\'erature sur les s\'eries courtes --- \textit{aucun mod\`ele ne domine uniform\'ement} \citep{Frankel2011} --- et s'explique par la forte structure saisonni\`ere qui laisse peu de variance r\'esiduelle \`a expliquer. Cependant, cette conclusion ne r\'epond qu'\`a une partie r\'eduite de la question de recherche. La vraie valeur ajout\'ee de l'IA r\'eside dans ce qu'elle \textbf{permet de faire} au-del\`a de la pr\'evision agr\'eg\'ee~: op\'erer \`a la granularit\'e de la ligne budg\'etaire (105~lignes), produire des intervalles de confiance (VaR), d\'etecter des anomalies en cours d'exercice, et concentrer l'attention du gestionnaire sur les lignes r\'eellement \`a risque --- autant de fonctions que la moyenne historique est structurellement incapable de remplir.
+
+\paragraph{Enseignement cl\'e sur la structure des d\'epenses.}
+
+L'analyse des importances confirms la dominance absolue du lag saisonnier (taux lag-4, $\approx$65\,\%). Ce r\'esultat constitue une information op\'erationnelle directe~: la pr\'evision du taux d'ex\'ecution d'un trimestre donn\'e repose avant tout sur le taux correspondant de l'ann\'ee pr\'ec\'edente, confirmant la structure cyclique stable du budget du minist\`ere de la Justice. Cette stabilit\'e est pr\'ecis\'ement ce qui rend possible un syst\`eme d'alertes automatis\'e~: toute d\'eviation significative par rapport au profil historique est un signal anormal exploitable en temps r\'eel.
+
+\paragraph{Implication pour la Direction du Budget.}
+
+La contribution la plus directement actionnable de cette \'etude n'est pas le chiffre de RMSE~: c'est le \textbf{syst\`eme d'aide \`a la d\'ecision} construit \`a partir de ce mod\`ele. En disposant \`a fin~T2 d'une pr\'evision du taux T4 par ligne budg\'etaire --- assortie d'un intervalle de confiance (VaR~Q05/Q95) et d'une classification de risque --- la Direction du Budget peut~: (1) d\'eclencher des alertes cibl\'ees sur les 105~lignes d'ex\'ecution plut\'ot que sur 3~cat\'egories agr\'eg\'ees, (2) quantifier en MDH le montant de cr\'edits \`a risque de sous-consommation d\`es juin, et (3) pr\'eparer des m\'ecanismes de r\'eallocation inter-programmes avant la fermeture de la r\'egie de d\'epenses en novembre. C'est cette capacit\'e de \textit{triage automatis\'e \`a l'\'echelle programmatique} qui constitue l'apport r\'eel de l'IA dans ce contexte.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.6.2 \quad Limites et perspectives}
+\addcontentsline{toc}{subsubsection}{4.6.2 Limites et perspectives}
+%----------------------------------------------------------------
+
+\paragraph{Limites internes.}
+
+\begin{itemize}
+    \item \textbf{Volume de donn\'ees et effet taille d'entra\^inement}~: 45~observations constituent un volume tr\`es limit\'e. L'analyse par pli LOYO r\'ev\`ele un gradient clair~: les erreurs d\'ecroissent syst\'ematiquement \`a mesure que le jeu d'entra\^inement grossit --- les plis 2021--2022 (entra\^in\'es sur 3~\`a 6~points) sont les plus impr\'ecis, tandis que le pli~2025 (entra\^in\'e sur 16~points) produit les pr\'evisions les plus fiables. Ce constat est simultan\'ement une limite actuelle et une perspective positive~: chaque exercice budg\'etaire suppl\'ementaire am\'eliore m\'ecaniquement les performances futures. Les mod\`eles restent contraints \`a une r\'egularisation forte, et le gain sur les benchmarks demeurera marginal tant que la s\'erie TGR ne couvrira pas au moins dix exercices.
+
+    \item \textbf{Absence de donn\'ees programmatiques}~: l'exclusion des parts programmatiques issues des morasses est la principale limite de l'\'etude. Ces donn\'ees permettraient d'expliquer pourquoi certaines ann\'ees pr\'esentent des taux syst\'ematiquement \'elev\'es ou faibles, ind\'ependamment du profil saisonnier habituel.
+
+    \item \textbf{Granularit\'e trimestrielle}~: des donn\'ees mensuelles ou hebdomadaires permettraient une d\'etection plus pr\'ecoce des \'ecarts par rapport \`a la trajectoire pr\'evue, mais ces donn\'ees ne sont pas publiquement disponibles pour le minist\`ere de la Justice.
+\end{itemize}
+
+\paragraph{Perspectives de recherche.}
+
+Trois directions d'approfondissement se dessinent~:
+
+\begin{enumerate}
+    \item \textbf{Extension \`a un panel multi-minist\`eres.} L'extension du mod\`ele \`a d'autres minist\`eres marocains (\'Education, Sant\'e, Infrastructures) constitue la perspective la plus prometteuse pour l\'ever la contrainte de volume de donn\'ees. En regroupant les s\'eries TGR de cinq \`a dix minist\`eres (soit 200 \`a 400~observations), les mod\`eles ML accèderaient \`a une variabilit\'e sectorielle suffisante pour apprendre des patterns g\'en\'eralisables, tout en contr\^olant les effets minist\`ere-sp\'ecifiques par des variables identitaires.
+
+    \item \textbf{Int\'egration des donn\'ees programmatiques des morasses.} L'extraction syst\'ematique des parts de programmes depuis les morasses budg\'etaires (2015--2025) ajouterait des features explicatives de la variabilit\'e inter-annuelle. Toutefois, cette perspective doit \^etre tempér\'ee~: les allocations programmatiques du minist\`ere de la Justice sont relativement stables d'un exercice \`a l'autre, ce qui limite leur pouvoir discriminant marginal face au lag saisonnier (d\'ej\`a dominant \`a~65\,\%). Cette extension apporterait une valeur r\'eelle principalement dans les ann\'ees o\`u une r\'eorientation structurelle de l'enveloppe d'investissement survient --- situation historiquement rare sur la p\'eriode \'etudi\'ee.
+
+    \item \textbf{Interpr\'etabilit\'e locale par SHAP.} L'application de techniques SHAP (\textit{SHapley Additive exPlanations}) \citep{Lundberg2017} permettrait de d\'ecomposer chaque pr\'evision individuelle en contributions sign\'ees des variables~: pour un trimestre donn\'e, le d\'ecideur saurait si la pr\'evision basse du mod\`ele r\'esulte d'un lag-4 faible, d'un ratio LF \'elev\'e ou d'une combinaison des deux. Cet outil transformerait le mod\`ele d'un simple pr\'edicteur en un syst\`eme d'aide \`a la d\'ecision interpr\'etable, directement exploitable lors de la revue de mi-ann\'ee.
+\end{enumerate}
+
+%================================================================
+\phantomsection
+\subsection*{4.9 \quad Apports compl\'ementaires de l'IA au pilotage budg\'etaire}
+\addcontentsline{toc}{subsection}{4.9 Apports compl\'ementaires de l'IA au pilotage budg\'etaire}
+%================================================================
+
+Au-del\`a de la pr\'evision du taux d'ex\'ecution, l'analyse conduite dans ce travail met en \'evidence cinq domaines dans lesquels l'intelligence artificielle apporte une valeur ajout\'ee concr\`ete que les outils statistiques classiques --- notamment la moyenne historique --- ne peuvent pas fournir.
+
+%----------------------------------------------------------------
+\paragraph{1. D\'etection d'anomalies.}
+%----------------------------------------------------------------
+
+La moyenne historique pr\'edit ce qui est \textit{normal}. Un mod\`ele d'apprentissage automatique peut d\'etecter, en temps r\'eel, quand une ligne budg\'etaire s'\'ecarte significativement de son profil habituel. Il ne s'agit pas seulement de savoir si la ligne atteindra 80\,\% en fin d'ann\'ee, mais de signaler une d\'eviation pr\'ecoce~: une ligne qui consomme habituellement 15\,\% de son cr\'edit \`a fin~T2 et n'a consomm\'e que 2\,\% cette ann\'ee est un signal d'alerte qualitatif qui appelle une investigation imm\'ediate, ind\'ependamment de la pr\'evision finale.
+
+%----------------------------------------------------------------
+\paragraph{2. Segmentation automatique des lignes budg\'etaires.}
+%----------------------------------------------------------------
+
+Avec 109~lignes budg\'etaires dans le p\'erim\`etre de l'investissement, l'analyse manuelle ligne par ligne est op\'erationnellement impossible. Des techniques de clustering (partitionnement non-supervis\'e) permettent de regrouper automatiquement les lignes selon leur profil d'ex\'ecution~: lignes syst\'ematiquement en retard, lignes \`a ex\'ecution r\'eguli\`ere, lignes imp\-r\'evisibles. Le gestionnaire peut ainsi adapter sa strat\'egie de suivi \`a chaque groupe plut\^ot que de traiter toutes les lignes de mani\`ere uniforme.
+
+%----------------------------------------------------------------
+\paragraph{3. Simulation de sc\'enarios budg\'etaires.}
+%----------------------------------------------------------------
+
+Un mod\`ele ML entra\^in\'e peut \^etre utilis\'e comme moteur de simulation~: ``Quel serait l'impact d'une augmentation de 30\,\% du budget du programme~P303~Casablanca~?'' ou ``Que se passe-t-il si les march\'es sont lanc\'es en~T1 plut\^ot qu'en~T2~?'' Ces simulations contrefactuelles permettent \`a la Direction du Budget de tester des sc\'enarios d'am\'elioration avant de les mettre en \oe uvre, ce qu'une simple projection historique ne permet pas.
+
+%----------------------------------------------------------------
+\paragraph{4. Priorisation automatique des actions correctives.}
+%----------------------------------------------------------------
+
+Le tableau de bord produit dans la section~4.8 classe d\'ej\`a les lignes par niveau de risque. Cette logique peut \^etre \'etendue \`a un score de priorit\'e combin\'e~: urgence de l'\'ecart pr\'evu $\times$ montant de cr\'edits \`a risque $\times$ capacit\'e d'absorption historique de la ligne. Le gestionnaire re\c{c}oit automatiquement un \textit{top~10} des lignes \`a traiter en priorit\'e chaque trimestre, sans avoir \`a analyser manuellement l'ensemble du tableau.
+
+%----------------------------------------------------------------
+\paragraph{5. M\'emoire institutionnelle et apprentissage continu.}
+%----------------------------------------------------------------
+
+L'un des d\'efis op\'erationnels de la gestion budg\'etaire est la perte de m\'emoire institutionnelle lors des rotations de personnel. Un mod\`ele ML aliment\'e ann\'ellement par les donn\'ees r\'eelles de chaque ligne budg\'etaire constitue une m\'emoire formalis\'ee des comportements pass\'es~: une ligne historiquement difficile \`a consommer (forte variabilit\'e, d\'emarrages tardifs) sera automatiquement identifi\'ee comme \`a risque, m\^eme si l'agent gestionnaire ne conna\^it pas son historique. Le mod\`ele s'am\'eliore \`a chaque exercice sans intervention manuelle.
+
+%================================================================
+\phantomsection
+\subsection*{4.7 \quad Environnement technique}
+\addcontentsline{toc}{subsection}{4.7 Environnement technique}
+%================================================================
+
+L'ensemble des traitements est r\'ealis\'e sous \textbf{Python~3.x} avec les biblioth\`eques suivantes~:
+
+\begin{itemize}
+    \item \texttt{pandas} / \texttt{numpy}~: manipulation et structuration des donn\'ees.
+    \item \texttt{openpyxl}~: extraction des donn\'ees depuis le fichier Excel source.
+    \item \texttt{scikit-learn}~: Random Forest, m\'etriques d'\'evaluation \citep{Pedregosa2011}.
+    \item \texttt{xgboost}~: impl\'ementation XGBoost \citep{Chen2016}.
+    \item \texttt{matplotlib} / \texttt{seaborn}~: visualisation des r\'esultats.
+\end{itemize}
+
+La reproductibilit\'e est assur\'ee par la fixation de la graine al\'eatoire (\texttt{random\_state=42}) dans tous les mod\`eles et la documentation compl\`ete du pipeline de traitement dans les scripts \texttt{reshape\_data.py} et \texttt{model.py}.
+
+%================================================================
+\phantomsection
+\subsection*{4.8 \quad Prototype~: syst\`eme d'alerte pr\'ecoce par ligne budg\'etaire}
+\addcontentsline{toc}{subsection}{4.8 Prototype : système d'alerte précoce par ligne budgétaire}
+%================================================================
+
+Au-del\`a de l'analyse pr\'edictive au niveau cat\'egoriel (sections~4.1--4.7), ce m\'emoire propose un \textbf{prototype de syst\`eme d'aide \`a la d\'ecision} destin\'e \`a l'usage op\'erationnel de la Direction de la Programmation et des \'Etudes Budg\'etaires (DPEB) du minist\`ere de la Justice. Ce prototype r\'epond \`a un besoin explicitement exprim\'e lors des \'echanges avec le chef de division de programmation~: disposer d'un outil permettant, \`a fin~T2 (30~juin), de signaler les \textbf{lignes budg\'etaires \`a risque de sous-ex\'ecution}, afin de d\'eclencher des mesures correctives avant la fermeture de la r\'egie en novembre.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.8.1 \quad Granularit\'e~: de la cat\'egorie \`a la ligne}
+\addcontentsline{toc}{subsubsection}{4.8.1 Granularité : de la catégorie à la ligne}
+%----------------------------------------------------------------
+
+Les rapports TGR pub\-li\'es fournissent des donn\'ees agr\'eg\'ees par cat\'egorie de d\'epense (investissement, mat\'eriel, personnel). Or, la gestion budg\'etaire op\'erationnelle se conduit \`a un niveau beaucoup plus fin~: la \textbf{ligne budg\'etaire}, identifi\'ee par son quadruplet Programme--R\'egion--Projet--Ligne dans la nomenclature des services et des d\'epenses (voir l'exemple issu de la morasse 2018, Programme~300, figure structurale). Une m\^eme cat\'egorie ``investissement'' agr\`ege des lignes de nature tr\`es diff\'erente~:
+
+\begin{itemize}
+    \item Des \textbf{lignes ``travaux''} (construction/r\'ehabilitation de tribunaux ou \'etablissements p\'enitentiaires)~: ex\'ecution quasi-nulle aux T1--T2, puis acc\'el\'eration massive en T3--T4 au rythme des r\'eceptions de chantiers.
+    \item Des \textbf{lignes ``\'etudes et assistance technique''}~: lanc\'ees d\`es T1, ex\'ecution plus r\'eguli\`ere.
+    \item Des \textbf{lignes ``\'equipements''}~: d\'ependantes des d\'elais de livraison et de r\'eception, profil interm\'ediaire.
+    \item Des \textbf{lignes ``fournitures''}~: consommables \`a ex\'ecution quasi-lin\'eaire.
+\end{itemize}
+
+Cette h\'et\'erog\'en\'eit\'e intra-cat\'egorielle est pr\'ecis\'ement ce qui rend le diagnostic agr\'eg\'e insuffisant pour l'action corrective~: un taux d'investissement global de 8\,\% \`a fin~T2 ne dit pas \textit{quelles} lignes sont en retard structurel et \textit{lesquelles} suivent simplement leur calendrier normal.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.8.2 \quad Donn\'ees simul\'ees calibr\'ees}
+\addcontentsline{toc}{subsubsection}{4.8.2 Données simulées calibrées}
+%----------------------------------------------------------------
+
+Les donn\'ees internes du minist\`ere (ex\'ecution par ligne budg\'etaire) ne sont pas accessibles publiquement. Pour d\'emontrer la faisabilit\'e du prototype, nous g\'en\'erons des \textbf{donn\'ees simul\'ees} pour 21~lignes budg\'etaires r\'eparties sur trois programmes (P301~: Acc\`es \`a la Justice~; P302~: Modernisation~; P303~: Justice P\'enale), deux r\'egions (Centrale et R\'egionale), et la p\'eriode 2020--2025. Cette simulation n'est pas une fiction arbitraire~: elle repose sur une \textbf{double contrainte de calibration}.
+
+\paragraph{Contrainte 1 --- Coh\'erence agr\'eg\'ee.}
+
+Pour chaque ann\'ee $Y$ et chaque trimestre $Q$, la somme pond\'er\'ee des taux simul\'es par ligne doit \'egaler exactement le taux agr\'eg\'e TGR observ\'e~:
+
+$$\sum_{i=1}^{21} s_i \cdot \hat{y}_{i,Q,Y} = \text{TGR}_{Q,Y}$$
+
+o\`u $s_i$ est la part de la ligne~$i$ dans l'enveloppe d'investissement annuelle. Cette contrainte est satisfaite \`a $\pm$0{,}0002 point pr\`es sur l'ensemble des 24 trimestres (v\'erifi\'e \`a l'ex\'ecution). Les donn\'ees simul\'ees sont donc \textit{coh\'erentes} avec les realisations agr\'eg\'ees publi\'ees par la TGR --- la seule inconnue vraie est la r\'epartition intra-agr\'egat.
+
+\paragraph{Contrainte 2 --- Profils types par nature de ligne.}
+
+Chaque ligne se voit affecter un profil d'ex\'ecution trimestriel typ\'e selon sa nature (tableau~\ref{tab:profiles}), informé par la litt\'erature sur le cycle de la commande publique marocaine \citep{CourDesComptes2016}. Un facteur de performance ligne-sp\'ecifique (bruit al\'eatoire d'\'ecart-type 10\,\%) introduit la variabilit\'e inter-annuelle observ\'ee dans les donn\'ees r\'eelles.
+
+\begin{table}[H]
+\centering
+\caption{Profils d'ex\'ecution simul\'es par nature de ligne budg\'etaire}
+\label{tab:profiles}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Nature} & \textbf{T1 moyen} & \textbf{T2 moyen} & \textbf{T3 moyen} & \textbf{T4 moyen} \\
+\midrule
+Travaux de construction/r\'ehabilitation & 1{,}2\,\% & 9{,}5\,\% & 31{,}0\,\% & 85{,}0\,\% \\
+Acquisitions (terrains) & 2{,}0\,\% & 13{,}0\,\% & 30{,}0\,\% & 78{,}0\,\% \\
+\'Equipements & 8{,}0\,\% & 29{,}0\,\% & 57{,}0\,\% & 93{,}0\,\% \\
+\'Etudes et assistance technique & 12{,}0\,\% & 37{,}0\,\% & 67{,}0\,\% & 94{,}0\,\% \\
+Fournitures et consommables & 18{,}0\,\% & 45{,}0\,\% & 72{,}0\,\% & 97{,}0\,\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.8.3 \quad Mod\`ele et protocole de pr\'evision}
+\addcontentsline{toc}{subsubsection}{4.8.3 Modèle et protocole de prévision}
+%----------------------------------------------------------------
+
+Le mod\`ele de pr\'evision est un \textbf{XGBoost} entra\^in\'e pour pr\'edire le taux d'ex\'ecution au 31~d\'ecembre (\textit{taux~T4}) de chaque ligne, en utilisant uniquement les informations disponibles \`a fin juin (\textit{snapshot T2}). Le vecteur de features est le suivant~:
+
+\begin{itemize}
+    \item \textbf{taux\_T2}~: taux d'ex\'ecution cumul\'e observ\'e \`a fin juin (signal contemporain).
+    \item \textbf{taux\_T1}~: taux \`a fin mars (inertie intra-annuelle).
+    \item \textbf{taux\_T4\_lag}~: taux T4 de l'ann\'ee pr\'ec\'edente pour la m\^eme ligne (m\'emoire long terme).
+    \item \textbf{taux\_T2\_lag}~: taux T2 de l'ann\'ee pr\'ec\'edente (r\'ef\'erence saisonni\`ere).
+    \item \textbf{lf\_ratio}~: ratio de l'enveloppe LF de l'ann\'ee par rapport \`a la moyenne historique de la ligne.
+    \item \textbf{lf\_share}~: part de la ligne dans l'enveloppe totale d'investissement de l'ann\'ee.
+    \item \textbf{Nature, programme, r\'egion}~: variables cat\'egorielles encod\'ees.
+\end{itemize}
+
+Le protocole de validation est identique au LOYO d\'ecrit \`a la section~4.4.1~: le mod\`ele est entra\^in\'e successivement sur 3~ann\'ees et test\'e sur la quatri\`eme, pour quatre folds (2021--2024). Le \textbf{RMSE moyen en validation crois\'ee est de 0{,}145} ($\pm$\,0{,}033), soit une pr\'ecision comparable au mod\`ele agr\'eg\'e sur la cat\'egorie la plus volatile (investissement, RMSE~=~0{,}148). \`A ce niveau de granularit\'e, avec 84~observations d'entra\^inement, ce r\'esultat constitue une performance satisfaisante pour un outil de triage op\'erationnel.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.8.4 \quad Tableau de bord d'alerte --- exercice 2025}
+\addcontentsline{toc}{subsubsection}{4.8.4 Tableau de bord d'alerte — exercice 2025}
+%----------------------------------------------------------------
+
+La figure~\ref{fig:dashboard} pr\'esente le r\'esultat de l'application du prototype \`a l'exercice~2025, en simulant une utilisation \`a fin~T2. Chaque ligne budg\'etaire est repr\'esent\'ee par deux barres horizontales~: la barre bleue indique le taux T2 observ\'e (information disponible au 30~juin), la barre color\'ee indique le taux T4 pr\'evu par le mod\`ele (information prospective).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/alert_dashboard.png}
+    \caption{Prototype de syst\`eme d'alerte pr\'ecoce --- Pr\'evision T4 par ligne budg\'etaire au 30~juin~2025. Donn\'ees simul\'ees calibr\'ees sur les agr\'egats TGR r\'eels 2020--2025.}
+    \label{fig:dashboard}
+\end{figure}
+
+L'analyse du tableau de bord pour l'exercice~2025 appelle plusieurs observations~:
+
+\begin{itemize}
+    \item \textbf{Deux lignes en zone ``Attention''} (79\,\%, orange)~: les lignes ``\'Equipements des centres de formation'' (P302) et ``\'Equipements et mat\'eriel de r\'einsertion'' (P303) pr\'esentent un taux T2 de 13\,\% et 15\,\% respectivement, et le mod\`ele pr\'evoit un taux T4 inf\'erieur au seuil cible de 80\,\%. Ces deux lignes repr\'esentent \textbf{3{,}1~MDH} de cr\'edits potentiellement sous-utilis\'es.
+
+    \item \textbf{Les lignes ``travaux'' pr\'edisent bien} malgr\'e leurs taux T2 quasi-nuls (3--6\,\%)~: le mod\`ele apprend que ces lignes suivent normalement un profil de d\'ecaissement massif en T3--T4 et pr\'evoit des taux T4 entre 84\,\% et 90\,\%. Ce r\'esultat illustre pr\'ecis\'ement la valeur de l'approche ML par rapport \`a une r\`egle na\"\i ve~: un contr\^oleur inspectant manuellement le taux T2 de 4\,\% pour ``Travaux de construction de tribunaux'' pourrait conclure \`a tort \`a un risque critique, alors que le mod\`ele contextualise ce taux par rapport au profil historique de cette nature de d\'epense.
+
+    \item \textbf{Signal d'action op\'erationnel}~: le DPEB peut, d\`es juillet, concentrer les relances sur les deux lignes en orange et v\'erifier si des obstacles sp\'ecifiques (appels d'offres infructueux, probl\`emes de r\'eception) expliquent le retard --- plut\^ot que de g\'erer 21~lignes de mani\`ere indiscriminate.
+\end{itemize}
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.8.5 \quad Conditions de d\'eploiement r\'eel}
+\addcontentsline{toc}{subsubsection}{4.8.5 Conditions de déploiement réel}
+%----------------------------------------------------------------
+
+Ce prototype d\'emontre la faisabilit\'e technique du syst\`eme~; son d\'eploiement op\'erationnel requiert trois conditions~:
+
+\begin{enumerate}
+    \item \textbf{Alimentation en donn\'ees r\'eelles}~: l'historique d'ex\'ecution trimestrielle par ligne budg\'etaire, disponible dans le syst\`eme GID du minist\`ere, remplacerait les donn\'ees simul\'ees. Avec 10~ann\'ees d'historique et~21~lignes actives, on obtiendrait environ 630~observations d'entra\^inement --- suffisant pour calibrer un XGBoost robuste.
+
+    \item \textbf{Mise \`a jour annuelle du mod\`ele}~: apr\`es chaque cl\^oture d'exercice, les nouvelles observations sont int\'egr\'ees et le mod\`ele reentra\^in\'e. La structure du pipeline Python (\texttt{simulate\_programs.py}, \texttt{alert\_system.py}) est con\c{c}ue pour rendre cette op\'eration automatique.
+
+    \item \textbf{Interface de restitution}~: le tableau de bord (figure~\ref{fig:dashboard}) peut \^etre g\'en\'er\'e automatiquement et transmis au chef de division sous forme de rapport PDF \`a la fin de chaque mois de juillet, en synth\`ese de l'\'etat d'ex\'ecution de mi-ann\'ee.
+\end{enumerate}
+
+En r\'esum\'e, ce prototype illustre comment l'intelligence artificielle peut \^etre utilis\'ee non comme un substitut au jugement du gestionnaire, mais comme un \textbf{filtre de triage} qui concentre son attention sur les lignes r\'eellement \`a risque --- r\'epondant ainsi directement \`a la question de recherche centrale de ce m\'emoire~: l'apport de l'IA dans la programmation et l'ex\'ecution budg\'etaire.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.8.6 \quad Application bureau de pilotage budg\'etaire}
+\addcontentsline{toc}{subsubsection}{4.8.6 Application bureau de pilotage budgétaire}
+%----------------------------------------------------------------
+
+Dans le cadre de ce travail, un \textbf{syst\`eme d'aide \`a la d\'ecision budg\'etaire} a \'et\'e d\'evelopp\'e sous forme d'application bureau autonome, enti\`erement hors ligne, destin\'ee aux gestionnaires de la Direction du Budget du Minist\`ere de la Justice. L'application repose sur le mod\`ele XGBoost pr\'esent\'e ci-dessus et produit, \`a partir d'un snapshot \`a fin juin (T2), une \textbf{pr\'evision du taux d'ex\'ecution au 31~d\'ecembre~(T4)} pour chacune des lignes budg\'etaires d'investissement, r\'eparties sur 3~programmes et 12~r\'egions.
+
+L'application offre les fonctionnalit\'es suivantes~:
+
+\begin{enumerate}
+    \item \textbf{Tableau de bord interactif}~: affichage de toutes les lignes budg\'etaires avec leur taux r\'ealis\'e \`a~T2, leur taux pr\'evu \`a~T4, leur niveau de risque (\textit{OK} / \textit{Attention} / \textit{Critique}) et les cr\'edits potentiellement non consomm\'es, avec filtrage par programme, r\'egion et niveau de risque.
+
+    \item \textbf{Visualisation graphique}~: repr\'esentation horizontale des pr\'evisions par ligne, avec affichage des seuils cibles (80\,\%) et critiques (60\,\%), permettant une lecture imm\'ediate de l'exposition au risque.
+
+    \item \textbf{Synth\`ese par r\'egion}~: agr\'egation automatique des alertes et des montants \`a risque par r\'egion administrative, permettant une lecture territoriale du risque de sous-ex\'ecution.
+
+    \item \textbf{Indicateurs de performance}~: affichage du RMSE de validation crois\'ee~(LOYO) directement dans l'interface, permettant au gestionnaire d'appr\'ecier la fiabilit\'e des pr\'evisions affich\'ees.
+\end{enumerate}
+
+L'ensemble du traitement s'ex\'ecute localement sur la machine du gestionnaire via la commande \texttt{python app.py}. Aucune donn\'ee ne transite par un r\'eseau externe, ce qui r\'epond aux exigences de confidentialit\'e propres au contexte minist\'eriel marocain.
+
+\begin{itemize}
+    \item \texttt{pandas} / \texttt{numpy}~: manipulation et structuration des donn\'ees.
+    \item \texttt{openpyxl}~: extraction des donn\'ees depuis le fichier Excel source.
+    \item \texttt{scikit-learn}~: Random Forest, m\'etriques d'\'evaluation \citep{Pedregosa2011}.
+    \item \texttt{xgboost}~: impl\'ementation XGBoost \citep{Chen2016}.
+    \item \texttt{matplotlib} / \texttt{seaborn}~: visualisation des r\'esultats.
+\end{itemize}
+
+La reproductibilit\'e est assur\'ee par la fixation de la graine al\'eatoire (\texttt{random\_state=42}) dans tous les mod\`eles et la documentation compl\`ete du pipeline de traitement dans les scripts \texttt{reshape\_data.py} et \texttt{model.py}.

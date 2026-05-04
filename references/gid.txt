@@ -1,0 +1,469 @@
+Mohammed Nabil EL MOUSSALI 35
+Dossiers de Recherches en Economie et Gestion : Dossier 11, N° 1 : Février 2023
+Le système de gestion intégrée de
+la dépense (GID) et performances
+budgétaires de l’Etat
+Mohammed Nabil EL MOUSSALI
+Enseignant-Chercheur Laboratoire Universitaire de Recherche
+en Instrumentation et Gestion des Organisations (LURIGOR).
+Faculté des Sciences Juridiques Economiques et Sociales
+Université Mohammed Premier - Oujda-Maroc
+mn.elmoussali@ump.ac.ma
+Le système de gestion intégrée de la dépense (GID) et performances …. 36
+Résumé
+Le Maroc s’est engagé dans une réforme budgétaire de l’état et des finances
+publiques caractérisée par une gestion axée sur les résultats et la recherche de
+performances financières des administrations.
+La Loi Organique n°130-13 relatives à loi de Finance, a permis de concrétiser cette
+réforme en adoptant une gestion budgétaire basée sur des projets, des objectifs bien
+précis et des indicateurs de mesure des performances. Cette nouvelle vision de la
+gestion des deniers publics se trouve confrontée également aux transformations
+numériques que connaisse le monde aujourd’hui. Le Maroc a été conscient de
+l’importance des Technologies d’Information et de Communication ainsi que de la
+digitalisation dans la modernisation du secteur public. Pour cette raison, la
+Trésorerie Générale du Royaume a mis en place depuis 2009 un système
+d’information financière pour l’exécution des dépenses publiques appelé système
+de « Gestion Intégrée de la Dépense » connu sous l’appellation « GID ».
+Le but de mettre en place le système GID c’est de permettre à l’Etat d’avoir une
+vision globale de l’exécution de budget alloué aux différents départements, de
+faciliter la gestion budgétaire et de permettre plus de transparence des actes
+exécutés.
+Cet article vise d’abord à présenter le cadre théorique de management des
+administrations publiques justifiant l’implantation du système GID. Puis d’évaluer les
+apports de ce système à la gestion budgétaire de l’Etat. Enfin d’aborder les enjeux
+futurs auxquels sera confronté ce système d’information financière.
+Mots-clés
+New Public Management – Gestion budgétaire – Système de Gestion Intégrée de la
+Dépense – Loi Organique relative à la loi de Finance
+Summary
+Morocco has embarked on a state budget and public finance reform characterized
+by results-based management and the search for financial performance of the
+administrations.
+The Organic Law relating to Finance Law No. 130-13 made it possible to implement
+this reform by adopting budget management based on projects, extremely specific
+objectives, and performance measurement indicators. This new vision of the
+management of public funds is also confronted with the digital transformations that
+the world is experiencing today. Morocco has been aware of the importance of
+Information and Communication Technologies as well as digitalization in the
+modernization of the public sector. For this reason, the General Treasury of the
+Kingdom has set up since 2009 a financial information system for the execution of
+Mohammed Nabil EL MOUSSALI 37
+Dossiers de Recherches en Economie et Gestion : Dossier 11, N° 1 : Février 2023
+public expenditure called the “Integrated Expenditure Management” system known
+as “GID”.
+The purpose of setting up the GID system is to allow the State to have an overall view
+of the execution of the budget allocated to the various departments, to facilitate
+budgetary management and to allow more transparency of the acts executed.
+This article aims first to present the theoretical framework of management of public
+administrations justifying the implementation of the GID system. Then to evaluate
+the contributions of this system to the budgetary management of the State. Finally,
+to address the future challenges that this financial information system will face.
+Key words
+New Public Management – Budget management – Integrated Expenditure
+Management System – Organic law relating to the finance law
+ملخص
+
+
+رشع المغرب ف
+ ل اصالح ل
+ما لدولة و للمالية العامة الذي يتسم باإلدارة القائمة عىل النتائج والبحث عن األداء
+ ل لإلدارات.
+الما
+القانون التنظي -13 130 لقانون المالية انية عىل م أتاح رقم
+تنفيذ هذا اإلصالح من خالل اعتماد إدارة الم ي
+رشات قياس األداء. هذه الرؤية الجد
+أساس المشاري ع واألهداف المحددة للغاية ومؤ يدة إلدارة األموال العامة
+يشهدها العالم اليوم. يدرك المغرب أهمية تكنولوجيا المعلومات
+ ت
+ا التحوالت الرقمية ال
+تواجه أيض ً
+تحديث القطاع العام. لهذا
+
+
+واالتصاالت وكذلك الرقمنة ف السبب، أنشأت الخزانة العامة للمملكة منذ عام
+2009 نظام المعلومات المالية لتنفيذ اإلنفاق العام يسم نظام "التدب ي المندمج للنفقات" المعروف باسم
+."GID"
+هو السماح للدولة بإلقاء نظرة شاملة عىل تنفيذ الم ي الغرض من إنشاء نظام GID انية المخصصة لإلدارات
+لتسهيل إدارة الم ي المختلفة، انية والسماح بمزيد من الشفافية لألعمال المنفذة.
+إل تقديم اإلطار النظري إلدارة اإلدارات العامة الذي يرير تطبيق نظام
+ً
+تهدف هذه المقالة أوال GID. ثم تقييم
+إدارة موازنة الدولة.
+
+
+مساهمات هذا النظام ف ا،
+ً
+أخ ي
+ ت
+لمواجهة التحديات المستقبلية ال سيواجهها نظام
+المعلومات المالية GID.
+الكلمات الدالة
+ اإلدارة العامة الجديدة - انية
+ م إدارة الم ي - التدب يالمندمج للنفقات - لقانون المالية
+القانون التنظي
+Le système de gestion intégrée de la dépense (GID) et performances …. 38
+Introduction
+La réforme et la modernisation de l’administration est un phénomène qui qui a
+touché beaucoup de pays, soit développés soit en développement. Cette réforme
+provient du fait que la gestion administrative au sens classique et bureaucratique est
+devenue caduque et ne permet pas se remplir les fonctions essentielles de service
+publics d’une manière satisfaisante. Le Maroc, à l’instar des autres pays, a débuté
+une réforme de son administration depuis les années 80 et qui a été concrétisée par
+plusieurs stratégies durant les trois dernières décennies.
+Adopter une nouvelle gestion publique s’intègre dans ce qu’on appelle le New Public
+Management (NPM) qui correspond au courant de changement de paradigme de
+gestion des organisations publiques qui a touché plusieurs pays développés depuis
+les années 70. Le NPM a essayé d’emprunter les principes de gestion des
+organisations privées pour les appliquer dans le contexte public. D’où on parle de
+Gestion Axée sur les résultats (GAR), de déconcentration, de système d’évaluation
+des performances, de planification stratégique d’audit interne etc. Aujourd’hui ces
+réformes continuent à travers une nouvelle orientation qui est la transformation
+numérique ou la digitalisation des services publics qui a été mise en œuvre par
+plusieurs plans notamment « la stratégie e-Maroc 2010 », « la plan Maroc
+numérique 2013 » et «la stratégie Maroc Digital 2020 ».
+L’efficacité dans la gestion publique a touché tous les domaines publics notamment
+la simplification des procédures administratifs pour l’obtention de certaines
+documents ou autorisations, modernisation des systèmes d’informations, une
+communication plus efficace avec les citoyens etc.
+Parmi les domaines douché par le NPM on trouve la gestion budgétaire de l’Etat. La
+bonne exécution des dépenses publiques revêt une importance considérable pour la
+bonne marche des services de l’Etat et la mise en œuvre des projets d’intérêt public.
+Une gestion budgétaire de l’Etat efficace dépend de plusieurs facteurs tels une
+programmation bien établie, des cadres financiers compétents et un système
+d’information fiable et efficace. La Loi Organique n°130-13 relatives à loi de Finance
+(LOF) a concrétisé ces principes en mettant l’accent sur l’efficacité budgétaire, sur la
+transparence et sur la réédition des comptes.
+Pour s’inscrire dans l’élan de modernisation de l’administration publique et surtout
+dans la transformation numérique de cette dernière, le domaine de gestion des
+finances publiques a été précurseur dans la mise en place d’outils numériques tels le
+Portail des Marchés Publics (PMP), le système « E-budget », le système « WADEFAUJOUR » ou le système de Gestion Intégrée de la Dépense (GID). Ce dernier outil
+(GID) constitue une vrai révolution dans la gouvernance financière des dépenses de
+l’Etat depuis sa mise en place en 2009.
+Mohammed Nabil EL MOUSSALI 39
+Dossiers de Recherches en Economie et Gestion : Dossier 11, N° 1 : Février 2023
+L’objectif de cet article est d’analyse le rôle du système GID dans les performances
+budgétaires de l’Etat. Pour cela nous allons dans un premier temps analyser le cadre
+de référence qui est considéré comme base à la réforme budgétaire au Maroc à
+savoir le NPM et la LOF. Puis dans un second temps, nous allons montrer comment
+le système GID a un eu apport positif aux performances budgétaire de l’Etat.
+1. Le NPM et la LOF comme cadres de référence à la réforme budgétaire de
+l’Etat
+Les réformes qu’a connu le service public au Maroc ont entraîné des répercussions
+sur le domaine de la gestion des finances publiques. Ces réformes trouvent leur
+essence dans le cadre théorique du NPM puis dans les apports de la LOF.
+Les premières pratiques du courant NPM sont apparues dans les années 70 pour
+remplacer la gestion traditionnelle de « l’Etat providence » c’est-à-dire la gestion
+Wébérienne ou bureaucratique. Le NPM a succédé aux premières tentatives de
+modernisation des administrations publiques notamment le Planning Programming
+Budgeting System (PPBS) aux États-Unis ou la Rationalisation des Choix Budgétaires
+(RCB) en France (AMAR et BERTHIER, 2007). Ainsi l’idée principale du NPM est gérer
+l’Etat comme une entreprise en appliquant les pratiques managériales de celle-ci afin
+d’obtenir l’efficacité et l’efficience souhaitées. La notion du NPM a été
+conceptualisée la première fois par C. HOOD (1991).
+Selon HOOD et JACKSON (1991), la montée du NPM repose sur les principes
+suivants :
+- La séparation entre les questions de gestion et les questions politiques ;
+- La séparation des unités administratives en unité autonomes ;
+- La réduction des coûts et la diminution de la bureaucratie ;
+- L’application des principes du management privé dans le sens ou l’accent est
+mis sur les résultats que sur les processus ;
+- Des politiques basées sur des sondages d’opinions ;
+- Une préférence pour une réglementation plus souple.
+Même si ce courant a connu une notoriété dans beaucoup de pays (grande bretagne,
+Nouvelle Zélande, Canada et autres pays de l’OCDE), il présente néanmoins quelques
+limites. Il y’a d’abord le problème de désagrégation et surtout l’agencification qui
+présentent le problème de contrôle et la conduite des politiques publiques (Van
+Haeperen, 2012).
+Cette tendance à considérer qu’il faut moderniser la gestion des établissements
+publics (vu qu’ils sont devenus non performants) a touché également le Maroc. On
+a vu ainsi les réformes se succéder depuis les années 80, tels le « programme
+d’ajustement structurel », le « pacte de bonne gestion », ou le « livre blanc sur la
+réforme administrative ». Ces réformes ont eu une réussite relative, puisque les
+organismes publics souffrent encore d’une lourdeur administrative et des
+Le système de gestion intégrée de la dépense (GID) et performances …. 40
+dysfonctionnements qui ne permettent pas de répondre aux besoins des citoyens en
+termes de services publics de qualité (Conseil Economique Social et
+Environnemental, 2013). Ces dysfonctionnements alarmants ont poussé le Maroc à
+suivre la voie de la réforme des services publics.
+Parmi les services publics les plus importants et décisifs dans le fonctionnement de
+l’Etat il y a les finances publics et plus précisément la gestion des dépenses publiques
+telles le paiement des salaires des fonctionnaires ou la réalisations des projets
+d’investissements. Pour cette raison ce domaine a eu reçu son lot de reformes depuis
+les années 90. Ces réformes concernent : la globalisation des crédits, le cadre des
+dépenses à moyen terme (CMDT), la déconcentration des crédits, l’allégement des
+contrôles, la revue de la nomenclature budgétaire, la modernisation du système
+d’information budgétaire (mise en place du système GID) et la gestion budgétaire
+axée sur les résultats (Banque Mondiale, 2007).
+Ces réformes qui s’intègrent aussi dans le courant du NPM puisque la gestion des
+deniers de l’Etat est passée d’une logique de moyens, qui veut que les crédits
+budgétaires soient alloués en « vrac » aux différents services déconcentrés, vers une
+logique de résultats qui permet de relier la délégation des différents crédits à des
+actions bien précises et des programmes identifiés. Ceci est le principal apport de la
+LOF, entrée en vigueur depuis 2015.
+La LOF a concrétisé les nouveaux principes de gestion budgétaire de l’Etat
+précisément ceux qui figurent dans la constitution de 2011 notamment la bonne
+gouvernance, la réédition des comptes et le contrôle des deniers publics (Ministère
+de l’Economie et des Finances, 2016). La LOF est basée sur trois piliers : la
+performance, la transparence et la réédition des comptes (Ministère de l’Economie
+et des Finances, 2019).
+Rechercher la performance budgétaire passe par trois axes. Le premier c’est la
+programmation budgétaire triennale qui consiste dans une budgétisation glissante
+sur trois année. La premières année correspond au projet de loi de finance, puis les
+années suivantes sont programmées d’une manière réaliste et qui peuvent être
+révisées selon les réalisations de chaque année. Le deuxième axe est la gestion par
+des programmes établis pour chaque département ministériel et accompagné d’un
+projet de performance. Le troisième axe est la gestion budgétaire axée sur le résultat
+qui se concrétise par un changement de la nomenclature budgétaire et par
+l’utilisation d’objectifs et d’indicateurs de performance.
+La transparence est le deuxième pilier de la LOF qui est un principe de bonne
+gouvernance des finances publiques. Selon la LOF ce principe se base d’abord sur la
+sincérité budgétaire (pertinence des hypothèses qui servent à la préparation de la
+loi de finance) et sur la sincérité comptable (respect des principes et règles
+comptables). Le deuxième principe dans le pilier de la transparence réside dans de
+nouvelles règles financières qui sont au nombre de trois : assurer un équilibre
+Mohammed Nabil EL MOUSSALI 41
+Dossiers de Recherches en Economie et Gestion : Dossier 11, N° 1 : Février 2023
+budgétaire entre les dépenses et les recettes, une rationalisation des ressources des
+Services de l’Etat Gérée de Manière Autonome (SEGMA) qui doivent détenir au
+moins 30% de ressources propres et la tenue d’une comptabilité budgétaire, d’une
+comptabilité générale et d’une comptabilité analytique.
+Le troisième et dernier pilier est celui de la réédition des comptes qui consiste en
+deux principales actions : d’abord les informations communiqués au parlement
+(plusieurs rapports et documents accompagnant le projet de loi de finance) et
+ensuite le réaménagement du calendrier de vote des projets de loi de finance.
+Nous pouvons conclure donc que la LOF a instauré les principes du NPM dans la
+gestion budgétaire de l’Etat, ce qui va permettre aux services publiques d’être plus
+performants dans la gestion des deniers publics.
+Le déploiement de toutes les réformes budgétaires, citées ci-dessus, dépend de
+l’existence d’un système d’information budgétaire efficace et moderne. Avec la
+digitalisation des services de l’Etat, le système d’information budgétaire est appelé
+à innover en utilisant les outils numériques adaptés.
+2. La transformation numérique et la gestion budgétaire de l’Etat
+Le rôle des systèmes d’informations budgétaire ne se limite pas aux stockage des
+données et des indicateurs, mais ces système participent aux pilotage des services
+de l’Etat ce par les nombreux avantages qu’ils offrent : d’abord une prise de décision
+efficace basée sur des données probantes, puis fournir un tableau de bord des
+performances financières, enfin fournir les informations nécessaires aux différents
+parties prenantes de l’Etat (citoyens, parlement, partenaires étranger…) permettant
+ainsi une transparence dans la gestion des deniers publics.
+Pour que le système d’information budgétaires soit efficace, l’utilisation des
+technologies d’information et de communication (TIC) joue un rôle important. Ainsi,
+dans les années 90 et le début des année 2000 il y avait une utilisation de l’outil
+informatique sous forme d’applications et logiciels installées dans les postes des
+agents comptables de la Trésorerie Générale du Royaume (TGR).
+A partir de 2007, la TGR a débuté un processus de réforme de son système
+d’information vers une architecture centralisée et intégrée (Trésorerie Générale du
+Royaume, 2013). Parmi les transformations numériques du système d’information
+qui ont été mises en place entre 2007 à 2013, on cite :
+- Gestion intégrée de la dépense de l’Etat et des collectivités
+territoriales (GID) ;
+- Système d’information de l’activité bancaire (SIAB) ;
+- Gestion intégrée des recettes de l’Etat et des collectivités territoriales (GIR)
+;
+Le système de gestion intégrée de la dépense (GID) et performances …. 42
+- Gestion de la paie du personnel de l’Etat (WADEF-AUJOUR) ;
+- Système d’information comptable de l’Etat (SI-PCE) ;
+- Programme de la dématérialisation de la commande publique ;
+- Portail intranet et internet ;
+- Paiement en ligne des taxes locales ;
+- Système de conseil financier aux collectivités locales (CFCL) ;
+- Système de pilotage et d’aide à la décision.
+Tous ces systèmes mis en place ont permis à la gestion des finances publics au Maroc
+de prendre le chemin vers une dématérialisation de plusieurs actes administratifs
+pour de meilleures performances budgétaires.
+Parmi les exemples de cette dématérialisation nous pouvons citer celle de la
+commande publique à travers le Portail Marocain des Marchés Publics. Aujourd’hui
+les entreprises prétendantes à la commande publiques peuvent soumissionner à
+n’importe quel appel d’offre de l’Etat par le biais d’une soumission électronique sans
+se déplacer aux locaux du maitre d’ouvrage. Cette innovation a permis de gagner en
+efficacité et en transparence et offrir aux entreprises (surtout les PME) plus
+d’opportunités pour accéder aux marchés publics.
+Le domaine de la dépenses publique connait également une importance
+considérable dans la gestion des finances de l’Etat. Pour cette raison un système
+ingénieux a été développé depuis 2009 pour mieux gérer les dépenses publiques qui
+est le système de Gestion Intégrée de la Dépense (GID). La mise en œuvre du système
+GID entre dans le cadre de la modernisation des services publics précisément la
+gestion financière publique. Il s’agit d’une Plate-forme de gestion en ligne mise en
+place par la TGR, inspirée d’autres expériences internationales notamment le projet
+CHORUS en France, le projet SIGFE en Chili et le projet GIRES au Canada.
+GID est un système d’information budgétaire et comptable unifié et commun à
+l’ensemble des acteurs institutionnels de la dépense publique (Trésorerie Générale
+du Royaume). Plusieurs raisons ont poussé la TGR à introduire ce système, parmi
+lesquelles on trouve (Banque Mondiale, 2007) :
+- Connaitre en temps réel, l’état d’exécution de la dépense effectuée par
+chacun des trois acteurs(ordonnateur, comptable et contrôleur) et à chacun
+de ses stades ;
+- Permettre à chacun des trois acteurs d’accéder à ces informations grâce à la
+coordination de la messagerie ;
+- Localiser immédiatement les points de difficultés dans l’état d’avancement
+de l’exécution ;
+- Résoudre les difficultés de rapprochement des écritures des trois acteurs ;
+- Suivre en temps réel l’état de consommation des crédits (tableau de bord) ;
+- Produire automatiquement les données nécessaires à la production de la loi
+de règlement (dépenses) ;
+Mohammed Nabil EL MOUSSALI 43
+Dossiers de Recherches en Economie et Gestion : Dossier 11, N° 1 : Février 2023
+- Permettre des traitements comptables par addition de logiciels spécifiques
+en bout de chaîne.
+La mise en place du système GID vise l’atteinte de plusieurs objectifs notamment le
+fait d’assurer une efficacité dans la gestion des actes de la dépense en réduisant les
+délais et les coûts et en simplifiant les procédures tout en respectant la qualité
+nécessaire et le respect de la réglementation (El Alaoui, 2013).
+La conception du système GID a débuté en 2005 et s’est étendu jusqu’à 2008. Durant
+cette phase, la TGR a réalisé un diagnostic de l’environnement de la dépense
+publique notamment l’élaboration d’un inventaires des acteurs et l’échange
+d’information avec tous les intervenants. L’implication de ces derniers est une
+condition essentielle pour la réussite de ce projet. Ainsi, à côté de la TGR d’autres
+acteurs interviennent dans ce système notamment l’entité GID, la direction du
+budget relevant du Ministère de l’Economie et des Finances, les ordonnateurs et les
+sous-ordonnateurs et le Contrôle Général des Engagements des Dépenses (CGED).
+La mise en place du système GID a été faite d’une manière progressive (figure n°1).
+Ainsi En 2009 et en 2010, le système GID a été testé et appliqué dans les
+administrations publiques relevant des départements ministériels. Puis à partir de
+2013 il a été appliqué dans les collectivités territoriales (CT), suivi d’une applications
+pour les agents comptables à l’étranger (ACE) à partir de 2016.
+Vu que les établissements publics ont également une importance dans les finances
+publiques, le système GID a connu une application aux Académies Régionales de
+l’Education et de la Formation (AREF) à partir de 2018. Enfin en 2019 on a donnée
+l’opportunité aux prestataires d’accéder à ce système via « GID-fournisseur » afin de
+suivre l’état de leurs dossiers de paiement et également leur permettre de déposer
+leurs facture d’une manière digitalisée.
+Le système de gestion intégrée de la dépense (GID) et performances …. 44
+Figure n°1 : Historique du projet GID
+Source : élaborée par nos soins
+Cette plateforme (GID) concerne toutes les composantes du budget de l’Etat (Budget
+Général, Budget Annexe, Compte Spéciaux du Trésor et SEGMA). Par ailleurs elle
+permet de traiter tout le périmètre des actes liés à la dépense publique (Tijani,
+2019) :
+- Gestion des crédits budgétaires : mise en place des crédits, délégations des
+crédits, virements et réservation des crédits ;
+- Exécution des dépenses : engagement, liquidation, ordonnancement,
+oppositions et règlement ;
+- Opérations de fin de gestion : situations de fin d’année, compte
+administratif, états de reports ;
+- Pilotage transverse de la gestion : tableaux de bord et reporting.
+Concernant la sécurité du système GID, nous pouvons dire que cette plateforme a
+montré sa fiabilité puisque depuis sa mise en œuvre en 2009, il n’y a eu aucune faille
+de sécurité. Ceci est dû au fait que c’est une application auditée et protégée contre
+les attaques puisqu’elle utilise un accès sécurisé (https) avec des logins et mots de
+passe et également une authentification forte (certificat électronique SSL pour
+chaque utilisateur).
+2009/2010
+Application
+dans l'Etat
+2013/2014
+Application
+s dans les
+CT
+2016/2017
+Application
+aux ACE
+2018/2019
+Application
+aux AREF
+2019/2022
+Gidfournisseur
+Mohammed Nabil EL MOUSSALI 45
+Dossiers de Recherches en Economie et Gestion : Dossier 11, N° 1 : Février 2023
+3. Les apports du système de gestion intégrée de la dépense aux
+performances budgétaires de l’Etat
+Comme tous les systèmes d’informations financiers, la plateforme GID a eu des
+apports considérables pour l’efficacité et l’efficience budgétaire. Nous allons
+analyser tous ces apports en comparaison avec les piliers de la LOF (la performance,
+la transparence et la réédition des comptes) qui sont garants d’une gestion
+budgétaire publique efficace et également en comparaison avec les principes du
+NPM.
+Au niveau de la performance, le système GID a permis d’abord une réduction des
+coûts et des délais puisque certains actes ont été dématérialisé nécessitant ainsi
+moins de temps pour leur saisie, moins de consommation de papier et moins d’effort
+de la part des agents. Puis ce système a permis une simplification des procédures. Le
+contrôle modulé de la dépense a permis de réduire les documents exigés pour le
+même acte de dépense. Enfin GID a permis une réduction des délais, puisque ce
+système permis de vérifier les informations saisies notamment le calcul concernant
+les bordereaux des prix par exemple.
+GID a eu un apport positif au niveau de la transparence. Nous pouvons donner deux
+exemple à ce niveau : d’abord il a permis la génération instantanée des situations
+des engagements et des émissions. Ceci facilite le travail d’audit et d’inspection et
+permet d’avoir une information fiable sans falsification ; puis GID a donné aux
+prestataires qui ont des contrats avec l’Etat (marchés, bons de commandes…) de
+suivre leur dossiers de paiement via « GID-fournisseur », et également déposer la
+facture d’une manière électronique ce qui renforce la transparence et limite les abus
+de pouvoir en matière de paiements.
+La transparence dans la gestion des dépenses publiques favorise la réédition des
+comptes des ordonnateurs et des sous-ordonnateurs. Ainsi par exemple les délais
+des engagements et des paiements sont visibles et accessibles pour tout auditeur ou
+contrôleur et même pour les prestataires, ce qui fait que chaque administration doit
+rendre des comptes en cas de retard dans les actes de dépenses. Au niveau
+hiérarchique, le système GID offre à l’administration centrale un droit de regard sur
+les sous-ordonnateurs ce qui responsabilise ces derniers plus sur leur actes et facilite
+le contrôle.
+Nous remarquons alors que GID permet de renforcer les piliers de la LOF et
+contribuer ainsi à construire une gestion des dépenses publiques plus efficace et plus
+efficiente.
+Le système de gestion intégrée de la dépense (GID) et performances …. 46
+D’un côté managérial, GID a permis de transformer la gestion financière de l’Etat en
+une gestion financière semblable à celle des organisations privées (entreprises) et
+concrétiser ainsi les principes du NPM. Utiliser un progiciel de gestion intégrée est
+un outil qui est préconisé par les entreprises pour une gestion financière efficace. Le
+système GID peut remplir ce rôle vu qu’il offre une information fiable intégrée et
+instantanée. Le fait d’offrir des bases de données sur les dépenses (liste des marchés,
+liste des bons de commandes etc.) permet de fournir une information utile pour les
+décideurs et gestionnaires. Les tableaux de bord et les différents états (reports,
+consolidations…) sont des outils de pilotage de la performance qui permettent un
+contrôle continu et appliquer par conséquent les principes du contrôle de gestion.
+L’évaluation des performances devient plus fluide et plus transparente.
+Conclusion
+L’administration marocaine est appelée à relever le défi de la performance et la
+modernisation. Par conséquent la gestion des deniers de l’Etat nécessite de
+nouveaux outils plus moderne et en adéquation avec les transformations
+numériques. La crise du COVID et la Crise de la Guerre en Ukraine ont eu un impact
+sur les finances publiques de plusieurs pays, de ce fait l’impératif de la rationalisation
+des dépenses passe par une gestion efficace de ces dernières. Les outils numériques
+apportent leur part dans ce processus en offrant un mode de gestion et de
+gouvernance plus efficace et efficient des deniers publics. GID a rempli cette mission
+d’une manière fiable ce qui lui permet d’être considéré parmi les meilleures
+applications digitalisées utilisé par l’Etat marocain.
+L’analyse systémique veut que tout système doive se développer et innover d’une
+manière constante. Le système GID doit évoluer dans le sens d’offrir plus de
+digitalisation dans le traitement des actes de dépenses et ne pas se limiter à la phase
+de dématérialisation qui est accompagnée encore par le support papier. C’est vrai
+que cela nécessite des outils techniques, juridiques et managériaux mais franchir le
+cap de la digitalisation est nécessaires pour de meilleures performances budgétaires.
+Le deuxième défis à relever c’est de continuer la généralisation de ce système vers
+les autres établissements publics pour avoir une vision des finances publiques plus
+intégrée et complète.
+Mohammed Nabil EL MOUSSALI 47
+Dossiers de Recherches en Economie et Gestion : Dossier 11, N° 1 : Février 2023
+Références bibliographiques
+Articles
+Amar A. et Berthier L. (2007). Le nouveau management public : avantages et
+limites. Gestion et Management Publics, vol.5, Décembre 2007.
+El Alaoui M. S. (2013). Le système de gestion intégrée de la dépense. Un acquis
+indéniable pour le déploiement des réformes en finances publiques. Revue AL
+KHAZINA, n°10 / Août 2013.
+Hood C. (1991-a). A Public Management for All Seasons. Public Administration, 69,
+1, 3-19.
+Hood C. et Jackson M. W. (1991). The New Public Management, a recipe for
+disaster. Canberra Bulletin of Public Administration, n°64, May 1991, 16-24.
+Ministère de l’Economie et des Finances (2019). Loi Organique relative à loi de
+Finances : Levier de modernisation de la gestion publique. Revue Al Maliya n°65 /
+Aout 2019.
+Trésorerie Générale du Royaume (2013). Spécial, les systèmes d’information : un
+instrument de pilotage des reformes des finances publiques. Revue AL KHAZINA,
+n°10 / Aout 2013.
+Van Haeperen B. (2012). Que sont les principes du new public management
+devenus ? Le cas de l'administration régionale wallonne. « Reflets et perspectives
+de la vie économique », 2012/2 Tome LI | pages 83 à 99.
+Rapports et documents officiels
+Banque Mondiale (2007). Etude d’évaluation de la gestion des systèmes de
+finances publiques.
+Conseil Economique Social et Environnemental (2013). Gouvernance des services
+publics.
+Ministère de l’Economie et des Finances (2016). Dépliant sur l'essentiel de la loi
+organique N°130-13 relative à la loi de finances.
+Tijani N., TGR (2019). Présentation du système GID-AREF. Tiré de
+Textes juridiques
+Dahir n°1-15-62 du 14 chaabane 1436 (2 juin 2015) portant promulgation de la loi
+organique n°130-13 relative à la loi de finances.
+Webographie
+https://lof.finances.gov.ma/ (consulté le 15/09/2022)

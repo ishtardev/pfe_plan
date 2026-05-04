@@ -11,11 +11,16 @@
 \usepackage{natbib}
 \usepackage{csquotes}
 \usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{colortbl}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{caption}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{parskip}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, fit}
 
 % --- Professional Color Palette ---
 \definecolor{primary}{RGB}{33, 150, 243}
@@ -38,291 +43,286 @@
 
 \begin{document}
 
-% ---- HEADER ----
+% ======================================================
+% TITLE PAGE
+% ======================================================
+\begin{titlepage}
 \begin{center}
-{\small Université Abdelmalek Essaâdi - FSJES Tétouan \quad|\quad Master FADS \quad|\quad 2025--2026}\\[6pt]
-\vspace{6pt}
-{\large \textbf{L'apport de l'intelligence artificielle dans la prévision budgétaire :}}\\[0.5pt]
-{\large \textbf{cas du ministère de la Justice du Maroc}}\\[6pt]
-\rule{\textwidth}{0.4pt}
+
+% ---- Header ----
+\begin{minipage}{0.18\textwidth}
+\raggedright
+\includegraphics[height=2.7cm]{logos/logofsjeste.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.78\textwidth}
+\raggedleft
+{\small Royaume du Maroc}\\[2pt]
+{\large Universit\'e Abdelmalek Essa\^adi}\\[2pt]
+{\normalsize Facult\'e des Sciences Juridiques, \'Economiques et Sociales}\\
+{\normalsize T\'etouan}
+\end{minipage}
+
+\vspace{0.8cm}
+
+% ---- Memoire ----
+{\normalsize \textsc{M\'emoire de Fin d'\'Etudes}}\\[4pt]
+{\small Pour l'obtention du Master en}\\[2pt]
+{\normalsize \textbf{Finance, Actuariat et Data Science}}
+
+\vspace{0.3cm}
+\rule{\textwidth}{0.5pt}
+\vspace{0.4cm}
+
+% ---- TITLE ----
+{\large \textbf{L'APPORT DE L'INTELLIGENCE ARTIFICIELLE}}\\[4pt]
+{\normalsize \textbf{DANS LA PR\'EVISION BUDG\'ETAIRE}}\\[6pt]
+{\small \textit{Cas du Minist\`ere de la Justice du Maroc}}
+
+\vspace{0.4cm}
+\rule{\textwidth}{0.5pt}
+
+\vspace{0.6cm}
+
+% ---- Author ----
+\begin{flushleft}
+\textbf{R\'ealis\'e par :}\\[2pt]
+\hspace{0.4cm} ABBARI Fatima Ezzahraa
+\end{flushleft}
+
+\vspace{0.25cm}
+
+% ---- Supervisors ----
+\begin{flushleft}
+\textbf{Encadr\'e par :}\\[2pt]
+\hspace{0.4cm} Pr. DAKKON Mohamed, Professeur \`a la FSJES de T\'etouan\\
+\hspace{0.4cm} M. ZABARATOU Iliass, Encadrant professionnel
+\end{flushleft}
+
+\vfill
+
+% ---- Bottom: logo + academic year ----
+\begin{center}
+\includegraphics[height=2.4cm]{logos/ministry.png}\\[10pt]
+\rule{0.35\textwidth}{0.4pt}\\[6pt]
+{\footnotesize Ann\'ee universitaire : 2025--2026}
 \end{center}
 
-\vspace{2pt}
-{\small\textbf{Problématique :} \textit{Dans quelle mesure les approches d'intelligence artificielle (Machine Learning et Deep Learning) peuvent-elles améliorer la précision de la prévision budgétaire au sein du ministère de la Justice du Maroc, par rapport aux méthodes économétriques traditionnelles ?}}
+\vspace{0.2cm}
 
-\vspace{6pt}
-\rule{\textwidth}{0.4pt}
-\vspace{4pt}
+\end{center}
+\end{titlepage}
 
 % ---- TABLE OF CONTENTS ----
+\pagenumbering{arabic}
 \newpage
 \tableofcontents
 \newpage
 
-% ---- INTRODUCTION ----
-{\large \textbf{INTRODUCTION GÉNÉRALE}}
+% ======================================================
+% REMERCIEMENTS
+% ======================================================
+\phantomsection
+\section*{Remerciements}
+\addcontentsline{toc}{section}{Remerciements}
 
-\vspace{6pt}
+\begin{center}
 
-\begin{itemize}[label={}, leftmargin=2cm, itemsep=6pt]
-    \item \textbf{Contexte :} Réforme des finances publiques (LOF 130-13)
-    \item \textbf{Problématique :} Amélioration de la précision budgétaire
-    \item \textbf{Hypothèses :} IA vs Méthodes traditionnelles
-    \item \textbf{Méthodologie :} Approches économétriques, ML et DL
-    \item \textbf{Intérêt :} Apports théoriques et opérationnels
-    \item \textbf{Structure :} Organisation du manuscrit
-\end{itemize}
+Au terme de ce travail, je tiens à exprimer ma sincère gratitude envers toutes les personnes qui ont contribué, de près ou de loin, à sa réalisation.
 
-\vspace{16pt}
+\vspace{0.4cm}
 
-% ---- PARTIE I ----
-\colorbox{black!8}{\parbox{\dimexpr\textwidth-2\fboxsep}{%
-\centering\vspace{5pt}{\large \textbf{Partie I : Cadre théorique et institutionnel}}\vspace{5pt}}}
+Je remercie en premier lieu \textbf{Monsieur Iliass Zabaratou}, mon encadrant professionnel, pour m'avoir guidé dans la définition du sujet de ce mémoire et pour m'avoir accordé sa confiance tout au long du stage.
 
-\vspace{14pt}
+\vspace{0.4cm}
 
-% ---- CHAPITRE 1 ----
-{\large \textbf{Chapitre 1 : Prévision budgétaire publique et intelligence artificielle}}
+Mes remerciements s'adressent également au \textbf{Professeur Mohamed Dakkon}, coordinateur du Master Finance, Actuariat et Data Science et encadrant académique de ce travail, pour son soutien, ses orientations et sa disponibilité.
 
-\vspace{8pt}
+% \vspace{0.4cm}
 
-\textbf{1.0 \quad Évolution historique des finances publiques marocaines}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 1912 \quad Protectorat : fondations du système budgétaire
-    \item 1956 \quad Indépendance : construction d'un système national
-    \item 1962 \quad Première Constitution : ancrage constitutionnel
-    \item 1998 \quad Première réforme organique : modernisation technique
-    \item 2011 \quad Constitution révisée : impulsion décisive
-    \item 2015 \quad LOF 130-13 : aboutissement et transformation
-\end{itemize}
+% Je souhaite exprimer ma profonde reconnaissance à \textbf{Monsieur Bilal Khanfoud}, dont l'aide a été déterminante à plusieurs étapes de ce travail.
 
-\vspace{6pt}
+% \vspace{0.4cm}
 
-\textbf{1.1 \quad Le cadre budgétaire marocain : architecture et instruments}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 1.1.1 \quad La LOF 130-13 : principes et apports
-    \item 1.1.2 \quad Architecture budgétaire : missions, programmes et actions - budgétisation par programmes et GBO
-    \item 1.1.3 \quad Les autorisations budgétaires : de l'engagement à la dépense
-\end{itemize}
+J'adresse mes sincères remerciements aux cadres et professionnels du bureau, et en particulier à \textbf{Zakaria} et \textbf{Kaoutar}, qui m'ont guidé dès le premier jour et ont veillé à ce que mon intégration se déroule dans les meilleures conditions. Je tiens également à exprimer ma gratitude envers \textbf{Khaoula}, \textbf{Idrissi}, \textbf{Fatima} et \textbf{Taoufiq} pour leurs conseils avisés et leur soutien constant tout au long de cette expérience.
 
-\vspace{6pt}
+\vspace{0.4cm}
 
-\textbf{1.2 \quad La programmation pluriannuelle : planification, écarts et limites}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 1.2.1 \quad Fonctionnement et horizon glissant (N, N+1, N+2)
-    \item 1.2.2 \quad Les écarts prévision-exécution : typologie et causes
-    \item 1.2.3 \quad Vers de nouvelles approches : justification du recours à l'IA
-\end{itemize}
+Enfin, je remercie l'ensemble du corps enseignant du Master Finance, Actuariat et Data Science de la FSJES de Tétouan pour la qualité de la formation dispensée, ainsi que ma famille pour son soutien indéfectible.
 
-\vspace{6pt}
-
-\textbf{1.3 \quad L'intelligence artificielle au service de la prévision financière}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 1.3.1 \quad Définitions : IA, Machine Learning, Deep Learning
-    \item 1.3.2 \quad État de l'art : IA et prévision budgétaire dans le secteur public (France, Canada, Maroc)
-    \item 1.3.3 \quad L'apport des Big Data dans la prévision budgétaire : le cas de la DGI au Maroc
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{1.4 \quad Travaux connexes et positionnement de l'étude}
-
-\vspace{18pt}
-
-% ---- CHAPITRE 2 ----
-{\large \textbf{Chapitre 2 : Contexte institutionnel : Le ministère de la Justice}}
-
-\vspace{8pt}
-
-\textbf{2.1 \quad Présentation du ministère de la Justice}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 2.1.1 \quad Missions et organisation générale
-    \item 2.1.2 \quad La Direction du Budget : rôle et positionnement dans la chaîne de dépense
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{2.2 \quad Le processus budgétaire au sein du ministère}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 2.2.1 \quad Cycle de préparation et d'exécution
-    \item 2.2.2 \quad Outils et pratiques actuels
-    \item 2.2.3 \quad Diagnostic de l'existant : forces et limites
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{2.3 \quad Contexte du stage et cadrage du projet}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 2.3.1 \quad Enjeux identifiés
-    \item 2.3.2 \quad Objectifs du projet
-\end{itemize}
-
-\vspace{18pt}
-
-% ---- PARTIE II ----
-\colorbox{black!8}{\parbox{\dimexpr\textwidth-2\fboxsep}{%
-\centering\vspace{5pt}{\large \textbf{Partie II : Modélisation et analyse empirique}}\vspace{5pt}}}
-
-\vspace{14pt}
-
-% ---- CHAPITRE 3 ----
-{\large \textbf{Chapitre 3 : Données et méthodologie}}
-
-\vspace{8pt}
-
-\textbf{3.1 \quad Sources de données et stratégie de collecte}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 3.1.1 \quad Les morasses budgétaires : structure et contenu
-    \item 3.1.2 \quad Variables budgétaires extraites (crédits ouverts, engagés, ordonnancés, taux de consommation, restes à payer)
-    \item 3.1.3 \quad Variables exogènes (inflation, PIB, démographie, indicateurs d'activité judiciaire)
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{3.2 \quad Analyse exploratoire des données (EDA)}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 3.2.1 \quad Statistiques descriptives
-    \item 3.2.2 \quad Visualisations et tendances
-    \item 3.2.3 \quad Détection d'anomalies et saisonnalités
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{3.3 \quad Préparation et feature engineering}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 3.3.1 \quad Nettoyage et traitement des valeurs manquantes
-    \item 3.3.2 \quad Transformation et création de variables
-    \item 3.3.3 \quad Stationnarité et tests statistiques
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{3.4 \quad Protocole expérimental}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 3.4.1 \quad Découpage train / test
-    \item 3.4.2 \quad Validation croisée temporelle
-    \item 3.4.3 \quad Métriques d'évaluation (MAE, RMSE, MAPE, R²)
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{3.5 \quad Environnement technique}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item Python, bibliothèques utilisées, architecture du code
-\end{itemize}
-
-\vspace{18pt}
-
-% ---- CHAPITRE 4 ----
-{\large \textbf{Chapitre 4 : Modélisation comparative}}\\[3pt]
-{\small\textit{(Le choix des modèles sera affiné en fonction des données disponibles)}}
-
-\vspace{8pt}
-
-\textbf{4.1 \quad Approche économétrique}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 4.1.1 \quad ARIMA / SARIMA
-    \item 4.1.2 \quad Prophet
-    \item 4.1.3 \quad VAR (Vector Autoregression)
-    \item 4.1.4 \quad Résultats et interprétation
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{4.2 \quad Approche Machine Learning}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 4.2.1 \quad Random Forest
-    \item 4.2.2 \quad XGBoost
-    \item 4.2.3 \quad Résultats et interprétation
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{4.3 \quad Approche Deep Learning}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 4.3.1 \quad LSTM / GRU
-    \item 4.3.2 \quad Architecture et hyperparamètres
-    \item 4.3.3 \quad Résultats et interprétation
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{4.4 \quad Synthèse comparative des approches}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 4.4.1 \quad Tableau récapitulatif des performances (MAE, RMSE, MAPE, R²)
-    \item 4.4.2 \quad Discussion et sélection du modèle optimal
-\end{itemize}
-
-\vspace{18pt}
-
-% ---- CHAPITRE 5 ----
-{\large \textbf{Chapitre 5 : Résultats, discussion et recommandations}}
-
-\vspace{8pt}
-
-\textbf{5.1 \quad Analyse et discussion des résultats}
-
-\vspace{6pt}
-
-\textbf{5.2 \quad Analyse de scénarios budgétaires}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 5.2.1 \quad Scénario optimiste / central / pessimiste
-    \item 5.2.2 \quad Quantification de l'incertitude (intervalles de confiance)
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{5.3 \quad Interprétabilité des modèles}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 5.3.1 \quad Feature importance
-    \item 5.3.2 \quad SHAP values
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{5.4 \quad Prototype d'outil de visualisation (Streamlit)}
-\begin{itemize}[leftmargin=2.5cm, label={}, itemsep=2pt]
-    \item 5.4.1 \quad Architecture et fonctionnalités
-    \item 5.4.2 \quad Démonstration
-\end{itemize}
-
-\vspace{6pt}
-
-\textbf{5.5 \quad Limites de l'étude}
-
-\vspace{6pt}
-
-\textbf{5.6 \quad Recommandations pour le ministère}
-
-\vspace{20pt}
-
-% ---- CONCLUSION ----
-{\large \textbf{CONCLUSION GÉNÉRALE}}
-
-\vspace{6pt}
-
-\begin{itemize}[label={}, leftmargin=2cm, itemsep=6pt]
-    \item Synthèse des résultats
-    \item Réponse à la problématique
-    \item Apports du mémoire
-    \item Perspectives futures
-\end{itemize}
-
-\vspace{14pt}
-
-% ---- COMPLÉMENTS ----
-{\large \textbf{Éléments complémentaires}}
-
-\vspace{6pt}
-
-\begin{itemize}[label={}, leftmargin=2cm, itemsep=6pt]
-    \item Bibliographie
-    \item Liste des figures
-    \item Liste des tableaux
-    \item Annexes
-\end{itemize}
+\end{center}
 
 \newpage
+
+% ======================================================
+% DÉDICACE
+% ======================================================
+\phantomsection
+\section*{D\'edicace}
+\addcontentsline{toc}{section}{D\'edicace}
+
+\begin{center}
+\vspace*{3cm}
+
+\textit{\`A mes parents,}\\[4pt]
+\textit{pour tout ce qu'ils ont sacrifi\'e pour que j'en arrive l\`a.}
+
+\vspace{0.8cm}
+
+\textit{\`A mon fr\`ere,}\\[4pt]
+\textit{pour sa pr\'esence et son soutien au quotidien.}
+
+\vspace{0.8cm}
+
+\textit{\`A mes amis,}\\[4pt]
+\textit{pour les moments partag\'es et les encouragements.}
+
+\vspace{1.2cm}
+
+\textit{Je d\'edie ce travail.}
+
+\end{center}
+
+\newpage
+
+% ======================================================
+% RÉSUMÉ
+% ======================================================
+\phantomsection
+\section*{R\'esum\'e}
+\addcontentsline{toc}{section}{R\'esum\'e}
+
+Ce m\'emoire examine dans quelle mesure les approches de \textit{Machine Learning} peuvent am\'eliorer la pr\'ecision de la pr\'evision budg\'etaire au sein du Minist\`ere de la Justice du Maroc, par rapport aux m\'ethodes statistiques classiques.
+
+La d\'epense publique marocaine est encadr\'ee depuis 2015 par la Loi Organique relative \`a la Loi de Finances (LOF~130-13), qui impose une budg\'etisation par la performance et une programmation triennale. Dans ce contexte, la fiabilit\'e des pr\'evisions de cr\'edits constitue un enjeu institutionnel majeur~: un \'ecart important entre pr\'evision et ex\'ecution expose le minist\`ere \`a des critiques parlementaires et \`a des observations de la Cour des Comptes.
+
+\`A partir d'un jeu de donn\'ees trimestrielles reconstitut\'e \`a partir des morasses budg\'etaires annuelles et des rapports de la Tr\'esorerie G\'en\'erale du Royaume (2020--2025, 109~lignes budg\'etaires), nous \'evaluons quatre mod\`eles~: une moyenne historique et un d\'ecalage annuel (benchmarks), une r\'egression Lasso, et un algorithme de gradient boosting (XGBoost). La validation repose sur un protocole \textit{walk-forward} \`a fen\^etre expansive (4~folds sur 2022--2025), conforme \`a la contrainte de causalit\'e temporelle. Un module de d\'etection d'anomalies bas\'e sur le score~$z$ compl\`ete le dispositif en signalant les lignes en sous-ex\'ecution anormale en cours d'exercice.
+
+Les r\'esultats montrent que les mod\`eles de Machine Learning, et en particulier XGBoost, offrent des gains de pr\'ecision substantiels par rapport aux benchmarks, tout en permettant une interpr\'etabilit\'e op\'erationnelle gr\^ace aux importances de variables. Ces r\'esultats sont int\'egr\'es dans un tableau de bord interactif d\'evelopp\'e en Python, mis \`a disposition de la Direction du Budget.
+
+\bigskip
+\noindent\textbf{Mots-cl\'es~:} pr\'evision budg\'etaire, Machine Learning, Lasso, XGBoost, LOF~130-13, Minist\`ere de la Justice, walk-forward, d\'etection d'anomalies.
+
+\newpage
+
+% ======================================================
+% ABSTRACT
+% ======================================================
+\phantomsection
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+This thesis investigates whether Machine Learning approaches can improve the accuracy of budget execution forecasting at the Moroccan Ministry of Justice, compared to classical statistical methods.
+
+Moroccan public expenditure has been governed since 2015 by the Organic Finance Law (LOF~130-13), which introduced performance-based budgeting and a three-year programming framework. In this context, the reliability of budget forecasts has become a major institutional challenge: significant deviations between forecasts and actual execution expose the Ministry to parliamentary scrutiny and Court of Accounts observations.
+
+Using a quarterly dataset reconstructed from annual budget documents (\textit{morasses budgétaires}) and Treasury General reports (2020--2025, 109 budget lines), we evaluate four models: a historical mean and an annual lag (benchmarks), a Lasso regression, and a gradient boosting algorithm (XGBoost). Validation follows a walk-forward protocol with an expanding window (4~folds over 2022--2025), strictly respecting temporal causality. A Z-score anomaly detection module complements the system by flagging budget lines with abnormal under-execution during the fiscal year.
+
+Results show that Machine Learning models, particularly XGBoost, achieve substantial accuracy gains over the benchmarks while maintaining operational interpretability through variable importance scores. These results are integrated into an interactive Python dashboard made available to the Budget Directorate.
+
+\bigskip
+\noindent\textbf{Keywords:} budget forecasting, Machine Learning, Lasso, XGBoost, LOF~130-13, Ministry of Justice, walk-forward validation, anomaly detection.
+
+\newpage
+
+% ======================================================
+% TABLE DES FIGURES
+% ======================================================
+\phantomsection
+\addcontentsline{toc}{section}{Table des figures}
+\listoffigures
+
+\newpage
+
+% ======================================================
+% LISTE DES TABLEAUX
+% ======================================================
+\phantomsection
+\addcontentsline{toc}{section}{Liste des tableaux}
+\listoftables
+
+\newpage
+
+% ======================================================
+% LISTE DES ACRONYMES
+% ======================================================
+\phantomsection
+\section*{Liste des acronymes}
+\addcontentsline{toc}{section}{Liste des acronymes}
+
+\begin{tabular}{@{}ll@{}}
+\textbf{IA}   & Intelligence Artificielle \\
+\textbf{ML}   & Machine Learning \\
+\textbf{LOF}  & Loi Organique relative \`a la Loi de Finances \\
+\textbf{MJ}   & Minist\`ere de la Justice \\
+\textbf{TGR}  & Tr\'esorerie G\'en\'erale du Royaume \\
+\textbf{GID}  & Gestion Int\'egr\'ee de la D\'epense \\
+\textbf{PLF}  & Projet de Loi de Finances \\
+\textbf{RMSE} & Root Mean Squared Error \\
+\textbf{MAE}  & Mean Absolute Error \\
+\textbf{MAPE} & Mean Absolute Percentage Error \\
+\end{tabular}
+
+\newpage
+
+% ======================================================
+% INTRODUCTION GÉNÉRALE
+% ======================================================
+\phantomsection
+\section*{Introduction g\'en\'erale}
+\addcontentsline{toc}{section}{Introduction g\'en\'erale}
+
+La pr\'evision budg\'etaire est au c\oe{}ur de la gouvernance financi\`ere publique. Pour un minist\`ere comme celui de la Justice du Maroc, anticiper avec pr\'ecision l'ex\'ecution des cr\'edits n'est pas un exercice formel~: c'est une condition de coh\'erence entre les ambitions programmatiques et les capacit\'es r\'eelles de d\'epense. Pourtant, malgr\'e les progr\`es introduits par la r\'eforme de la Loi Organique relative \`a la Loi de Finances (LOF~130-13), les \'ecarts entre pr\'evisions et r\'ealisations demeurent significatifs, notamment pour les d\'epenses d'investissement.
+
+Face \`a ce constat, les approches de \textit{Machine Learning} offrent une piste prometteuse. En exploitant des structures non lin\'eaires, en mutualisant l'information entre lignes budg\'etaires et en s'adaptant aux donn\'ees courtes, ces m\'ethodes pourraient combler les limites des outils statistiques classiques utilis\'es jusqu'ici.
+
+\phantomsection
+\subsection*{Contexte et Probl\'ematique}
+\addcontentsline{toc}{subsection}{Contexte et Probl\'ematique}
+
+Depuis l'entr\'ee en vigueur de la LOF~130-13 en 2015 et sa mise en \oe{}uvre progressive jusqu'en 2020, le cadre budg\'etaire marocain a profond\'ement \'evolu\'e. La budg\'etisation par la performance, la programmation triennale et l'obligation de sinc\'erit\'e budg\'etaire (article~10) ont renforc\'e les exigences en mati\`ere de fiabilit\'e des pr\'evisions. Dans ce contexte, un \'ecart important entre pr\'evision et ex\'ecution expose le minist\`ere \`a des critiques parlementaires et \`a des observations de la Cour des Comptes.
+
+Le Minist\`ere de la Justice pr\'esente par ailleurs des caract\'eristiques sp\'ecifiques qui compliquent la pr\'evision~: une masse salariale rigide repr\'esentant plus de 70\,\% des d\'epenses de fonctionnement, des d\'epenses d'investissement fortement concentr\'ees sur le dernier trimestre, et une nomenclature budg\'etaire d\'ecompos\'ee en plus d'une centaine de lignes h\'et\'erog\`enes.
+
+C'est dans ce contexte que s'inscrit la probl\'ematique de ce m\'emoire~:
+
+\begin{center}
+\textit{Dans quelle mesure les approches de Machine Learning peuvent-elles am\'eliorer la pr\'ecision de la pr\'evision de l'ex\'ecution budg\'etaire au Minist\`ere de la Justice du Maroc, par rapport aux m\'ethodes statistiques classiques~?}
+\end{center}
+
+\phantomsection
+\subsection*{Objectifs de la Recherche}
+\addcontentsline{toc}{subsection}{Objectifs de la Recherche}
+
+Ce travail poursuit quatre objectifs compl\'ementaires~:
+
+\begin{enumerate}
+    \item \textbf{Analyser} le cadre institutionnel et budg\'etaire du Minist\`ere de la Justice, afin d'identifier les facteurs qui commandent l'ex\'ecution des cr\'edits.
+    \item \textbf{Construire} un jeu de donn\'ees trimestrielles fiable, reconstitut\'e \`a partir des morasses budg\'etaires annuelles et des rapports de la Tr\'esorerie G\'en\'erale du Royaume (2020--2025).
+    \item \textbf{\'Evaluer} quatre mod\`eles de pr\'evision -- deux benchmarks classiques, une r\'egression Lasso et un algorithme XGBoost -- selon un protocole de validation \textit{walk-forward} rigoureux.
+    \item \textbf{D\'eployer} les r\'esultats dans un tableau de bord interactif Python, op\'erationnel pour la Direction du Budget.
+\end{enumerate}
+
+\phantomsection
+\subsection*{M\'ethodologie}
+\addcontentsline{toc}{subsection}{M\'ethodologie}
+
+La d\'emarche adopt\'ee articule trois composantes~:
+
+\textbf{Une phase de contextualisation} (chapitres~1 et~2)~: description de l'institution, de son budget et du cadre juridique de la gestion budg\'etaire. Cette \'etape permet d'identifier les variables explicatives pertinentes et les contraintes propres aux donn\'ees disponibles.
+
+\textbf{Une phase th\'eorique} (chapitre~3)~: pr\'esentation des fondements du Machine Learning appliqu\'e \`a la pr\'evision de s\'eries temporelles courtes. Sont d\'etaill\'es~: le compromis biais-variance, les mod\`eles retenus (Lasso et XGBoost), les benchmarks de r\'ef\'erence, le module de d\'etection d'anomalies par score~$z$, et le protocole de validation \textit{walk-forward} \`a fen\^etre expansive.
+
+\textbf{Une phase empirique} (chapitre~4)~: construction du jeu de donn\'ees, entra\^inement et \'evaluation des mod\`eles, analyse des r\'esultats par indicateurs d'erreur (RMSE, MAE, MAPE).
+
+\textbf{Une phase applicative} (chapitre~5)~: conception, d\'eveloppement et \'evaluation du syst\`eme de pilotage budg\'etaire -- tableau de bord interactif Python int\'egrant les pr\'evisions et les alertes d'anomalies, d\'eploy\'e pour la Direction du Budget.
+
+\medskip
+
+\textbf{Structure du m\'emoire~:} Le chapitre~1 pr\'esente le Minist\`ere de la Justice. Le chapitre~2 d\'ecrit la gestion budg\'etaire et ses contraintes. Le chapitre~3 pose les fondements th\'eoriques des mod\`eles utilis\'es. Le chapitre~4 expose la mise en \oe{}uvre empirique et les r\'esultats obtenus. Le chapitre~5 d\'etaille la conception et l'\'evaluation du syst\`eme de pilotage.
+
+\newpage
+
 \include{chapters/chapter1}
 
 \newpage
@@ -330,6 +330,12 @@
 
 \newpage
 \include{chapters/chapter3}
+
+\newpage
+\include{chapters/chapter4}
+
+\newpage
+\include{chapters/chapter5}
 
 \newpage
 \bibliography{references}

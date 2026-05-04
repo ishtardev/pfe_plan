@@ -1,489 +1,766 @@
-\section*{Chapitre 3 : Données et méthodologie}
-\addcontentsline{toc}{section}{Chapitre 3 : Données et méthodologie}
+%================================================================
+\phantomsection
+\section*{Chapitre 3 : Fondements théoriques du Machine Learning appliqué à la prévision budgétaire}
+\addcontentsline{toc}{section}{Chapitre 3 : Fondements théoriques du Machine Learning appliqué à la prévision budgétaire}
+%================================================================
 
 \bigskip
 
-Ce chapitre présente la démarche méthodologique qui structure l'ensemble de notre étude empirique. Il répond à la question du \textit{comment} : comment avons-nous constitué notre base de données, comment avons-nous préparé et transformé ces données, et selon quel protocole avons-nous construit, entraîné et évalué les modèles de prévision ? La transparence méthodologique est ici un impératif essentiel : une recherche en sciences de gestion appliquée n'a de valeur opérationnelle que si ses résultats sont reproductibles et ses choix explicitement justifiés.
+La prévision des taux d'exécution budgétaire est un problème difficile~: les données
+sont peu nombreuses, les comportements varient d'une ligne à l'autre, et les méthodes
+statistiques classiques atteignent rapidement leurs limites. Ce chapitre présente les
+outils de Machine Learning retenus pour y répondre, en expliquant à chaque étape
+\textit{pourquoi} ces outils ont été choisis, comment ils fonctionnent, et quelles
+précautions ont été prises pour garantir la fiabilité des résultats.
+
+La première section pose le cadre conceptuel du ML et son positionnement par rapport
+aux approches classiques. La deuxième section développe la théorie de la généralisation
+et le compromis biais-variance. La troisième présente les quatre modèles évalués.
+La quatrième traite d'un enjeu technique central~: comment s'assurer qu'un modèle
+prédit vraiment l'avenir, et non qu'il «~triche~» en regardant des données futures.
 
 %================================================================
-\subsection*{3.1 \quad Sources de données et stratégie de collecte}
-\addcontentsline{toc}{subsection}{3.1 Sources de données et stratégie de collecte}
-%================================================================
-
-%----------------------------------------------------------------
-\subsubsection*{3.1.1 \quad Les morasses budgétaires : nature et structure}
-%----------------------------------------------------------------
-
-La morasse budgétaire --- terme issu de la pratique administrative française et inscrit dans l'usage courant des services financiers marocains --- désigne un état d'exécution budgétaire mensuel détaillé, produit par extraction du système GID à la fin de chaque période. Elle constitue le document de référence pour le suivi opérationnel de la consommation des crédits au sein des ministères, et représente la source de données primaire de notre étude.
-
-\paragraph{Nature du document.}
-
-La morasse est un état tabulaire structuré qui présente, pour chaque ligne budgétaire (programme, sous-programme, article de nature de dépense, unité gestionnaire), les montants cumulés des différentes phases du cycle de la dépense depuis l'ouverture de l'exercice. Sa périodicité mensuelle lui confère une granularité temporelle suffisamment fine pour la construction de séries temporelles à usage de modélisation, tout en restant alignée sur le rythme institutionnel du reporting budgétaire.
-
-Chaque morasse mensuelle fournit une photographie cumulative de l'exécution à date : en soustrayant deux morasses consécutives, on reconstitue les flux mensuels réels de dépenses par ligne et par programme. Cette opération de différentiation constitue l'une des premières étapes de la chaîne de traitement des données.
-
-\paragraph{Structure et variables disponibles.}
-
-Pour chaque ligne budgétaire, la morasse renseigne les informations suivantes, exprimées en milliers de dirhams :
-
-\begin{itemize}
-    \item \textbf{Crédits ouverts (CO)} : montant total des crédits autorisés par la Loi de Finances pour la ligne concernée, y compris les éventuels virements, reports et ajustements en cours d'exercice.
-    \item \textbf{Crédits délégués (CD)} : portion des crédits ouverts effectivement délégués aux ordonnateurs secondaires déconcentrés.
-    \item \textbf{Engagements (ENG)} : montant cumulé des dépenses juridiquement engagées (marchés signés, décisions de recrutement, bons de commande), dans la limite des crédits ouverts.
-    \item \textbf{Liquidations (LIQ)} : montant cumulé des dépenses dont le service fait a été constaté et le montant définitif arrêté par le service gestionnaire.
-    \item \textbf{Ordonnancements (ORD)} : montant cumulé des ordres de payer émis par l'ordonnateur au comptable public.
-    \item \textbf{Paiements (PAY)} : lorsque disponibles, montant cumulé des règlements effectivement opérés par le comptable public.
-\end{itemize}
-
-De ces variables brutes sont dérivés plusieurs indicateurs synthétiques de pilotage budgétaire :
-
-\begin{align}
-    \text{Taux d'engagement}       &= \frac{\text{ENG}}{\text{CO}} \times 100 \label{eq:taux_eng} \\[6pt]
-    \text{Taux d'ordonnancement}   &= \frac{\text{ORD}}{\text{CO}} \times 100 \label{eq:taux_ord} \\[6pt]
-    \text{Taux de consommation}    &= \frac{\text{PAY}}{\text{CO}} \times 100 \label{eq:taux_conso} \\[6pt]
-    \text{Restes \`a payer (RAP)} &= \text{ENG} - \text{PAY} \label{eq:rap}
-\end{align}
-
-Ces indicateurs constituent à la fois des variables d'état de l'exécution budgétaire et des features potentiellement pertinentes pour nos modèles de prévision.
-
-\paragraph{Période d'étude et périmètre des données.}
-
-Les morasses utilisées dans cette étude couvrent les exercices budgétaires post-LOF, soit depuis l'exercice 2016 --- premier exercice d'application de la LOF 130-13 --- jusqu'à l'exercice le plus récent disponible au moment de l'extraction des données lors du stage. Ce corpus offre un historique mensuel homogène d'un point de vue institutionnel (même structure budgétaire par programmes sur toute la période), ce qui est une condition importante pour la comparabilité longitudinale des séries.
-
-Il convient de noter que les exercices 2020 et 2021, marqués par les effets de la pandémie de COVID-19 et les mesures d'état d'urgence sanitaire, présentent des profils d'exécution atypiques. Ces observations seront traitées avec le soin méthodologique approprié lors de la phase d'analyse exploratoire et de préparation des données (section 3.3).
-
-%----------------------------------------------------------------
-\subsubsection*{3.1.2 \quad Variables budgétaires retenues}
-%----------------------------------------------------------------
-
-La sélection des variables budgétaires à retenir dans nos modèles résulte d'une démarche conjointe d'exploration des données et de consultation des praticiens de la DAFB. Elle vise à trouver un équilibre entre exhaustivité analytique et parcimonie modélisatrice \citep{Hyndman2021}.
-
-\paragraph{Variable cible.}
-
-La variable cible principale de nos modèles de prévision est le \textbf{montant mensuel des ordonnancements (ORD)} par programme, exprimé en milliers de dirhams courants. Ce choix est motivé par plusieurs considérations :
-
-\begin{itemize}
-    \item Les ordonnancements représentent le stade de la dépense le plus directement contrôlable par les gestionnaires ordonnateurs et le plus pertinent pour le pilotage budgétaire infra-annuel.
-    \item Contrairement aux paiements, qui dépendent également de la disponibilité et des contraintes du comptable public, les ordonnancements reflètent la consommation effective des crédits du côté ordonnateur.
-    \item Les données d'ordonnancement sont systématiquement et complètement disponibles dans les morasses GID, sans les problèmes d'exhaustivité qui peuvent affecter les données de paiement, notamment en fin d'exercice.
-\end{itemize}
-
-À titre de robustesse et pour valider la généralité des conclusions, nous conduisons également des estimations parallèles sur les \textbf{engagements mensuels (ENG)}, qui constituent la variable la plus en amont du cycle de dépense et donc la plus utile pour des prévisions à horizon N+1 et N+2 dans le cadre de la PBT.
-
-\paragraph{Variables explicatives budgétaires endogènes.}
-
-Outre les valeurs retardées de la variable cible (composante autorégressive), nous mobilisons les variables budgétaires suivantes comme features :
-
-\begin{itemize}
-    \item \textbf{Crédits ouverts (CO)} : ils définissent le plafond légal de la dépense possible et constituent une contrainte institutionnelle forte sur toute la dynamique d'exécution.
-    \item \textbf{Taux d'exécution historiques} : les taux d'engagement et d'ordonnancement des mois précédents capturent la dynamique d'exécution et les effets d'inertie administrative.
-    \item \textbf{Restes à payer en début de période} : ils reflètent les engagements pluriannuels accumulés et exercent une pression significative sur les crédits de paiement disponibles.
-    \item \textbf{Profil saisonnier historique} : la part moyenne de chaque mois dans le total annuel, calculée sur l'historique disponible, constitue un signal puissant de la saisonnalité structurelle de la dépense.
-\end{itemize}
-
-%----------------------------------------------------------------
-\subsubsection*{3.1.3 \quad Variables exogènes}
-%----------------------------------------------------------------
-
-Pour respecter la troisième hypothèse de recherche (H3 : l'intégration de variables exogènes améliore les performances des modèles), nous enrichissons le jeu de données avec des variables macroéconomiques et sectorielles tirées de sources officielles.
-
-\paragraph{Variables macroéconomiques.}
-
-Les variables macroéconomiques retenues couvrent les principaux déterminants exogènes de la dépense publique sectorielle \citep{Leal2008} :
-
-\begin{itemize}
-    \item \textbf{Taux d'inflation mensuel} (source : Haut-Commissariat au Plan -- HCP) : affecte le pouvoir d'achat réel des dotations budgétaires et les coûts de fonctionnement (alimentation pénitentiaire, services, fournitures).
-    \item \textbf{Taux de croissance du PIB trimestriel} (source : HCP/comptes nationaux) : indicateur de l'environnement économique global, utilisé comme variable de contexte macrofiscal.
-    \item \textbf{Indice des prix à la consommation (IPC)} (source : HCP) : utilisé comme déflateur pour exprimer certaines séries en termes réels lorsque nécessaire.
-    \item \textbf{Taux directeur de Bank Al-Maghrib} : signal des conditions de financement de l'État, pertinent pour les dépenses d'investissement et les frais financiers.
-\end{itemize}
-
-\paragraph{Variables sectorielles spécifiques à la Justice.}
-
-Ces variables capturent les déterminants propres à l'activité judiciaire et pénitentiaire du ministère, qui ne peuvent être appréhendés par les seules variables macroéconomiques \citep{MJMaroc2023} :
-
-\begin{itemize}
-    \item \textbf{Population carcérale mensuelle} : variable clé pour les dépenses d'alimentation, de santé et de sécurité relevant de la DGAPR, qui représentent une part significative du budget total du programme 3.
-    \item \textbf{Nombre d'affaires judiciaires traitées} : indicateur de la charge d'activité des juridictions, utile pour prévoir les besoins en ressources des tribunaux (fonctionnement, actes de procédure, frais de justice).
-    \item \textbf{Effectifs du personnel} (sources : DRH ministerielle) : déterminant direct de la masse salariale, variable la plus prévisible mais aussi la plus lourde du budget.
-    \item \textbf{Nombre de marchés publics passés et leur montant} : indicateur d'activité d'engagement en amont des dépenses d'investissement.
-\end{itemize}
-
-\paragraph{Variables calendaires et saisonnières.}
-
-L'encodage de la temporalité dans nos modèles passe par des variables catégorielles et cycliques :
-
-\begin{itemize}
-    \item Mois de l'année (encodé en variables cycliques $\sin(2\pi m/12)$ et $\cos(2\pi m/12)$ pour les modèles DL sensibles à la circularité, et en indicatrices pour les modèles ML)
-    \item Numéro du trimestre (T1 à T4) et indicateur de fin de trimestre
-    \item Indicateurs de fin d'exercice budgétaire (mois 11 et 12)
-    \item Nombre de jours ouvrés dans le mois (variable de capacité opérationnelle)
-    \item Variable binaire de crise COVID-19 (exercices 2020-2021)
-    \item Millésime de l'exercice (variable d'ancienneté depuis 2016, capturant les effets d'apprentissage institutionnel post-LOF)
-\end{itemize}
-
-%================================================================
-\subsection*{3.2 \quad Analyse exploratoire des données}
-\addcontentsline{toc}{subsection}{3.2 Analyse exploratoire des données}
-%================================================================
-
-L'analyse exploratoire des données (EDA --- Exploratory Data Analysis) constitue une étape indispensable avant toute modélisation. Elle vise à comprendre la structure statistique des séries, à identifier les patterns temporels et les régularités saisonnières, et à déceler les anomalies ou ruptures structurelles susceptibles d'affecter le comportement des modèles.
-
-%----------------------------------------------------------------
-\subsubsection*{3.2.1 \quad Statistiques descriptives et profil budgétaire}
-%----------------------------------------------------------------
-
-Les statistiques descriptives sont calculées pour l'ensemble des variables budgétaires retenues sur la totalité de la période d'étude. Pour chaque programme et chaque variable (CO, ENG, ORD, RAP), sont calculées les mesures suivantes :
-
-\begin{itemize}
-    \item \textbf{Tendance centrale} : moyenne arithmétique, médiane, et mode des distributions mensuelles.
-    \item \textbf{Dispersion} : écart-type, coefficient de variation (CV = $\sigma / \mu$), intervalle interquartile (IQR).
-    \item \textbf{Forme de la distribution} : coefficient d'asymétrie (skewness) et d'aplatissement (kurtosis), permettant d'évaluer la normalité des distributions et d'orienter les choix de transformation.
-\end{itemize}
-
-Le coefficient de variation est particulièrement instructif dans ce contexte budgétaire : les dépenses de personnel, par nature rigides et prévisibles, présentent structurellement un CV faible, tandis que les dépenses d'investissement affichent une volatilité nettement plus élevée, confirmant les intuitions théoriques de la section 1.2.2. Cette hétérogénéité de volatilité entre catégories de dépenses motive l'adoption de modèles distincts --- ou à défaut, de pondérations différenciées --- selon le programme ou la nature de dépense analysée.
-
-L'analyse de corrélation entre les variables budgétaires et les variables exogènes est conduite à deux niveaux. Une \textbf{matrice de corrélation de Pearson} fournit une première vue de la co-variation linéaire entre variables. Des \textbf{fonctions d'autocorrélation (ACF) et d'autocorrélation partielle (PACF)} sont calculées pour chaque série temporelle afin d'identifier les ordres de retard pertinents pour les modèles autorégressifs et de guider la sélection des features de lag \citep{Hyndman2021}.
-
-%----------------------------------------------------------------
-\subsubsection*{3.2.2 \quad Décomposition saisonnière et analyse des tendances}
-%----------------------------------------------------------------
-
-L'analyse de la structure temporelle des séries de dépenses repose sur la décomposition de chaque série en ses composantes fondamentales : tendance ($T_t$), saisonnalité ($S_t$) et résidu ($R_t$). Soit $y_t$ la série observée :
-
-\begin{equation}
-    y_t = T_t + S_t + R_t \quad \text{(modèle additif)}
-    \label{eq:decomp}
-\end{equation}
-
-ou, si la variance de la série croît proportionnellement à son niveau :
-
-\begin{equation}
-    y_t = T_t \cdot S_t \cdot R_t \quad \text{(modèle multiplicatif)}
-    \label{eq:decomp_mult}
-\end{equation}
-
-Nous appliquons la méthode \textbf{STL (Seasonal and Trend decomposition using Loess)}, qui présente l'avantage d'être robuste aux valeurs aberrantes et d'autoriser une saisonnalité variable au cours du temps --- propriété particulièrement adaptée à des séries budgétaires susceptibles d'avoir évolué suite à la mise en œuvre de la LOF \citep{Hyndman2021}.
-
-\paragraph{Tendance.}
-
-La composante de tendance extrait l'évolution de long terme des dépenses, intimement liée aux trajectoires des enveloppes budgétaires pluriannuelles et aux priorités stratégiques du ministère. On anticipe une tendance légèrement croissante reflétant l'augmentation progressive des dotations, interrompue par un plateau ou une inflexion en 2020-2021.
-
-\paragraph{Saisonnalité.}
-
-La composante saisonnière est particulièrement prononcée dans les séries budgétaires publiques. Le pattern attendu, confirmé par la littérature sur le ``rush budgétaire'' de fin d'exercice \citep{Frankel2011}, comprend :
-
-\begin{itemize}
-    \item Une faible activité en début d'année (janvier-mars), correspondant aux délais d'installation administrative et de délégation de crédits après la promulgation de la Loi de Finances.
-    \item Une montée en puissance au deuxième trimestre lors du lancement des marchés d'investissement annuels et de l'intensification des engagements.
-    \item Une accélération au troisième trimestre pour les liquidations et ordonnancements des marchés engagés.
-    \item Un pic prononcé en fin d'exercice (novembre-décembre) pour les dépenses d'investissement, traduisant la pression à consommer les crédits disponibles avant la clôture comptable.
-\end{itemize}
-
-Ce pattern saisonnier constitue l'une des informations les plus précieuses pour la prévision, et sa bonne capture par les modèles est l'un des critères de sélection les plus importants.
-
-\paragraph{Résidus.}
-
-Après décomposition STL, les résidus permettent d'identifier les observations atypiques non expliquées par la tendance ou la saisonnalité. Les pics résiduels correspondent aux années COVID, aux éventuels virements budgétaires exceptionnels, ou aux années de transition LOF avec changements de périmètre de programmes.
-
-%----------------------------------------------------------------
-\subsubsection*{3.2.3 \quad Détection d'anomalies et ruptures structurelles}
-%----------------------------------------------------------------
-
-La détection des anomalies et ruptures structurelles revêt une importance particulière compte tenu de deux événements majeurs survenus au cours de la période d'étude.
-
-\paragraph{La mise en œuvre progressive de la LOF 130-13 (2016--2020).}
-
-Le basculement progressif vers la nouvelle architecture budgétaire peut avoir introduit des discontinuités ou des changements de régime dans les séries historiques, notamment en ce qui concerne les définitions et périmètres des programmes, les méthodes d'imputation des dépenses, et les comportements d'engagement des gestionnaires. Un \textbf{test de Chow} est appliqué aux points de rupture présumés (2016, 2018) pour détecter formellement des changements structurels dans les paramètres des séries au seuil de 5\%.
-
-\paragraph{La pandémie de COVID-19 (2020--2021).}
-
-L'état d'urgence sanitaire a eu un impact direct sur l'activité judiciaire (suspension temporaire des audiences entre mars et juin 2020, réorganisation des audiences), sur la population pénitentiaire (libérations exceptionnelles de certains détenus en 2020), et sur l'exécution budgétaire générale (gel de certains programmes d'investissement, dépenses de santé pénitentiaires extraordinaires). Ces observations constituent des \textit{outliers} structurels qui, si non traités, peuvent biaiser l'apprentissage des modèles vers des relations aberrantes.
-
-\paragraph{Stratégie de traitement des anomalies.}
-
-La détection des observations atypiques repose sur une approche combinée :
-
-\begin{itemize}
-    \item \textbf{Méthode STL augmentée} : un point est flaggé comme anomalie si son résidu de décomposition dépasse le seuil de $\pm 3\,\hat{\sigma}_R$, où $\hat{\sigma}_R$ est l'écart-type robuste des résidus.
-    \item \textbf{Méthode IQR} : pour les distributions non gaussiennes, tout point en dehors de l'intervalle $[Q_1 - 1.5 \cdot \text{IQR}\,,\, Q_3 + 1.5 \cdot \text{IQR}]$ est considéré comme aberrant.
-\end{itemize}
-
-Les anomalies détectées sont traitées différemment selon leur nature : les anomalies structurelles liées à des changements institutionnels sont conservées et accompagnées d'une variable indicatrice dans les modèles ML/DL ; les erreurs manifestes sont corrigées par interpolation.
-
-%================================================================
-\subsection*{3.3 \quad Préparation des données et feature engineering}
-\addcontentsline{toc}{subsection}{3.3 Préparation des données et feature engineering}
+\phantomsection
+\subsection*{3.1 \quad Cadre conceptuel du Machine Learning en prévision budgétaire}
+\addcontentsline{toc}{subsection}{3.1 Cadre conceptuel du Machine Learning en prévision budgétaire}
 %================================================================
 
 %----------------------------------------------------------------
-\subsubsection*{3.3.1 \quad Nettoyage et traitement des valeurs manquantes}
+\phantomsection
+\subsubsection*{3.1.1 \quad Positionnement méthodologique}
+\addcontentsline{toc}{subsubsection}{3.1.1 Positionnement méthodologique}
 %----------------------------------------------------------------
 
-Les données issues des morasses budgétaires bénéficient généralement d'un bon niveau de qualité intrinsèque, l'un des avantages des données administratives produites par un système d'information structuré tel que le GID. Néanmoins, certaines situations requièrent un traitement préalable explicite.
+\paragraph{Définition et principe~:}
 
-\paragraph{Valeurs manquantes.}
+Le \textbf{Machine Learning} (ML) est une branche de l'intelligence artificielle
+qui dote les systèmes informatiques de la capacité d'apprendre automatiquement
+à partir de données, sans que chaque règle de décision soit codée explicitement
+par un expert. L'idée fondamentale est la suivante~: plutôt que de définir manuellement
+des règles (par exemple \textit{«~si le taux de réalisation en juin dépasse 40\,\%,
+alors la ligne sera satisfaisante en fin d'année~»}), on soumet à l'algorithme un ensemble
+d'exemples historiques dont on connaît l'issue, et il en déduit lui-même les
+régularités statistiques sous-jacentes.
 
-Les valeurs manquantes peuvent survenir dans les situations suivantes : nouvelles lignes budgétaires créées en cours de période (absence d'historique pour les premiers mois), lignes désactivées en cours de période (programmes restructurés), ou extractions incomplètes pour des mois particuliers. La stratégie d'imputation adoptée est la suivante :
+Cette capacité est particulièrement précieuse pour la prévision budgétaire~: les
+déterminants de l'exécution d'une ligne dépendent de facteurs nombreux et
+interdépendants (programme, région, rythme trimestriel, saisonnalité institutionnelle)
+qui seraient impossibles à encoder manuellement de façon exhaustive. En laissant
+le modèle découvrir ces relations depuis les données historiques, on obtient un outil
+adaptatif, capable de traiter simultanément des centaines de lignes budgétaires.
+
+\paragraph{Les quatre familles du Machine Learning~:}
+
+Le ML ne se résume pas à un seul type d'apprentissage. Selon la nature des données
+disponibles et l'objectif poursuivi, on distingue quatre familles principales~:
 
 \begin{itemize}
-    \item \textbf{Séquences courtes} ($\leqslant 3$ mois consécutifs) : imputation par interpolation linéaire, en cohérence avec la continuité habituelle des flux budgétaires.
-    \item \textbf{Séquences longues} ($> 3$ mois) : imputation par la médiane saisonnielle de la même ligne sur les années adjacentes, qui préserve le pattern saisonnier tout en étant robuste aux valeurs extrêmes.
-    \item \textbf{Lignes entièrement absentes avant une date donnée} : exclusion du périmètre d'analyse pour les modèles nécessitant un historique complet, et traitement séparé pour les modèles capables de gérer des historiques partiels.
+    \item \textbf{L'apprentissage supervisé}~: le modèle apprend à partir d'exemples
+    étiquetés, c'est-à-dire des paires (entrée, réponse connue). C'est la famille
+    utilisée dans ce travail pour prédire le taux d'exécution annuel à partir des taux
+    trimestriels. Les algorithmes courants incluent la régression, les arbres de décision,
+    les forêts aléatoires (Random Forest) et le gradient boosting (XGBoost).
+    \item \textbf{L'apprentissage non supervisé}~: aucune étiquette n'est disponible~;
+    l'algorithme cherche des structures cachées dans les données (groupes similaires,
+    réductions de dimensions). Le \textit{clustering} est un exemple typique~: il peut
+    regrouper automatiquement les lignes budgétaires selon leur profil d'exécution, sans
+    qu'on lui ait dit à l'avance combien de groupes existent.
+    \item \textbf{L'apprentissage semi-supervisé}~: une petite partie des données est
+    étiquetée et une grande partie ne l'est pas. L'algorithme exploite les deux pour
+    améliorer ses prédictions, ce qui est utile lorsque l'annotation manuelle est
+    coûteuse.
+    \item \textbf{L'apprentissage par renforcement}~: un agent apprend en interagissant
+    avec un environnement et en recevant des récompenses ou des pénalités selon ses
+    décisions. Cette famille est surtout utilisée dans les jeux, la robotique et la
+    gestion de systèmes dynamiques en temps réel.
 \end{itemize}
 
-\paragraph{Incohérences comptables.}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/machinelearningtypes.png}
+    \caption{Les quatre familles du Machine Learning.}
+    \label{fig:ml-types}
+\end{figure}
 
-Des valeurs manifestement incohérentes au regard des règles budgétaires (ordonnancement cumulé supérieur aux crédits ouverts, engagements négatifs) sont identifiées et corrigées par référence croisée avec les morasses des mois adjacents et les règles de contrôle interne de la comptabilité publique.
+Dans notre contexte, l'apprentissage \textbf{supervisé} est le seul pertinent~:
+nous disposons d'un historique d'exécutions passées (les étiquettes) et l'objectif
+est précis : prédire le taux annuel $T4$. Il est important de noter que le ML est
+une \textit{branche} de l'intelligence artificielle~: certains systèmes d'IA
+fonctionnent par règles écrites manuellement par un expert (on parle de
+\textit{systèmes experts}) sans jamais apprendre à partir de données. Dans le
+contexte de la prévision budgétaire, où les dynamiques sont trop complexes pour
+être encodées à la main, c'est le ML supervisé qui s'impose naturellement.
 
-\paragraph{Harmonisation des séries temporelles.}
+\paragraph{Le cadre de l'apprentissage supervisé~:}
 
-Lorsque des redéfinitions de programmes ou de lignes budgétaires sont intervenues au cours de la période d'étude, une reventilation rétrospective est appliquée pour assurer la cohérence longitudinale des séries. Cette opération, conduite en concertation avec les agents de la DAFB, consiste à réallouer les crédits des anciennes nomenclatures vers la nomenclature en vigueur en fin de période, en utilisant les clés de répartition documentées dans les notes techniques de la Direction du Budget.
+Dans ce travail, nous utilisons exclusivement l'\textbf{apprentissage supervisé}~: le
+modèle apprend à partir d'exemples pour lesquels la «~bonne réponse~» est connue.
+Chaque exemple est un couple~:
+
+\begin{itemize}
+    \item \textbf{Les variables d'entrée} $\mathbf{x}_i$ (appelées \textit{features})~:
+    tout ce qu'on sait \textit{avant} la fin de l'année (taux de réalisation au premier,
+    deuxième et troisième trimestre, programme budgétaire, région, part de la ligne dans
+    le budget total).
+    \item \textbf{La variable à prédire} $y_i$ (appelée \textit{variable cible})~: le
+    taux de réalisation annuel final $T4$, connu seulement en fin d'exercice.
+\end{itemize}
+
+Le modèle cherche une fonction $f$ telle que $f(\mathbf{x}_i) \approx y_i$~: étant
+donné ce qu'on sait en cours d'année, il estime ce que sera le taux final. En termes
+formels, l'algorithme minimise une \textbf{fonction de perte} $\mathcal{L}$, qui
+mesure l'écart entre la prédiction et la réalité, sur l'ensemble des exemples
+historiques~:
+
+$$\hat{f} = \arg\min_{f \in \mathcal{F}} \sum_{i=1}^{n}
+\mathcal{L}\bigl(y_i,\, f(\mathbf{x}_i)\bigr)$$
+
+Dans notre application, $\mathcal{L}$ est l'erreur quadratique $(y - \hat{y})^2$, qui
+pénalise davantage les grandes erreurs de prédiction.
+
+\paragraph{Comment se déroule un projet de Machine Learning~?}
+
+Tout projet ML suit les mêmes étapes, de la collecte des données au déploiement opérationnel. Le cycle ci-dessous est décrit dans le contexte de notre application~:
+
+\begin{enumerate}
+    \item \textbf{Collecte des données}~: rassembler des données fiables et
+    représentatives. Dans notre cas, il s'agit des rapports trimestriels d'exécution
+    budgétaire publiés par la TGR sur la période 2020--2025, complétés par les morasses
+    annuelles du ministère de la Justice.
+    \item \textbf{Préparation des données}~: nettoyer, structurer et transformer les
+    données brutes en un format exploitable par les algorithmes. Cette étape inclut
+    la gestion des valeurs manquantes, la création des variables (features) et
+    l'encodage des identifiants catégoriels (programme, région).
+    \item \textbf{Choix de l'algorithme}~: sélectionner le type de modèle adapté
+    au problème. Pour une prévision sur données tabulaires avec historique court,
+    Lasso et XGBoost ont été retenus (voir section~3.3).
+    \item \textbf{Entraînement du modèle}~: présenter les exemples historiques
+    à l'algorithme. Celui-ci ajuste ses paramètres internes pour minimiser l'écart
+    entre ses prédictions et les valeurs réelles, selon la formule ci-dessus.
+    \item \textbf{Évaluation}~: tester le modèle sur des données qu'il n'a pas
+    vues pendant l'entraînement, en mesurant son erreur via le RMSE, le MAE et le
+    MAPE. Dans ce travail, cette évaluation se fait par validation walk-forward
+    (section~3.4).
+    \item \textbf{Amélioration}~: analyser les erreurs commises, ajuster les
+    hyperparamètres (profondeur des arbres, taux de régularisation $\lambda$) et
+    affiner l'ingénierie des features jusqu'à obtenir des performances satisfaisantes.
+    \item \textbf{Déploiement et surveillance}~: intégrer le modèle dans un
+    environnement opérationnel et surveiller en continu sa performance sur les
+    nouvelles données, en le ré-entraînant si la structure des données évolue.
+\end{enumerate}
+
+Ce cycle n'est pas linéaire~: les résultats de l'évaluation conduisent souvent
+à revenir sur la préparation des données ou le choix des features. Dans notre
+travail, plusieurs itérations ont été nécessaires pour identifier et corriger
+les problèmes de fuite de données décrits en section~3.4.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/CommentfonctionneleML.png}
+    \caption{Cycle de fonctionnement d'un projet de Machine Learning~: de la
+    collecte des données au déploiement, avec itérations d'amélioration.}
+    \label{fig:cycle-ml}
+\end{figure}
 
 %----------------------------------------------------------------
-\subsubsection*{3.3.2 \quad Construction des features (feature engineering)}
+\phantomsection
+\subsubsection*{3.1.2 \quad Apports du Machine Learning dans les finances publiques}
+\addcontentsline{toc}{subsubsection}{3.1.2 Apports du Machine Learning dans les finances publiques}
 %----------------------------------------------------------------
 
-Le feature engineering constitue l'une des étapes les plus déterminantes pour les performances des modèles de Machine Learning appliqués aux séries temporelles \citep{Hastie2009}. L'objectif est de créer, à partir des variables brutes, des représentations enrichies qui capturent explicitement les structures pertinentes pour la prévision --- persistance temporelle, tendance locale, saisonnalité, momentum --- et que les algorithmes ML n'auraient pas la capacité de déduire spontanément à partir des valeurs brutes seules.
+La pr\'evision des taux d'ex\'ecution budg\'etaire pr\'esente trois caract\'eristiques
+qui rendent les approches classiques de s\'eries temporelles difficiles \`a appliquer
+dans notre contexte~: les comportements sont non lin\'eaires, l'information pertinente
+est multidimensionnelle, et l'historique disponible par ligne est court. C'est
+pr\'ecis\'ement face \`a ces trois propri\'et\'es que le Machine Learning d\'emontre
+le plus clairement sa valeur ajout\'ee.
 
-\paragraph{Features de lag (composante autorégressive).}
+\paragraph{Non-lin\'earit\'es et effets de seuil~:}
 
-Pour capturer la persistance et les dépendances temporelles des séries de dépenses, nous créons des variables de retard (lag features) sur la variable cible. Le choix des ordres de retard est guidé par les fonctions ACF et PACF analysées à la section 3.2.1 :
+L'ex\'ecution budg\'etaire n'ob\'eit pas \`a une logique de proportionnalit\'e
+simple. Une ligne d\'ej\`a \`a 60\,\% de r\'ealisation au deuxi\`eme trimestre
+ne se comportera pas du tout de la m\^eme fa\c{c}on qu'une ligne \`a 10\,\%,
+m\^eme si l'\'ecart brut avec leur historique respectif est identique. Il existe
+des \textbf{effets de seuil et d'acc\'el\'eration}~: au-del\`a d'un certain
+niveau d'avancement, la dynamique d'ex\'ecution change de nature. Les algorithmes
+ML, en particulier les arbres de d\'ecision (XGBoost), d\'etectent et mod\'elisent
+ces ruptures automatiquement, sans qu'on ait besoin de les sp\'ecifier \`a
+l'avance.
 
-\begin{itemize}
-    \item $y_{t-1}$ : valeur du mois $t-1$ (persistance immédiate, forte dans les dépenses de personnel)
-    \item $y_{t-2}$, $y_{t-3}$ : valeurs des deux et trois mois précédents (dynamique de court terme)
-    \item $y_{t-6}$ : valeur il y a six mois (demi-cycle budgétaire semestriel)
-    \item $y_{t-12}$ : valeur du même mois de l'exercice précédent (capture le pattern saisonnier annuel, particulièrement informatif pour les séries budgétaires)
-\end{itemize}
+\paragraph{Int\'egration des variables contextuelles~:}
 
-\paragraph{Features de fenêtres glissantes (rolling features).}
+La capacit\'e d'ex\'ecution d'une ligne d\'epend de nombreux facteurs
+contextuels~: la cat\'egorie budg\'etaire de la ligne (Investissement ou
+Fonctionnement selon la nature de la d\'epense), le programme de rattachement
+(Soutien et pilotage, Performance de l'administration judiciaire, Modernisation
+du syst\`eme judiciaire et juridique, ou Renforcement des droits et des
+libert\'es), la r\'egion de rattachement, la part de la ligne dans le budget
+total, les ann\'ees pr\'ec\'edentes de lignes similaires. Les
+algorithmes ML absorbent toutes ces informations simultan\'ement et apprennent
+automatiquement \`a pond\'erer leur importance relative selon le type de d\'epense
+et l'horizon de pr\'evision.
 
-Des statistiques calculées sur des fenêtres temporelles glissantes apportent une dimension de tendance locale et de volatilité récente :
+\paragraph{Mutualisation de l'information entre lignes budg\'etaires~:}
 
-\begin{itemize}
-    \item Moyenne mobile sur 3 mois~: $\overline{y}_{3m,t} = \frac{1}{3}\sum_{k=1}^{3} y_{t-k}$
-    \item Moyenne mobile sur 6 et 12 mois (tendance de moyen et long terme)
-    \item Écart-type glissant sur 3 et 6 mois (mesure de la volatilité locale de l'exécution)
-    \item Taux de croissance glissant ($y_{t-1} / y_{t-13} - 1$) : variation annuelle glissante
-\end{itemize}
+Avec seulement 5 \`a 6 ann\'ees d'historique par ligne, tout mod\`ele traitant
+chaque ligne s\'epar\'ement travaille sur une base statistique fragile. Le ML
+r\'esout ce probl\`eme en \textbf{agr\'egeant toutes les lignes et toutes les
+ann\'ees dans un seul jeu d'entra\^inement}~: une ligne qui n'a que 5 ann\'ees
+d'historique b\'en\'eficie des patterns observ\'es sur l'ensemble du panel. Le
+mod\`ele apprend des r\`egles transversales~: par exemple, que les lignes
+d'investissement en retard \`a mi-ann\'ee rattrapent en g\'en\'eral leur d\'eficit
+au quatri\`eme trimestre, ou que les lignes de fonctionnement \`a forte part
+budg\'etaire sont structurellement pr\'evisibles. Cette mutualisation est l'un
+des avantages les plus d\'ecisifs de l'approche dans notre contexte.
 
-\paragraph{Features de taux et ratios budgétaires.}
-
-\begin{itemize}
-    \item Taux d'engagement cumulé au mois $t$ par rapport aux crédits ouverts annuels (mesure l'avancement relatif de la consommation)
-    \item Reste à engager en proportion des crédits ouverts ($1 - \text{Taux d'engagement}$) : mesure la ``pression'' budgétaire restante à couvrir
-    \item Pente locale d'exécution (coefficient $\beta$ de la régression linéaire de $y$ sur les 3 derniers mois)
-\end{itemize}
-
-\paragraph{Features temporelles et calendaires.}
-
-L'encodage de la temporalité est adapté à la nature de chaque modèle :
-
-\begin{itemize}
-    \item Pour les \textbf{modèles ML} (RF, XGBoost) : variables indicatrices binaires pour chaque mois de l'année (dummy encoding), indicateurs de trimestre, et indicateur de fin d'exercice.
-    \item Pour les \textbf{modèles DL} (LSTM, GRU) : encodage cyclique via $\sin(2\pi m/12)$ et $\cos(2\pi m/12)$ qui préserve la circularité du calendrier et évite les discontinuités artificielles entre décembre et janvier.
-    \item Nombre de jours ouvrés dans le mois (variable de capacité opérationnelle administrative)
-    \item Variable binaire COVID-19 (valeur 1 pour les mois de mars 2020 à décembre 2021)
-    \item Ancienneté du programme dans le nouveau référentiel LOF (nombre d'exercices écoulés depuis 2016)
-\end{itemize}
-
-%----------------------------------------------------------------
-\subsubsection*{3.3.3 \quad Tests de stationnarité et transformations}
-%----------------------------------------------------------------
-
-La stationnarité d'une série temporelle --- c'est-à-dire la stabilité de ses propriétés statistiques (moyenne, variance, structure d'autocovariance) dans le temps --- est une condition fondamentale pour les modèles économétriques de type ARIMA, et une propriété pratiquement souhaitable pour améliorer la convergence et les performances des modèles ML/DL.
-
-\paragraph{Test de Dickey-Fuller augmenté (ADF).}
-
-Le test ADF \citep{Dickey1979} s'écrit comme suit. Pour une série $y_t$, on estime le modèle :
-
-\begin{equation}
-    \Delta y_t = \alpha + \beta t + \gamma y_{t-1} + \sum_{j=1}^{p} \delta_j \Delta y_{t-j} + \varepsilon_t
-    \label{eq:adf}
-\end{equation}
-
-et on teste $H_0 : \gamma = 0$ (racine unitaire, non-stationnarité) contre $H_1 : \gamma < 0$ (stationnarité). L'ordre de retard $p$ est sélectionné par le critère d'information AIC. Le test est réalisé à trois spécifications (sans constante, avec constante, avec constante et tendance), selon la nature présumée de la série.
-
-\paragraph{Test KPSS.}
-
-Le test de Kwiatkowski-Phillips-Schmidt-Shin \citep{Kwiatkowski1992} procède dans la direction inverse : l'hypothèse nulle est la stationnarité autour d'une tendance déterministe, contre l'alternative d'une racine unitaire. L'utilisation conjointe des tests ADF et KPSS permet une décision plus robuste sur la nature réelle de la série :
-
-\begin{center}
-\small
-\begin{tabular}{lll}
-\toprule
-\textbf{ADF ($H_0$ rejeté ?)} & \textbf{KPSS ($H_0$ rejeté ?)} & \textbf{Conclusion} \\
-\midrule
-Oui & Non & Stationnarité confirmée \\
-Non & Oui & Non-stationnarité confirmée (racine unitaire) \\
-Non & Non & Ambiguïté (série faiblement non stationnaire) \\
-Oui & Oui & Ambiguïté (possible stationnarité fractionnaire) \\
-\bottomrule
-\end{tabular}
-\end{center}
 \vspace{4pt}
-{\small\textit{Tableau 3.1 --- Grille d'interprétation conjointe des tests ADF et KPSS}}
+Le tableau suivant synth\'etise ces propri\'et\'es~:
 
-\paragraph{Transformations appliquées.}
+\begin{table}[h]
+\centering
+\caption{Comparaison des m\'ethodes classiques et des approches de Machine Learning.}
+\label{tab:comparaison-ml}
+\begin{tabular}{lll}
+\hline
+\textbf{Propri\'et\'e} & \textbf{M\'ethodes classiques}
+& \textbf{ML (Lasso / XGBoost)} \\
+\hline
+Non-lin\'earit\'es et effets de seuil & Non & Oui \\
+Variables contextuelles multiples & Limit\'e & Naturellement int\'egr\'ees \\
+Courtes s\'eries par ligne & Fragile & Robuste (mutualisation) \\
+Interpr\'etabilit\'e & Coefficients & Coefficients (Lasso), importance (XGB) \\
+\hline
+\end{tabular}
+\end{table}
 
-Selon les résultats des tests de stationnarité, les transformations suivantes sont appliquées de manière sélective et documentée par série :
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.1.3 \quad Limites des approches classiques de prévision}
+\addcontentsline{toc}{subsubsection}{3.1.3 Limites des approches classiques de prévision}
+%----------------------------------------------------------------
 
-\begin{itemize}
-    \item \textbf{Différenciation d'ordre 1} ($\Delta y_t = y_t - y_{t-1}$) pour éliminer les tendances stochastiques (racines unitaires simples).
-    \item \textbf{Différenciation saisonnière} ($\Delta_{12} y_t = y_t - y_{t-12}$) pour neutraliser la saisonnalité déterministe forte.
-    \item \textbf{Transformation logarithmique} ($\tilde{y}_t = \log(y_t + 1)$) pour stabiliser la variance des séries dont l'écart-type croît proportionnellement à la moyenne.
-    \item \textbf{Normalisation Min-Max} $\left([0, 1]\right)$ pour les inputs des modèles DL, dont l'optimisation par descente de gradient est sensible à l'échelle des features.
-    \item \textbf{Standardisation Z-score} pour les features des modèles ML, afin d'assurer leur comparabilité en termes d'importance.
-\end{itemize}
+Le chapitre~2 a recensé les principales méthodes de prévision utilisées dans la
+littérature budgétaire~: modèles ARIMA/SARIMA, régressions saisonnières, lissages
+exponentiels. Ces approches reposent sur des hypothèses qui se révèlent difficiles
+à satisfaire dans notre contexte.
+
+Premièrement, elles exigent des séries temporelles suffisamment longues par entité
+prédite~: ARIMA recommande au moins 50 observations pour une estimation fiable, ce
+qui correspond à plus de 12 années de données trimestrielles par ligne. Avec
+seulement 5 à 6 ans d'historique, l'estimation des paramètres est instable et les
+intervalles de confiance très larges.
+
+Deuxièmement, ces méthodes traitent chaque ligne budgétaire de façon isolée~: elles
+ne peuvent pas exploiter le fait que des lignes relevant du même programme ou de
+la même région partagent des dynamiques communes. L'information potentiellement
+précieuse contenue dans les centaines de lignes du budget n'est pas mutualisée.
+
+Troisièmement, l'intégration de variables contextuelles explicatives (programme,
+région, indicateurs judiciaires) dans un modèle ARIMA requiert des extensions
+ARIMAX qui augmentent considérablement sa complexité sans garantir une amélioration
+sensible des performances quand l'historique est court. Ces limites motivent le
+recours au Machine Learning, dont les apports spécifiques à notre contexte ont été
+présentés en section~3.1.2.
 
 %================================================================
-\subsection*{3.4 \quad Protocole expérimental}
-\addcontentsline{toc}{subsection}{3.4 Protocole expérimental}
+\phantomsection
+\subsection*{3.2 \quad Théorie de la généralisation en apprentissage supervisé}
+\addcontentsline{toc}{subsection}{3.2 Théorie de la généralisation en apprentissage supervisé}
 %================================================================
 
 %----------------------------------------------------------------
-\subsubsection*{3.4.1 \quad Stratégie de découpage et validation temporelle}
+\phantomsection
+\subsubsection*{3.2.1 \quad Problématique de la généralisation}
+\addcontentsline{toc}{subsubsection}{3.2.1 Problématique de la généralisation}
 %----------------------------------------------------------------
 
-La conception du découpage des données en ensembles d'entraînement et de test constitue l'un des points méthodologiques les plus critiques en prévision de séries temporelles. Contrairement aux problèmes de régression sur données cross-sectionnelles, les séries temporelles imposent une contrainte absolue : \textbf{les données futures ne doivent jamais être accessibles lors de l'entraînement du modèle}, sous peine d'introduire un biais de \textit{data leakage} qui invaliderait toute évaluation de performance \citep{Hyndman2021}.
+Un modèle ML n'a de valeur que s'il prédit correctement des situations qu'il n'a
+\textit{jamais vues}. Or un algorithme suffisamment puissant peut «~mémoriser~»
+tous ses exemples d'entraînement sans réellement comprendre les patterns sous-jacents.
+Ce phénomène s'appelle le \textbf{surapprentissage} (\textit{overfitting})~: le
+modèle performe brillamment sur ses données d'entraînement et échoue sur de
+nouvelles données. La \textbf{généralisation} désigne précisément la capacité d'un
+modèle à maintenir ses performances sur des données inédites, critère
+déterminant pour un usage opérationnel.
 
-\paragraph{Approche walk-forward avec fenêtre expansive.}
+La généralisation dépend d'un équilibre délicat entre la complexité du modèle et
+la quantité de données disponibles. Un modèle trop simple ne captera pas les
+patterns importants~; un modèle trop complexe les mémorisera sans les comprendre.
+Cet équilibre est formalisé par le compromis biais-variance.
 
-Nous adoptons une stratégie de validation \textit{walk-forward} (aussi appelée \textit{rolling origin evaluation}) avec fenêtre d'entraînement expansive. Le principe est le suivant : à chaque étape $k$, le modèle est entraîné sur toutes les données disponibles jusqu'au mois $t_k$, puis évalué sur les $h = 12$ mois suivants (correspondant à un exercice budgétaire complet). La procédure est répétée pour plusieurs valeurs de $t_k$, correspondant à des points de coupe successifs en fin d'exercice budgétaire.
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.2.2 \quad Compromis biais--variance}
+\addcontentsline{toc}{subsubsection}{3.2.2 Compromis biais--variance}
+%----------------------------------------------------------------
 
-\begin{equation}
-    \hat{y}_{t_k + j} = f\!\left(\mathcal{D}_{1:t_k}\right), \quad j = 1, 2, \ldots, h \quad \text{avec} \quad h = 12
-    \label{eq:walkforward}
-\end{equation}
+L'erreur totale d'un modèle peut toujours se décomposer en trois termes~:
 
-où $\mathcal{D}_{1:t_k}$ désigne l'ensemble des données depuis le début de la série jusqu'au mois $t_k$ inclus, et $f(\cdot)$ représente le modèle entraîné sur cet ensemble.
-
-Cette approche présente trois avantages décisifs dans notre contexte :
+$$\text{Erreur totale} = \underbrace{\text{Biais}^2}_{\text{modèle trop simple}}
++ \underbrace{\text{Variance}}_{\text{modèle trop complexe}}
++ \text{Bruit irréductible}$$
 
 \begin{itemize}
-    \item Elle simule fidèlement les conditions réelles de prévision budgétaire (on prédit l'exercice N+1 à partir de l'historique disponible à la fin de l'exercice N).
-    \item L'utilisation d'une fenêtre expansive plutôt que glissante maximise la quantité de données d'entraînement à chaque étape, ce qui est important avec un historique de taille modérée.
-    \item Elle permet d'observer l'évolution des performances du modèle au fil du temps et d'identifier d'éventuelles dégradations.
+    \item Le \textbf{biais} traduit un \textit{sous-apprentissage}~: le modèle est
+    trop simple et rate des patterns importants. Exemple~: supposer que le taux final
+    est toujours égal au taux du deuxième trimestre.
+    \item La \textbf{variance} traduit un \textit{surapprentissage}~: le modèle est
+    trop complexe et apprend le bruit au lieu du signal. Il s'adapte parfaitement à
+    l'historique, mais généralise mal.
+    \item Le \textbf{bruit irréductible}~: une partie de la réalité est par nature
+    imprévisible (décisions politiques de dernière minute, suspensions de dépenses
+    imprévues, événements exceptionnels). Aucun modèle ne peut l'éliminer.
 \end{itemize}
 
-\paragraph{Ensemble de test hors-échantillon final.}
+Les métriques d'évaluation quantifient cet écart entre prédictions et réalité.
+Trois indicateurs sont utilisés dans ce travail~:
 
-L'évaluation conclusive des modèles est conduite sur un \textbf{ensemble de test hors-échantillon} constitué des 12 à 24 derniers mois de la série (selon la disponibilité des données), strictement isolés et n'ayant jamais été consultés pendant les phases d'entraînement, de sélection des features, ou d'optimisation des hyperparamètres.
+$$\text{RMSE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2} \qquad
+\text{MAE} = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i| \qquad
+\text{MAPE} = \frac{100}{n}\sum_{i=1}^{n}\left|\frac{y_i - \hat{y}_i}{y_i}\right|\,\%$$
 
-%----------------------------------------------------------------
-\subsubsection*{3.4.2 \quad Sélection des hyperparamètres}
-%----------------------------------------------------------------
+\begin{itemize}
+    \item Le \textbf{RMSE} (Racine de l'Erreur Quadratique Moyenne) est la métrique
+    principale. Il pénalise plus fortement les grandes erreurs~: se tromper de 20\,\%
+    est bien pire que deux erreurs de 10\,\%.
+    \item Le \textbf{MAE} (Erreur Absolue Moyenne) donne l'erreur typique en valeur
+    absolue, moins sensible aux cas exceptionnels.
+    \item Le \textbf{MAPE} (Erreur Absolue Moyenne en Pourcentage) exprime l'erreur
+    en pourcentage, ce qui facilite la comparaison entre lignes de niveaux très
+    différents.
+\end{itemize}
 
-Chaque famille de modèles fait l'objet d'une procédure spécifique de sélection des hyperparamètres, conduite exclusivement sur les données d'entraînement pour éviter toute contamination par les données de test.
-
-\paragraph{Modèles économétriques (ARIMA/SARIMA, VAR).}
-
-Pour les modèles ARIMA, l'ordre $(p, d, q)$ est sélectionné par la procédure de sélection automatique d'Hyndman-Khandakar fondée sur le critère d'information AICc (Akaike corrigé pour les petits échantillons), implémentée via la bibliothèque \texttt{pmdarima} \citep{Hyndman2021}. La composante saisonnière $(P, D, Q)_{12}$ est ajoutée lorsque la décomposition STL révèle une saisonnalité significative au test de Friedman ($p < 0.05$). Pour Prophet \citep{Taylor2018}, les paramètres de flexibilité de la tendance (\texttt{changepoint\_prior\_scale}) et de scale saisonnelle (\texttt{seasonality\_prior\_scale}) sont sélectionnés par validation croisée sur fenêtre temporelle.
-
-\paragraph{Random Forest.}
-
-La sélection des hyperparamètres du Random Forest \citep{Breiman2001} porte sur le nombre d'arbres ($n\_\text{estimators}$), la profondeur maximale ($\texttt{max\_depth}$), le nombre minimum d'observations par feuille ($\texttt{min\_samples\_leaf}$), et la proportion de features considérées à chaque nœud ($\texttt{max\_features}$). Une recherche sur grille (\textit{grid search}) combinée à une validation croisée temporelle à 5 folds est utilisée, avec la MAE comme critère de sélection.
-
-\paragraph{XGBoost.}
-
-Pour XGBoost \citep{Chen2016}, les hyperparamètres clés sont le taux d'apprentissage ($\eta$), la profondeur maximale des arbres ($\texttt{max\_depth}$), le taux de sous-échantillonnage par arbre ($\texttt{subsample}$), et les coefficients de régularisation L1 et L2 ($\alpha$ et $\lambda$). Compte tenu de l'espace de recherche plus étendu, une \textit{recherche aléatoire} (random search) suivie d'une \textit{optimisation bayésienne} via la bibliothèque \texttt{Optuna} est appliquée pour une exploration plus efficace.
-
-\paragraph{LSTM et GRU.}
-
-L'architecture des réseaux récurrents est définie par cinq hyperparamètres principaux : le nombre de couches récurrentes empilées, le nombre de cellules (unités) par couche, le taux de régularisation par dropout, le taux d'apprentissage initial de l'optimiseur Adam, et la taille du lot (\textit{batch size}). Ces paramètres sont optimisés par une recherche bayésienne dans un espace limité par les contraintes de la taille du corpus, en s'appuyant sur les recommandations de \citet{Hochreiter1997} et \citet{Cho2014} pour des séries temporelles de longueur comparable. Un mécanisme d'\textit{early stopping} sur la perte de validation est systématiquement utilisé pour prévenir le surapprentissage.
+Dans notre protocole, le RMSE sert de critère principal de sélection des modèles~;
+MAE et MAPE sont présentés en complément dans les tableaux du chapitre~4.
 
 %----------------------------------------------------------------
-\subsubsection*{3.4.3 \quad Métriques d'évaluation et comparaison statistique}
+\phantomsection
+\subsubsection*{3.2.3 \quad Surapprentissage et robustesse des modèles}
+\addcontentsline{toc}{subsubsection}{3.2.3 Surapprentissage et robustesse des modèles}
 %----------------------------------------------------------------
 
-La comparaison des performances des modèles s'appuie sur un éventail de métriques complémentaires \citep{Botchkarev2019}, permettant une évaluation multidimensionnelle des erreurs de prévision.
+Avec seulement 5 à 6 années d'historique par ligne, un modèle très complexe risque
+fortement de mémoriser les données plutôt que d'en extraire des règles généralisables.
+Nous privilégions donc des modèles \textbf{régularisés} (Lasso et XGBoost avec
+pénalités $L_1/L_2$) qui incluent un mécanisme interne limitant leur propre
+complexité, trouvant ainsi le bon équilibre entre simplicité et précision.
 
-\paragraph{Erreur absolue moyenne (MAE).}
+Trois contraintes spécifiques à notre contexte plafonnent par ailleurs la précision
+atteignable~:
 
-\begin{equation}
-    \text{MAE} = \frac{1}{h} \sum_{t=1}^{h} \left|y_t - \hat{y}_t\right|
-    \label{eq:mae}
-\end{equation}
+\begin{enumerate}
+    \item \textbf{Volume de données limité}~: cinq à six années d'historique par ligne
+    représentent un volume modeste. Les modèles à grand nombre de paramètres risquent
+    de mémoriser ces quelques exemples plutôt que d'en extraire des règles robustes.
 
-Exprimée en milliers de dirhams, la MAE mesure l'erreur moyenne en valeur absolue. Elle est robuste aux valeurs extrêmes isolées et constitue la métrique la plus directement interprétable pour les praticiens de la DAFB.
+    \item \textbf{Données partiellement synthétiques}~: les taux d'exécution publiés
+    par la Trésorerie Générale du Royaume (TGR) sont des agrégats par catégorie, sans
+    ventilation par programme ni par région. La construction du panel désagrégé repose
+    donc sur une simulation calibrée (décrite au chapitre~4), ce qui introduit une
+    imprécision structurelle dans les données d'entraînement.
 
-\paragraph{Racine de l'erreur quadratique moyenne (RMSE).}
-
-\begin{equation}
-    \text{RMSE} = \sqrt{\frac{1}{h} \sum_{t=1}^{h} \left(y_t - \hat{y}_t\right)^2}
-    \label{eq:rmse}
-\end{equation}
-
-Également exprimée en milliers de dirhams, la RMSE pénalise davantage les grandes erreurs de prévision par rapport à la MAE. Dans un contexte budgétaire public où les dépassements importants ont des conséquences institutionnelles significatives, cette propriété de la RMSE est analytiquement pertinente.
-
-\paragraph{Erreur absolue moyenne en pourcentage (MAPE).}
-
-\begin{equation}
-    \text{MAPE} = \frac{1}{h} \sum_{t=1}^{h} \left|\frac{y_t - \hat{y}_t}{y_t}\right| \times 100
-    \label{eq:mape}
-\end{equation}
-
-La MAPE normalise l'erreur par la valeur réelle, ce qui permet la comparaison des performances entre programmes de tailles très différentes (programme 3 - pénitentiaire vs programme 4 - investissement) et facilite l'interprétation par les décideurs non statisticiens.
-
-\paragraph{Coefficient de détermination ($R^2$).}
-
-\begin{equation}
-    R^2 = 1 - \frac{\displaystyle\sum_{t=1}^{h} (y_t - \hat{y}_t)^2}{\displaystyle\sum_{t=1}^{h} (y_t - \bar{y})^2}
-    \label{eq:r2}
-\end{equation}
-
-Le $R^2$ mesure la fraction de la variance totale de la variable cible expliquée par le modèle. Il fournit une mesure de l'adéquation globale du modèle à la structure de la série.
-
-\paragraph{Test de Diebold-Mariano (DM).}
-
-Au-delà des métriques ponctuelles, nous recourons au test de Diebold-Mariano \citep{DieboldMariano1995} pour tester formellement si les différences de performance entre deux modèles sont statistiquement significatives. Soit $e_t^{(i)} = y_t - \hat{y}_t^{(i)}$ l'erreur de prévision du modèle $i$, et $d_t = g\!\left(e_t^{(1)}\right) - g\!\left(e_t^{(2)}\right)$ la différence des pertes (avec $g(e) = e^2$ pour la MSE). La statistique DM est :
-
-\begin{equation}
-    \text{DM} = \frac{\bar{d}}{\sqrt{\hat{V}(\bar{d})\,/\,h}} \xrightarrow{d} \mathcal{N}(0, 1)
-    \label{eq:dm}
-\end{equation}
-
-Le test DM est appliqué à l'ensemble des paires modèle-IA vs modèle-économétrique de référence au seuil $\alpha = 5\%$, permettant de valider ou non les hypothèses H1 et H2 de notre recherche sur un fondement statistique rigoureux.
+    \item \textbf{Variables non observables}~: certains facteurs qui influencent
+    l'exécution budgétaire ne figurent tout simplement pas dans les données : une
+    décision de suspendre temporairement des dépenses en cours d'année, un retard
+    dans le lancement d'un appel d'offres, ou une réallocation de crédits d'un
+    programme vers un autre décidée au niveau central. Ces événements, invisibles
+    pour le modèle, peuvent pourtant modifier significativement le niveau de
+    consommation observé en fin d'année. Même le meilleur algorithme ne peut pas
+    prédire ce qu'il ne voit pas.
+\end{enumerate}
 
 %================================================================
-\subsection*{3.5 \quad Environnement technique et organisation du code}
-\addcontentsline{toc}{subsection}{3.5 Environnement technique et organisation du code}
+\phantomsection
+\subsection*{3.3 \quad Modèles de prévision retenus}
+\addcontentsline{toc}{subsection}{3.3 Modèles de prévision retenus}
 %================================================================
 
-L'ensemble de la chaîne de traitement --- de la collecte des données à la production des résultats finaux --- est implémenté en \textbf{Python 3.11}, choix justifié par la richesse et la maturité de son écosystème en matière de science des données et d'apprentissage automatique, ainsi que par sa communauté académique active facilitant la reproductibilité \citep{Pedregosa2011}.
+Quatre modèles ont été évalués dans ce travail~: deux \textbf{benchmarks naïfs}
+(sans apprentissage statistique) qui servent de barre minimale, et deux
+\textbf{algorithmes ML} à proprement parler. Le choix a été guidé par deux critères~:
+la pertinence théorique face aux données budgétaires, et la faisabilité d'un
+déploiement réel dans une administration publique (un modèle trop opaque ou trop
+coûteux à maintenir n'a pas de valeur opérationnelle).
 
-\paragraph{Bibliothèques principales.}
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.3.1 \quad Modèles de référence (benchmarks naïfs)}
+\addcontentsline{toc}{subsubsection}{3.3.1 Modèles de référence (benchmarks naïfs)}
+%----------------------------------------------------------------
+
+Avant tout modèle sophistiqué, il est indispensable de définir des références simples~:
+des prévisions que n'importe quel gestionnaire pourrait produire sans algorithme, et
+que tout modèle ML doit surpasser pour justifier sa complexité supplémentaire.
+
+\paragraph{Benchmark 1~: Moyenne historique.}
+
+La prévision la plus simple consiste à regarder comment une ligne s'est comportée
+par le passé et à répéter ce niveau~: si une ligne a réalisé en moyenne 82\,\% de
+son budget lors des cinq dernières années, on prédit 82\,\% pour l'année en cours.
+
+$$\hat{y}_i = \frac{1}{N} \sum_{t=1}^{N} y_{i,t}$$
+
+\noindent\small\textit{où $\hat{y}_i$ est la prévision pour la ligne $i$, $N$ le nombre d'années d'entraînement, et $y_{i,t}$ le taux d'exécution réel de la ligne $i$ en année $t$.}\normalsize
+
+Ce benchmark capture la \textbf{persistance structurelle} du taux d'exécution~:
+certaines lignes sont structurellement bien exécutées, d'autres chroniquement
+sous-exécutées. Ignorer cet historique serait une erreur.
+
+\paragraph{Benchmark 2~: Naïf saisonnier lag-4.}
+
+Une variante encore plus simple~: prévoir pour cette année exactement ce qui s'est
+passé l'an dernier.
+
+$$\hat{y}_i = y_{i,\, Y-1}$$
+
+\noindent\small\textit{où $y_{i,\, Y-1}$ est le taux d'exécution réel de la ligne $i$ l'année précédente.}\normalsize
+
+Ce benchmark est souvent difficile à battre, car il capte implicitement les tendances
+récentes et l'inertie institutionnelle. Un modèle ML qui ne fait pas mieux qu'un
+simple «~copier-coller de l'an dernier~» n'apporte aucune valeur ajoutée.
+
+Ces deux benchmarks constituent la \textbf{barre minimale} que les modèles ML doivent
+franchir pour justifier leur déploiement.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.3.2 \quad Régression régularisée (Lasso)}
+\addcontentsline{toc}{subsubsection}{3.3.2 Régression régularisée (Lasso)}
+%----------------------------------------------------------------
+
+\paragraph{Principe en langage clair~:}
+
+La régression linéaire classique cherche la combinaison de variables qui prédit le
+mieux le taux final~: «~le taux final vaut approximativement $a$ fois le taux T2,
+plus $b$ fois la part budgétaire, plus une constante~». Le problème~: avec beaucoup
+de variables et peu d'observations, le modèle peut attribuer des coefficients
+aberrants à des variables peu informatives, ce qui nuit à la généralistion.
+
+Le \textbf{Lasso} (Least Absolute Shrinkage and Selection Operator) ajoute une
+contrainte~: les coefficients trop grands sont pénalisés. L'effet est double~:
+les variables peu utiles se voient attribuer un coefficient exactement égal à zéro
+(elles sont éliminées), et les variables retenues ont des coefficients plus stables.
+
+$$\min_{\beta_1,\ldots,\beta_p} \;\; \underbrace{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}_{\text{erreur de pr\'ediction}} \;+\; \lambda \underbrace{\sum_{j=1}^{p}|\beta_j|}_{\text{p\'enalit\'e sur les coefficients}}$$
+
+\noindent\small\textit{Les $\beta_j$ sont les coefficients du mod\`ele. $\lambda$ est choisi par validation crois\'ee.}\normalsize
+
+Le paramètre $\lambda$ contrôle l'intensité de cette contrainte~: plus $\lambda$ est
+grand, plus le modèle est parcimonieux. Sa valeur est choisie automatiquement par
+validation croisée (voir section~3.4).
+
+\paragraph{Pourquoi Lasso pour les dépenses de matériel~?}
+
+Les dépenses de matériel et dépenses diverses ont un profil d'exécution
+\textbf{régulier et prévisible}, avec peu de variation d'une année à l'autre. Dans
+ce contexte, l'hypothèse de linéarité est raisonnable, et la parcimonie du Lasso
+limite le surapprentissage. De plus, ses résultats sont directement interprétables~:
+un gestionnaire peut comprendre qu'«~une hausse d'un point de pourcentage du taux
+au deuxième trimestre se traduit par une hausse de $\beta_{T2}$ points du taux
+annuel final~».
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.3.3 \quad Méthodes d'ensemble (XGBoost)}
+\addcontentsline{toc}{subsubsection}{3.3.3 Méthodes d'ensemble (XGBoost)}
+%----------------------------------------------------------------
+
+\paragraph{Principe en langage clair~:}
+
+Imaginez un groupe d'experts qui travaillent en équipe pour faire une prévision.
+Le premier expert fait une estimation rapide. Le second examine les cas où le premier
+s'est trompé et tente de corriger ces erreurs. Le troisième corrige les erreurs
+restantes du duo précédent, et ainsi de suite. À la fin, toutes les corrections
+s'additionnent pour produire une prévision bien meilleure que celle du premier expert
+seul. C'est exactement le principe du \textbf{gradient boosting}.
+
+Dans XGBoost, chaque «~expert~» est un \textbf{arbre de décision}~: une suite de
+questions simples du type «~est-ce que le taux T2 est supérieur à 45\,\%~?~» qui
+débouche sur une prévision. L'algorithme construit une séquence d'arbres
+$T_1, T_2, \ldots, T_K$, chacun corrigeant les erreurs du précédent~:
+
+$$\underbrace{\hat{y}_i^{(k)}}_{\text{nouvelle pr\'evision}} = \underbrace{\hat{y}_i^{(k-1)}}_{\text{pr\'evision pr\'ec\'edente}} + \eta \cdot \underbrace{T_k(x_i)}_{\text{correction de l'arbre }k}$$
+
+où $\eta$ est un «~taux d'apprentissage~» qui contrôle à quel point chaque correctif
+est appliqué (une valeur faible rend l'apprentissage plus prudent). La prévision
+finale est la somme de tous les arbres~:
+
+$$\hat{y}_i = \sum_{k=1}^{K} \eta \cdot T_k(x_i)$$
+
+Pour éviter le surapprentissage, chaque arbre est contraint dans sa complexité par
+des paramètres de régularisation~: limite sur la profondeur des arbres, pénalités
+sur les feuilles, et sous-échantillonnage aléatoire des données à chaque étape.
+
+\paragraph{Pourquoi XGBoost pour les dépenses d'investissement~?}
+
+Les dépenses d'investissement présentent des \textbf{non-linéarités fortes}~: une
+ligne à 5\,\% au deuxième trimestre avec un programme d'investissement infrastructure
+peut tout à fait atteindre 80\,\% en fin d'année grâce à des décaissements massifs
+en fin d'exercice, ce qu'un modèle linéaire ne peut pas prédire. XGBoost est
+particulièrement adapté à ces situations car~:
 
 \begin{itemize}
-    \item \textbf{Manipulation et analyse des données}~: \texttt{pandas} (manipulation de DataFrames et séries temporelles indexées), \texttt{numpy} (calcul numérique vectorisé haute performance).
-
-    \item \textbf{Modèles économétriques}~: \texttt{statsmodels} (ARIMA, SARIMA, VAR, tests ADF/KPSS, ACF/PACF), \texttt{pmdarima} (sélection automatique de l'ordre ARIMA), \texttt{prophet} (modèle Prophet de Meta \citep{Taylor2018}).
-
-    \item \textbf{Machine Learning}~: \texttt{scikit-learn} \citep{Pedregosa2011} (pipelines de prétraitement, Random Forest, métriques, validation croisée temporelle), \texttt{xgboost} (implémentation XGBoost de \citet{Chen2016}), \texttt{optuna} (optimisation bayésienne des hyperparamètres).
-
-    \item \textbf{Deep Learning}~: \texttt{TensorFlow 2.x} / \texttt{Keras} (architecture LSTM et GRU, optimiseur Adam, callbacks d'early stopping et de réduction du taux d'apprentissage).
-
-    \item \textbf{Visualisation}~: \texttt{matplotlib} et \texttt{seaborn} (graphiques statiques de haute qualité pour les figures du mémoire), \texttt{plotly} (graphiques interactifs pour le prototype Streamlit).
-
-    \item \textbf{Interprétabilité des modèles}~: \texttt{shap} \citep{Lundberg2017} (calcul des valeurs SHAP (SHapley Additive exPlanations) pour l'analyse de l'importance et de la contribution des features dans les modèles RF et XGBoost).
-
-    \item \textbf{Prototype de visualisation et de déploiement}~: \texttt{streamlit} (interface web légère permettant d'exposer les prévisions du modèle sélectionné aux équipes de la DAFB dans un format interactif et compréhensible).
+    \item Il capture naturellement les \textbf{effets de seuil et les interactions}~:
+    l'effet du taux T2 peut être différent selon le programme, la région ou la taille
+    de la ligne.
+    \item Il \textbf{généralise bien avec peu de données}~: contrairement aux réseaux
+    de neurones, XGBoost est efficace avec quelques centaines d'observations grâce à
+    sa régularisation intégrée.
+    \item Il est \textbf{interprétable}~: l'importance de chaque variable (combien elle
+    contribue en moyenne aux prédictions) peut être extraite et présentée à des
+    gestionnaires non-spécialistes.
+    \item Il est \textbf{open-source et rapide}~: déployable sans licence commerciale,
+    son exécution sur un ordinateur de bureau standard prend quelques secondes,
+    un impératif dans un contexte ministériel.
 \end{itemize}
 
-\paragraph{Organisation du code source.}
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.3.4 \quad Couche de détection d'anomalies}
+\addcontentsline{toc}{subsubsection}{3.3.4 Couche de détection d'anomalies}
+%----------------------------------------------------------------
 
-Le code source est organisé selon une architecture modulaire s'inspirant du gabarit \textit{Cookiecutter Data Science}, qui garantit une séparation claire entre les différentes étapes de la pipeline d'analyse et facilite la reproductibilité :
+En complément des prévisions, le système intègre une \textbf{couche de détection
+d'anomalies de sous-exécution}. Le principe est simple~: \textit{le système calcule
+un score Z par ligne, comparant son taux d'exécution T2 à sa propre moyenne
+historique. Une déviation de plus de 1,5~écarts-types déclenche une alerte
+opérationnelle.} Formellement, pour chaque ligne budgétaire $i$, on calcule un
+\textbf{score Z} comme suit~:
+
+$$z_i = \frac{\text{taux}_{i,\text{T2}} - \mu_i}{\sigma_i}$$
+
+\noindent\small\textit{où $\mu_i$ et $\sigma_i$ sont la moyenne et l'écart-type du
+taux T2 de la ligne $i$ sur les années d'entraînement.}\normalsize
+
+Une ligne est \textbf{signalée comme anomalie} si $z_i < -1{,}5$, ce qui indique
+que son niveau d'exécution à mi-année est statistiquement anormal par rapport à
+son propre historique. Trois niveaux de sévérité sont distingués~:
 
 \begin{itemize}
-    \item \texttt{data/raw/} : Données brutes (morasses au format Excel/CSV) non modifiées, conservées intactes comme source de vérité.
-    \item \texttt{data/processed/} : Données après nettoyage, harmonisation et feature engineering, prêtes pour la modélisation.
-    \item \texttt{src/features/} : Scripts de transformation et de construction des features (feature engineering).
-    \item \texttt{src/models/} : Implémentations, entraînement, sélection des hyperparamètres et sauvegarde des modèles.
-    \item \texttt{src/evaluation/} : Calcul des métriques de performance, tests statistiques (DM), et génération des tableaux de comparaison.
-    \item \texttt{notebooks/} : Cahiers Jupyter pour les analyses exploratoires et la visualisation des résultats intermédiaires.
-    \item \texttt{app/} : Application Streamlit pour la visualisation interactive et la présentation des résultats aux décideurs.
-    \item \texttt{reports/figures/} : Graphiques exportés en haute résolution pour intégration dans le mémoire.
+    \item \textbf{Exécution nulle}~: taux T2~$= 0$, aucun décaissement enregistré~;
+    \item \textbf{Sous-exécution sévère}~: $z_i < -2$, écart très inhabituel~;
+    \item \textbf{Sous-exécution modérée}~: $-2 \leq z_i < -1{,}5$, signal d'alerte préventive.
 \end{itemize}
 
-L'ensemble du code est versionné sous Git et documenté par des commentaires en ligne et un fichier \texttt{README.md} décrivant les étapes d'installation et d'exécution. La gestion des dépendances est assurée par un fichier \texttt{requirements.txt} fixant les versions exactes des bibliothèques, garantissant la reproductibilité complète de l'environnement d'exécution.
+Cette couche ne constitue \textit{pas} une détection de fraude au sens pénal~: elle
+identifie des \textbf{anomalies opérationnelles} -- lignes bloquées administrativement,
+crédits non encore délégués, ou projets n'ayant pas démarré -- qui nécessitent une
+intervention de pilotage avant la clôture de l'exercice.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.3.5 \quad Justification des modèles écartés}
+\addcontentsline{toc}{subsubsection}{3.3.5 Justification des modèles écartés}
+%----------------------------------------------------------------
+
+\paragraph{Principe~:}
+
+Le Random Forest fonctionne lui aussi sur le principe d'une «~équipe d'arbres~»,
+mais différemment~: au lieu de travailler en séquence (chacun corrigeant le
+précédent), les arbres travaillent \textbf{en parallèle et indépendamment}, chacun
+entraîné sur un sous-ensemble aléatoire des données. La prévision finale est la
+moyenne de toutes leurs réponses~:
+
+$$\hat{y}_i = \frac{1}{B} \sum_{b=1}^{B} \underbrace{T_b(x_i)}_{\text{r\'eponse de l'arbre }b}$$
+
+\noindent\small\textit{$B$ arbres votent ind\'ependamment~; la pr\'evision finale est leur moyenne.}\normalsize
+
+Cette indépendance réduit le risque de surapprentissage, mais elle a un coût~: les
+arbres ne se corrigent pas mutuellement, ce qui les rend moins précis individuellement.
+
+\paragraph{Pourquoi Random Forest a été écarté~:}
+
+Random Forest a été évalué lors de la validation walk-forward (détaillée au
+chapitre~4), mais n'a pas été retenu comme modèle de production, pour trois raisons~:
+
+\begin{enumerate}
+    \item \textbf{Performances inférieures}~: XGBoost a systématiquement produit des
+    erreurs plus faibles sur les dépenses d'investissement, la catégorie la plus
+    complexe. L'entraînement sur des sous-échantillons aléatoires peut éliminer
+    des patterns utiles quand les données sont rares.
+    \item \textbf{Incapacité à extrapoler}~: les arbres de décision ne peuvent pas
+    prédire au-delà des valeurs observées pendant l'entraînement. Pour des lignes
+    dont les taux 2025 dépassent tous les niveaux historiques, Random Forest plafonne
+    mécaniquement, tandis que XGBoost peut s'ajuster prudemment.
+    \item \textbf{Parcimonie opérationnelle}~: dans un contexte de déploiement réel,
+    retenir le modèle le plus performant par catégorie est préférable à empiler
+    plusieurs algorithmes dans un ensemble hybride difficile à expliquer et à maintenir.
+\end{enumerate}
+
+Random Forest est néanmoins présenté dans les tableaux de résultats du chapitre~4
+comme point de comparaison ; sa mise en concurrence avec les autres modèles est un
+élément de rigueur méthodologique essentiel.
+
+%================================================================
+\phantomsection
+\subsection*{3.4 \quad Validation en séries temporelles et fuite de données}
+\addcontentsline{toc}{subsection}{3.4 Validation en séries temporelles et fuite de données}
+%================================================================
+
+Construire un modèle ML n'est que la moitié du travail. L'autre moitié consiste à
+\textbf{mesurer honnêtement sa performance}~: combien d'erreur fait-il sur des
+données qu'il n'a jamais vues~? Cette question semble simple, mais elle cache un
+piège redoutable dans le contexte des séries temporelles.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.4.1 \quad Spécificités des données temporelles}
+\addcontentsline{toc}{subsubsection}{3.4.1 Spécificités des données temporelles}
+%----------------------------------------------------------------
+
+\paragraph{La validation croisée standard~: efficace mais inadaptée ici.}
+
+La méthode classique pour évaluer un modèle ML est la \textbf{validation croisée
+$k$-fold}~: on divise les données en $k$ groupes~; tour à tour, chaque groupe sert
+de test pendant que le modèle s'entraîne sur les autres. La performance finale est
+la moyenne sur tous les groupes.
+
+\begin{table}[h]
+\centering
+\caption{Sch\'ema de la validation crois\'ee $k$-fold (exemple~: Groupe~2 = test).}
+\label{tab:kfold}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Groupe 1} & \cellcolor{primary!40}\textbf{Groupe 2} & \textbf{Groupe 3} & \textbf{Groupe 4} & \textbf{Groupe 5} \\
+\hline
+Entr. & \textbf{Test} & Entr. & Entr. & Entr. \\
+\hline
+\end{tabular}\\[4pt]
+{\scriptsize Groupe 2 = test~; groupes 1, 3, 4, 5 = entra\^inement}
+\end{table}
+
+Cette méthode est valide quand les observations sont indépendantes. Mais pour des
+données temporelles, elle commet une erreur grave~: en mélangeant aléatoirement les
+années, elle permet au modèle de \textbf{s'entraîner sur le futur pour prédire
+le passé}. Un modèle qui a «~vu~» les données de 2024 pour prédire 2022 ne fait
+pas vraiment de la prévision : il triche.
+
+\paragraph{La contrainte fondamentale~: toujours prédire vers l'avant.}
+
+Pour les séries temporelles, une règle doit être respectée absolument~: les données
+d'entraînement doivent toujours être antérieures aux données de test. Cela donne
+naissance à des protocoles de validation spécifiques.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.4.2 \quad Validation walk-forward}
+\addcontentsline{toc}{subsubsection}{3.4.2 Validation walk-forward}
+%----------------------------------------------------------------
+
+Le protocole retenu dans ce travail est la \textbf{validation walk-forward à fenêtre
+expansive}~: on simule exactement ce que vivra le gestionnaire en production.
+
+\begin{itemize}
+    \item Pour prédire l'année 2022, le modèle s'entraîne uniquement sur 2020--2021.
+    \item Pour prédire 2023, il s'entraîne sur 2020--2022.
+    \item Pour prédire 2024, il s'entraîne sur 2020--2023.
+    \item Pour prédire 2025, il s'entraîne sur 2020--2024.
+\end{itemize}
+
+La fenêtre d'entraînement \textit{s'élargit} à chaque fold~: plus on avance dans
+le temps, plus le modèle dispose d'historique. La performance finale est la moyenne
+des erreurs sur les quatre années de test.
+
+\begin{table}[h]
+\centering
+\setlength{\tabcolsep}{4pt}
+\caption{Protocole de validation walk-forward \`a fen\^etre expansive (2022--2025).}
+\label{tab:walkforward}
+\begin{tabular}{l|ccccc}
+\hline
+ & \textbf{2021} & \textbf{2022} & \textbf{2023} & \textbf{2024} & \textbf{2025} \\
+\hline
+Fold 1 (test 2022) & \cellcolor{accent!30}Entr. & \cellcolor{primary!40}\textbf{Test} & & & \\
+Fold 2 (test 2023) & \cellcolor{accent!30}Entr. & \cellcolor{accent!30}Entr. & \cellcolor{primary!40}\textbf{Test} & & \\
+Fold 3 (test 2024) & \cellcolor{accent!30}Entr. & \cellcolor{accent!30}Entr. & \cellcolor{accent!30}Entr. & \cellcolor{primary!40}\textbf{Test} & \\
+Fold 4 (test 2025) & \cellcolor{accent!30}Entr. & \cellcolor{accent!30}Entr. & \cellcolor{accent!30}Entr. & \cellcolor{accent!30}Entr. & \cellcolor{primary!40}\textbf{Test} \\
+\hline
+\end{tabular}\\[4pt]
+{\scriptsize \colorbox{accent!30}{\strut Entra\^inement} \quad
+\colorbox{primary!40}{\strut Test} \quad Cases vides = donn\'ees non encore disponibles}
+\end{table}
+
+Ce protocole présente trois avantages majeurs~:
+
+\begin{itemize}
+    \item \textbf{Simulation exacte du déploiement réel}~: chaque fold reproduit
+    fidèlement la situation du gestionnaire : il dispose de tout l'historique passé
+    et prédit l'année courante.
+    \item \textbf{Aucune contamination temporelle}~: à aucun moment le modèle n'est
+    entraîné sur des données postérieures à l'année qu'il prédit.
+    \item \textbf{Mesure de la progression}~: comparer les erreurs du fold 2022 (peu
+    de données) à celles du fold 2025 (plus de données) quantifie l'apport de chaque
+    année d'historique supplémentaire.
+\end{itemize}
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.4.3 \quad Risque de data leakage et implications}
+\addcontentsline{toc}{subsubsection}{3.4.3 Risque de data leakage et implications}
+%----------------------------------------------------------------
+
+\paragraph{Qu'est-ce que la fuite de données~?}
+
+La \textbf{fuite de données} (\textit{data leakage}) est une erreur qui consiste à
+laisser entrer dans le processus d'entraînement des informations qui ne seraient pas
+disponibles au moment d'une vraie prévision. Le modèle apprend alors des patterns
+«~trop faciles~» qui disparaissent en production. Le symptôme est trompeur~: les
+métriques de validation semblent excellentes, mais le modèle déçoit une fois déployé.
+
+\paragraph{Mécanisme 1~: fuite par le protocole de validation.}
+
+Si le jeu de test est l'année~2022 mais que le modèle s'entraîne sur des données
+incluant 2023, 2024 et 2025, il «~voit l'avenir~» pendant l'entraînement. La méthode
+LOYO (\textit{Leave-One-Year-Out}) commet exactement cette erreur~: pour tester 2022,
+elle entraîne sur toutes les autres années y compris les années ultérieures, ce qui
+produit des métriques artificiellement optimistes. Le walk-forward élimine ce risque
+par construction.
+
+\paragraph{Mécanisme 2~: fuite par les variables explicatives.}
+
+Même avec un bon protocole, la fuite peut s'introduire lors de la construction des
+variables. Exemple typique~: si on calcule «~la moyenne historique des taux T3 de
+cette ligne sur toutes les années disponibles~» et qu'on l'utilise pour prédire 2022,
+cette moyenne inclut les années 2023, 2024, 2025, soit des données futures. La solution
+est de calculer cette moyenne de façon \textbf{causale}~: pour prédire l'année $Y$,
+n'utiliser que les années strictement antérieures à $Y$.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.4.4 \quad Conséquences sur l'évaluation des modèles}
+\addcontentsline{toc}{subsubsection}{3.4.4 Conséquences sur l'évaluation des modèles}
+%----------------------------------------------------------------
+
+Le taux de réalisation au troisième trimestre ($T3$, disponible fin septembre) est
+un prédicteur très puissant du taux annuel final. Mais si le modèle est utilisé
+\textit{en juin} (après T2), inclure T3 constituerait une fuite~: cette information
+n'existe pas encore. Notre implémentation propose donc deux prévisions distinctes~:
+\begin{itemize}
+    \item une \textbf{prévision du T4 basée sur T2}, disponible en juin (sans T3)~;
+    \item une \textbf{prévision du T4 basée sur T3}, disponible en octobre (avec T3).
+\end{itemize}
+
+Cette distinction illustre que la maîtrise de la fuite de données est avant tout une
+condition de \textbf{confiance opérationnelle}~: un modèle qui triche en entraînement
+produira des alertes erronées en production. Les détails d'implémentation sont
+présentés au chapitre~4.
+
+%================================================================
+\phantomsection
+\subsection*{3.5 \quad Synthèse du chapitre}
+\addcontentsline{toc}{subsection}{3.5 Synthèse du chapitre}
+%================================================================
+
+Ce chapitre a établi les fondements sur lesquels repose la démarche empirique
+du mémoire. Le Machine Learning a été justifié face aux approches classiques par sa
+capacité à mutualiser l'information entre lignes, à capturer des non-linéarités, et
+à fonctionner avec peu d'historique individuel. Parmi les quatre modèles évalués,
+Lasso et XGBoost ont été retenus pour leurs performances et leur adéquation au
+contexte opérationnel~; Random Forest a été évalué mais écarté. Enfin, la validation
+walk-forward (section~3.4) a été présentée comme le seul protocole qui simule
+fidèlement les conditions de déploiement réel, en éliminant par construction tout
+risque de fuite temporelle.
+
+Le chapitre suivant décrit la mise en œuvre empirique de ces principes~: construction
+des données, implémentation des folds walk-forward, et résultats comparatifs obtenus
+sur le périmètre du ministère de la Justice pour la période 2022--2025.
