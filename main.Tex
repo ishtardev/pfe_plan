@@ -138,13 +138,9 @@ Je remercie en premier lieu \textbf{Monsieur Iliass Zabaratou}, mon encadrant pr
 
 Mes remerciements s'adressent également au \textbf{Professeur Mohamed Dakkon}, coordinateur du Master Finance, Actuariat et Data Science et encadrant académique de ce travail, pour son soutien, ses orientations et sa disponibilité.
 
-% \vspace{0.4cm}
+ \vspace{0.4cm}
 
-% Je souhaite exprimer ma profonde reconnaissance à \textbf{Monsieur Bilal Khanfoud}, dont l'aide a été déterminante à plusieurs étapes de ce travail.
-
-% \vspace{0.4cm}
-
-J'adresse mes sincères remerciements aux cadres et professionnels du bureau, et en particulier à \textbf{Zakaria} et \textbf{Kaoutar}, qui m'ont guidé dès le premier jour et ont veillé à ce que mon intégration se déroule dans les meilleures conditions. Je tiens également à exprimer ma gratitude envers \textbf{Khaoula}, \textbf{Idrissi}, \textbf{Fatima} et \textbf{Taoufiq} pour leurs conseils avisés et leur soutien constant tout au long de cette expérience.
+J'adresse mes sincères remerciements aux cadres et professionnels du bureau, et en particulier à \textbf{Monsieur Bilal Khanfoud}, dont l'aide a été déterminante à plusieurs étapes de ce travail, ainsi qu'à \textbf{M. Zakaria} et \textbf{Mme Kaoutar}, qui m'ont guidé dès le premier jour et ont veillé à ce que mon intégration se déroule dans les meilleures conditions. Mes remerciements vont également à l'ensemble de l'équipe du bureau pour leur accueil et leurs conseils tout au long du stage.
 
 \vspace{0.4cm}
 
@@ -164,18 +160,8 @@ Enfin, je remercie l'ensemble du corps enseignant du Master Finance, Actuariat e
 \begin{center}
 \vspace*{3cm}
 
-\textit{\`A mes parents,}\\[4pt]
-\textit{pour tout ce qu'ils ont sacrifi\'e pour que j'en arrive l\`a.}
-
-\vspace{0.8cm}
-
-\textit{\`A mon fr\`ere,}\\[4pt]
-\textit{pour sa pr\'esence et son soutien au quotidien.}
-
-\vspace{0.8cm}
-
-\textit{\`A mes amis,}\\[4pt]
-\textit{pour les moments partag\'es et les encouragements.}
+\textit{\`A mes parents, \`a mon fr\`ere et \`a mes amis,}\\[6pt]
+\textit{pour leur soutien sans faille tout au long de ce parcours.}
 
 \vspace{1.2cm}
 
@@ -196,12 +182,12 @@ Ce m\'emoire examine dans quelle mesure les approches de \textit{Machine Learnin
 
 La d\'epense publique marocaine est encadr\'ee depuis 2015 par la Loi Organique relative \`a la Loi de Finances (LOF~130-13), qui impose une budg\'etisation par la performance et une programmation triennale. Dans ce contexte, la fiabilit\'e des pr\'evisions de cr\'edits constitue un enjeu institutionnel majeur~: un \'ecart important entre pr\'evision et ex\'ecution expose le minist\`ere \`a des critiques parlementaires et \`a des observations de la Cour des Comptes.
 
-\`A partir d'un jeu de donn\'ees trimestrielles reconstitut\'e \`a partir des morasses budg\'etaires annuelles et des rapports de la Tr\'esorerie G\'en\'erale du Royaume (2020--2025, 109~lignes budg\'etaires), nous \'evaluons quatre mod\`eles~: une moyenne historique et un d\'ecalage annuel (benchmarks), une r\'egression Lasso, et un algorithme de gradient boosting (XGBoost). La validation repose sur un protocole \textit{walk-forward} \`a fen\^etre expansive (4~folds sur 2022--2025), conforme \`a la contrainte de causalit\'e temporelle. Un module de d\'etection d'anomalies bas\'e sur le score~$z$ compl\`ete le dispositif en signalant les lignes en sous-ex\'ecution anormale en cours d'exercice.
+\`A partir d'un jeu de donn\'ees trimestrielles reconstitut\'e \`a partir des morasses budg\'etaires annuelles et des rapports de la Tr\'esorerie G\'en\'erale du Royaume (2020--2025, 109~lignes budg\'etaires), nous \'evaluons quatre mod\`eles~: une moyenne historique et un d\'ecalage annuel (benchmarks), une r\'egression lin\'eaire r\'egularis\'ee (Lasso puis Ridge apr\`es validation), et un algorithme de gradient boosting (XGBoost). La validation repose sur un protocole \textit{walk-forward} \`a fen\^etre expansive (4~folds sur 2022--2025), conforme \`a la contrainte de causalit\'e temporelle. Un module de d\'etection d'anomalies bas\'e sur le score~$z$ compl\`ete le dispositif en signalant les lignes en sous-ex\'ecution anormale en cours d'exercice.
 
-Les r\'esultats montrent que les mod\`eles de Machine Learning, et en particulier XGBoost, offrent des gains de pr\'ecision substantiels par rapport aux benchmarks, tout en permettant une interpr\'etabilit\'e op\'erationnelle gr\^ace aux importances de variables. Ces r\'esultats sont int\'egr\'es dans un tableau de bord interactif d\'evelopp\'e en Python, mis \`a disposition de la Direction du Budget.
+Les r\'esultats montrent que les mod\`eles de Machine Learning, et en particulier XGBoost, offrent des gains de pr\'ecision substantiels par rapport aux benchmarks, tout en permettant une interpr\'etabilit\'e op\'erationnelle gr\^ace aux importances de variables. Ces r\'esultats sont int\'egr\'es dans un tableau de bord interactif d\'evelopp\'e sous Power BI, mis \`a disposition de la Division de la Pr\'evision et de la Programmation Financi\`ere de la Direction du Budget.
 
 \bigskip
-\noindent\textbf{Mots-cl\'es~:} pr\'evision budg\'etaire, Machine Learning, Lasso, XGBoost, LOF~130-13, Minist\`ere de la Justice, walk-forward, d\'etection d'anomalies.
+\noindent\textbf{Mots-cl\'es~:} pr\'evision budg\'etaire, Machine Learning, Lasso, Ridge, XGBoost, LOF~130-13, Minist\`ere de la Justice, walk-forward, d\'etection d'anomalies.
 
 \newpage
 
@@ -216,12 +202,12 @@ This thesis investigates whether Machine Learning approaches can improve the acc
 
 Moroccan public expenditure has been governed since 2015 by the Organic Finance Law (LOF~130-13), which introduced performance-based budgeting and a three-year programming framework. In this context, the reliability of budget forecasts has become a major institutional challenge: significant deviations between forecasts and actual execution expose the Ministry to parliamentary scrutiny and Court of Accounts observations.
 
-Using a quarterly dataset reconstructed from annual budget documents (\textit{morasses budgétaires}) and Treasury General reports (2020--2025, 109 budget lines), we evaluate four models: a historical mean and an annual lag (benchmarks), a Lasso regression, and a gradient boosting algorithm (XGBoost). Validation follows a walk-forward protocol with an expanding window (4~folds over 2022--2025), strictly respecting temporal causality. A Z-score anomaly detection module complements the system by flagging budget lines with abnormal under-execution during the fiscal year.
+Using a quarterly dataset reconstructed from annual budget documents (\textit{morasses budgétaires}) and Treasury General reports (2020--2025, 109 budget lines), we evaluate four models: a historical mean and an annual lag (benchmarks), a regularized linear regression (Lasso, then Ridge after validation), and a gradient boosting algorithm (XGBoost). Validation follows a walk-forward protocol with an expanding window (4~folds over 2022--2025), strictly respecting temporal causality. A Z-score anomaly detection module complements the system by flagging budget lines with abnormal under-execution during the fiscal year.
 
-Results show that Machine Learning models, particularly XGBoost, achieve substantial accuracy gains over the benchmarks while maintaining operational interpretability through variable importance scores. These results are integrated into an interactive Python dashboard made available to the Budget Directorate.
+Results show that Machine Learning models, particularly XGBoost, achieve substantial accuracy gains over the benchmarks while maintaining operational interpretability through variable importance scores. These results are integrated into an interactive Power BI dashboard made available to the Financial Forecasting and Programming Division of the Ministry's Budget Directorate.
 
 \bigskip
-\noindent\textbf{Keywords:} budget forecasting, Machine Learning, Lasso, XGBoost, LOF~130-13, Ministry of Justice, walk-forward validation, anomaly detection.
+\noindent\textbf{Keywords:} budget forecasting, Machine Learning, Lasso, Ridge, XGBoost, LOF~130-13, Ministry of Justice, walk-forward validation, anomaly detection.
 
 \newpage
 
@@ -299,8 +285,8 @@ Ce travail poursuit quatre objectifs compl\'ementaires~:
 \begin{enumerate}
     \item \textbf{Analyser} le cadre institutionnel et budg\'etaire du Minist\`ere de la Justice, afin d'identifier les facteurs qui commandent l'ex\'ecution des cr\'edits.
     \item \textbf{Construire} un jeu de donn\'ees trimestrielles fiable, reconstitut\'e \`a partir des morasses budg\'etaires annuelles et des rapports de la Tr\'esorerie G\'en\'erale du Royaume (2020--2025).
-    \item \textbf{\'Evaluer} quatre mod\`eles de pr\'evision -- deux benchmarks classiques, une r\'egression Lasso et un algorithme XGBoost -- selon un protocole de validation \textit{walk-forward} rigoureux.
-    \item \textbf{D\'eployer} les r\'esultats dans un tableau de bord interactif Python, op\'erationnel pour la Direction du Budget.
+    \item \textbf{\'Evaluer} quatre mod\`eles de pr\'evision -- deux benchmarks classiques, une r\'egression lin\'eaire r\'egularis\'ee (Lasso puis Ridge apr\`es validation) et un algorithme XGBoost -- selon un protocole de validation \textit{walk-forward} rigoureux.
+    \item \textbf{D\'eployer} les r\'esultats dans un tableau de bord interactif Power BI, op\'erationnel pour la Direction du Budget.
 \end{enumerate}
 
 \phantomsection
@@ -311,11 +297,11 @@ La d\'emarche adopt\'ee articule trois composantes~:
 
 \textbf{Une phase de contextualisation} (chapitres~1 et~2)~: description de l'institution, de son budget et du cadre juridique de la gestion budg\'etaire. Cette \'etape permet d'identifier les variables explicatives pertinentes et les contraintes propres aux donn\'ees disponibles.
 
-\textbf{Une phase th\'eorique} (chapitre~3)~: pr\'esentation des fondements du Machine Learning appliqu\'e \`a la pr\'evision de s\'eries temporelles courtes. Sont d\'etaill\'es~: le compromis biais-variance, les mod\`eles retenus (Lasso et XGBoost), les benchmarks de r\'ef\'erence, le module de d\'etection d'anomalies par score~$z$, et le protocole de validation \textit{walk-forward} \`a fen\^etre expansive.
+\textbf{Une phase th\'eorique} (chapitre~3)~: pr\'esentation des fondements du Machine Learning appliqu\'e \`a la pr\'evision de s\'eries temporelles courtes. Sont d\'etaill\'es~: le compromis biais-variance, les mod\`eles retenus (r\'egression lin\'eaire r\'egularis\'ee --- Lasso puis Ridge --- et XGBoost), les benchmarks de r\'ef\'erence, le module de d\'etection d'anomalies par score~$z$, et le protocole de validation \textit{walk-forward} \`a fen\^etre expansive.
 
 \textbf{Une phase empirique} (chapitre~4)~: construction du jeu de donn\'ees, entra\^inement et \'evaluation des mod\`eles, analyse des r\'esultats par indicateurs d'erreur (RMSE, MAE, MAPE).
 
-\textbf{Une phase applicative} (chapitre~5)~: conception, d\'eveloppement et \'evaluation du syst\`eme de pilotage budg\'etaire -- tableau de bord interactif Python int\'egrant les pr\'evisions et les alertes d'anomalies, d\'eploy\'e pour la Direction du Budget.
+\textbf{Une phase applicative} (chapitre~5)~: conception, d\'eveloppement et \'evaluation du syst\`eme de pilotage budg\'etaire -- tableau de bord interactif Power BI int\'egrant les pr\'evisions et les alertes d'anomalies, d\'eploy\'e pour la Direction du Budget.
 
 \medskip
 
@@ -336,6 +322,112 @@ La d\'emarche adopt\'ee articule trois composantes~:
 
 \newpage
 \include{chapters/chapter5}
+
+\newpage
+
+% ======================================================
+% CONCLUSION GÉNÉRALE
+% ======================================================
+\phantomsection
+\section*{Conclusion g\'en\'erale}
+\addcontentsline{toc}{section}{Conclusion g\'en\'erale}
+
+Ce m\'emoire s'est attach\'e \`a r\'epondre \`a une question pratique mais structurante~:
+dans quelle mesure les approches de \textit{Machine Learning} peuvent-elles am\'eliorer
+la pr\'ecision de la pr\'evision de l'ex\'ecution budg\'etaire au Minist\`ere de la
+Justice du Maroc, par rapport aux m\'ethodes statistiques classiques~? Pour y r\'epondre,
+le travail a articul\'e une analyse institutionnelle, un effort de reconstitution de
+donn\'ees, une comparaison m\'ethodique de mod\`eles et un d\'eploiement op\'erationnel.
+
+\phantomsection
+\subsection*{Principaux r\'esultats}
+\addcontentsline{toc}{subsection}{Principaux r\'esultats}
+
+Sur le plan empirique, l'\'evaluation walk-forward men\'ee sur les donn\'ees
+trimestrielles 2020--2025 a fait \'emerger un constat clair~: aucun mod\`ele unique
+n'est optimal sur l'ensemble des cat\'egories de d\'epense. Les comportements
+budg\'etaires sont trop h\'et\'erog\`enes pour qu'une approche universelle soit
+satisfaisante. Cette observation a conduit \`a privil\'egier une \textbf{architecture
+sp\'ecialis\'ee}~:
+
+\begin{itemize}
+    \item Pour l'\textbf{Investissement}, cat\'egorie la plus volatile et la plus
+    strat\'egique financi\`erement, XGBoost s'impose en r\'eduisant le RMSE de
+    l'ordre de 12\,\% par rapport au benchmark de la moyenne historique. Le mod\`ele
+    capture les non-lin\'earit\'es et les interactions entre variables explicatives
+    qu'une r\'egression lin\'eaire ne peut saisir.
+    \item Pour le \textbf{Mat\'eriel}, une r\'egression lin\'eaire r\'egularis\'ee
+    Ridge (combin\'ee \`a un \textit{RobustScaler} et \`a une variable de volatilit\'e
+    par ligne, apr\`es bascule depuis Lasso) offre le meilleur compromis~: pr\'ecision
+    moyenne am\'elior\'ee et, surtout, robustesse accrue sur les valeurs extr\^emes
+    (r\'eduction du RMSE de 35\,\% sur les observations atypiques).
+    \item Pour le \textbf{Personnel}, dont l'ex\'ecution est m\'ecanique et fortement
+    contrainte par les bar\`emes salariaux, la simple moyenne historique reste
+    imbattable. Aucun mod\`ele complexe ne justifie sa charge suppl\'ementaire.
+\end{itemize}
+
+Sur le plan op\'erationnel, ces r\'esultats ont \'et\'e int\'egr\'es dans un
+\textbf{tableau de bord Power BI} structur\'e en deux pages compl\'ementaires~:
+une page de pilotage strat\'egique (KPI, courbes de pr\'evision, table de synth\`ese,
+\textit{slicers} programme/r\'egion) et une page de d\'etection d'anomalies fond\'ee
+sur le score~$z$. L'outil a \'et\'e con\c{c}u pour s'inscrire dans le cycle trimestriel
+de la Tr\'esorerie G\'en\'erale du Royaume et \^etre directement exploitable par les
+gestionnaires de la Division de la Pr\'evision et de la Programmation Financi\`ere, sans pr\'erequis technique en programmation.
+
+\phantomsection
+\subsection*{Apports du travail}
+\addcontentsline{toc}{subsection}{Apports du travail}
+
+Au-del\`a des r\'esultats num\'eriques, ce m\'emoire pr\'esente trois apports
+principaux. Le \textbf{premier} est m\'ethodologique~: il montre qu'un protocole
+de validation \textit{walk-forward} \`a fen\^etre expansive, respectueux de la
+causalit\'e temporelle, est non seulement faisable mais indispensable dans un
+contexte budg\'etaire o\`u toute fuite d'information future fausserait l'\'evaluation
+de la performance. Le \textbf{deuxi\`eme} est appliqu\'e~: il propose un cas d'usage
+concret de Machine Learning sur des donn\'ees budg\'etaires publiques marocaines,
+domaine encore peu document\'e dans la litt\'erature acad\'emique. Le \textbf{troisi\`eme}
+concerne la lisibilit\'e du dispositif~: les choix de mod\'elisation (importances
+de variables XGBoost, coefficients lin\'eaires Ridge, seuils d'alerte $z$ explicites)
+ont \'et\'e guid\'es par le souci de produire des r\'esultats interpr\'etables, de
+mani\`ere \`a ce que chaque pr\'evision ou alerte puisse \^etre justifi\'ee aupr\`es
+d'un utilisateur final.
+
+\phantomsection
+\subsection*{Limites}
+\addcontentsline{toc}{subsection}{Limites}
+
+Le travail comporte plusieurs limites qu'il convient d'assumer. La \textbf{profondeur
+historique} reste mod\'er\'ee (six exercices, 2020--2025), ce qui restreint la capacit\'e
+des mod\`eles \`a apprendre des r\'egimes budg\'etaires rares ou structurellement
+nouveaux. La \textbf{granularit\'e} des donn\'ees est limit\'ee aux 109 lignes
+budg\'etaires reconstitu\'ees~; un acc\`es direct \`a la base GID permettrait une
+analyse plus fine, notamment au niveau des engagements et des paiements. Enfin,
+le \textbf{p\'erim\`etre} se concentre sur le Minist\`ere de la Justice~; la
+transposition \`a d'autres minist\`eres demanderait un r\'e-entra\^inement et une
+adaptation des variables explicatives aux sp\'ecificit\'es sectorielles.
+
+\phantomsection
+\subsection*{Perspectives}
+\addcontentsline{toc}{subsection}{Perspectives}
+
+Plusieurs prolongements paraissent naturels. \`A court terme, la mise \`a jour
+trimestrielle automatis\'ee du tableau de bord (pipeline d'ingestion connect\'e
+aux extractions TGR) permettrait de passer d'un outil de pilotage ponctuel \`a un
+v\'eritable observatoire en continu. \`A moyen terme, l'extension du dispositif
+\`a d'autres minist\`eres pilotes, dans un cadre coordonn\'e par la Direction du
+Budget, fournirait un \'echantillon plus large et permettrait de tester la
+robustesse de l'architecture sp\'ecialis\'ee dans des contextes diff\'erents. Enfin,
+le couplage des pr\'evisions avec une approche de \textit{stress-testing}
+budg\'etaire ouvrirait la voie \`a une analyse plus prospective des risques
+d'ex\'ecution, en lien avec les ambitions de modernisation port\'ees par la
+LOF~130-13.
+
+\medskip
+
+En d\'efinitive, ce m\'emoire montre que le \textit{Machine Learning}, lorsqu'il
+est appliqu\'e avec discernement et int\'egr\'e dans un dispositif op\'erationnel
+interpr\'etable, n'est pas un objet th\'eorique d\'econnect\'e du r\'eel~: il peut devenir
+un instrument concret au service de la qualit\'e de la d\'epense publique.
 
 \newpage
 \bibliography{references}

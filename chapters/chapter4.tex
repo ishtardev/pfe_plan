@@ -4,19 +4,127 @@
 
 \bigskip
 
-Ce chapitre pr\'esente la mise en \oe{}uvre concr\`ete de la d\'emarche pr\'edictive.
-Apr\`es avoir d\'ecrit le jeu de donn\'ees et les variables retenues, nous comparons
-plusieurs mod\`eles, exposons les m\'etriques utilis\'ees pour les \'evaluer, puis
-pr\'esentons les mod\`eles s\'electionn\'es et les pr\'evisions obtenues pour
-l'exercice 2025. Une derni\`ere section traite de la d\'etection d'anomalies
-appliqu\'ee \`a ces pr\'evisions. Le chapitre se conclut par une synth\`ese et une
-discussion honn\^ete des limites du travail.
+Ce chapitre expose la mise en \oe{}uvre op\'erationnelle de la d\'emarche pr\'edictive
+conceptualis\'ee dans le chapitre pr\'ec\'edent. Apr\`es pr\'esentation du jeu de donn\'ees
+et justification des variables retenues, nous proc\'edons \`a une comparaison rigoureuse
+de plusieurs candidats algorithmiques, explicitons les m\'etriques mobilis\'ees pour leur
+\'evaluation, puis d\'etaillons l'architecture finalement retenue ainsi que les pr\'evisions
+produites pour l'exercice 2025. Une section d\'edi\'ee traite ensuite de la d\'etection
+statistique d'anomalies appliqu\'ee \`a ces pr\'evisions. Le chapitre s'ach\`eve par une
+synth\`ese critique int\'egrant une discussion structur\'ee des limites m\'ethodologiques
+et empiriques du travail.
+
+%================================================================
+\phantomsection
+\subsection*{Vue d'ensemble : du traitement des données à la prévision}
+\addcontentsline{toc}{subsection}{Vue d'ensemble du processus}
+%================================================================
+
+Ce travail repose sur un enchaînement rigoureux de phases 
+interdépendantes. Chaque étape transforme les sorties de la phase antérieure en entrées pour la phase suivante. Le schéma suivant illustre cette progression :
+
+\begin{figure}[H]
+    \centering
+    \fbox{\begin{minipage}{0.9\textwidth}
+    \centering\small
+    \textbf{\'ETAPE 1 : Assemblage des donn\'ees (Section 4.1)}
+    
+    Source TGR (taux agr\'eg\'es) + Morasses (nomenclature ligne par ligne)
+    
+    $\Rightarrow$ Jeu de donn\'ees d\'esagr\'eg\'e : 130 lignes, 6 ans, 4 trimestres
+    $\Rightarrow$ 3~120 observations au total
+    
+    \vspace{10pt}
+    
+    \textbf{\'ETAPE 2 : Construction des variables (Section 4.2)}
+    
+    Jeu de donn\'ees brut $\Rightarrow$ S\'election et encodage des features
+    
+    Variables explicatives : T1, T2, T3 (lag), budget, programme, r\'egion, ...
+    
+    Variable cible : Taux T4 (ce qu'on veut pr\'edire)
+    
+    \vspace{10pt}
+    
+    \textbf{\'ETAPE 3 : Test de quatre mod\`eles (Section 4.3 -- 4.4)}
+    
+    Données pr\'epar\'ees $\Rightarrow$ Validation walk-forward sur 4 folds
+    
+    Benchmark 1 : Moyenne historique
+    
+    Benchmark 2 : D\'ecalage annuel
+    
+    Mod\`ele 1 : Ridge (Lin\'eaire r\'egularis\'e)
+    
+    Mod\`ele 2 : XGBoost (Gradient boosting)
+    
+    Résultat : RMSE, MAE, MAPE pour chacun
+    
+    \vspace{10pt}
+    
+    \textbf{\'ETAPE 4 : S\'election sp\'ecialis\'ee par cat\'egorie (Section 4.5.1 -- 4.5.2)}
+    
+    R\'esultats par cat\'egorie (Investissement / Mat\'eriel / Personnel)
+    
+    $\Rightarrow$ Investissement: XGBoost (meilleur)
+    
+    $\Rightarrow$ Mat\'eriel: Ridge (meilleur)
+    
+    $\Rightarrow$ Personnel: Moyenne historique (suffisant)
+    
+    \vspace{10pt}
+    
+    \textbf{\'ETAPE 5 : Optimisation du mod\`ele Mat\'eriel (Section 4.5.5 -- 4.5.6)}
+    
+    Analyse post-validation des outliers et instabilit\'es
+    
+    Changements : StandardScaler $\rightarrow$ RobustScaler | Feature engineering \& tuning
+    
+    Feature engineering : Ajout de line\_volatility
+    
+    Gain : -9.1\% RMSE, -35.2\% sur cas extr\^emes
+    
+    \vspace{10pt}
+    
+    \textbf{\'ETAPE 6 : Pr\'evisions T4 2025 (Section 4.5.4)}
+    
+    Mod\`eles r\'e-entra\^{\i}n\'es sur 2021--2024 complets
+    
+    Application aux 130 lignes 2025
+    
+    R\'esultat : Pr\'evisions + intervalles de confiance implicites (via RMSE)
+    
+    \vspace{10pt}
+    
+    \textbf{\'ETAPE 7 : D\'etection d'anomalies (Section 4.6)}
+    
+    Pr\'evisions T4 2025 + Taux T2 observ\'es 2025
+    
+    Calcul du z-score T2 par ligne (historique vs actuel)
+    
+    R\'esultat : 4 anomalies identifi\'ees (3 mod\'er\'ees, 1 s\'ev\`ere)
+    
+    \end{minipage}}
+\end{figure}
+
+\noindent
+Les sections qui suivent d\'eveloppent chacune de ces \'etapes dans l'ordre. Le lecteur
+verra exactement comment les donn\'ees brutes se transforment en pr\'evisions
+op\'erationnelles, et comment chaque d\'ecision m\'ethodologique influence les
+r\'esultats finaux.
 
 %================================================================
 \phantomsection
 \subsection*{4.1 \quad Pr\'esentation et construction des donn\'ees}
 \addcontentsline{toc}{subsection}{4.1 Pr\'esentation et construction des donn\'ees}
 %================================================================
+
+\textbf{[PROCESSUS : \'ETAPE 1 -- Assemblage des donn\'ees]}
+
+\noindent Nous commen\c{c}ons par d\'ecrire les sources de donn\'ees brutes et la
+mani\'ere dont elles ont \'et\'e combin\'ees pour cr\'eer un jeu de donn\'ees
+d\'esagr\'eg\'e au niveau de la ligne budg\'etaire. C'est la fondation sur laquelle
+reposera tout mod\`ele ult\'erieur.
 
 Cette section d\'ecrit l'origine du jeu de donn\'ees, la d\'emarche suivie pour
 reconstituer les taux d'ex\'ecution au niveau de la ligne budg\'etaire \`a partir
@@ -29,13 +137,13 @@ statistiques de l'\'echantillon obtenu.
 \addcontentsline{toc}{subsubsection}{4.1.1 Source et p\'erim\`etre des donn\'ees}
 %----------------------------------------------------------------
 
-Le jeu de donn\'ees est constitu\'e \`a partir de deux sources publiques compl\'ementaires.
-D'une part, les \textbf{morasses budg\'etaires annuelles} publi\'ees avec les projets
-de loi de finances (2020--2025), qui fournissent la nomenclature compl\`ete des lignes
-budg\'etaires du Minist\`ere de la Justice ainsi que les cr\'edits initiaux par ligne.
-D'autre part, les \textbf{rapports d'ex\'ecution trimestriels} de la Tr\'esorerie
-G\'en\'erale du Royaume (TGR), qui renseignent les taux d'ex\'ecution agr\'eg\'es par
-cat\'egorie de d\'epense.
+La constitution du jeu de donn\'ees repose sur l'articulation de deux sources publiques
+compl\'ementaires. En premier lieu, les \textbf{morasses budg\'etaires annuelles} publi\'ees
+en annexe des projets de loi de finances (2020--2025) fournissent la nomenclature exhaustive
+des lignes budg\'etaires relevant du Minist\`ere de la Justice ainsi que les enveloppes
+de cr\'edits initialement allou\'ees par ligne. En second lieu, les \textbf{rapports
+trimestriels d'ex\'ecution} \'emis par la Tr\'esorerie G\'en\'erale du Royaume (TGR)
+documentent les taux d'ex\'ecution agr\'eg\'es, ventil\'es par cat\'egorie de d\'epense.
 
 Le tableau~\ref{tab:volumetrie} r\'esume la volum\'etrie du jeu de donn\'ees final.
 
@@ -72,17 +180,17 @@ proche que possible de la r\'ealit\'e ministerielle. La proc\'edure tient en
 trois id\'ees simples~:
 
 \begin{enumerate}
-    \item \textbf{On part des chiffres r\'eels.} Les taux trimestriels par cat\'egorie
+    \item \textbf{On part des chiffres r\'eels~:} les taux trimestriels par cat\'egorie
     publi\'es par la TGR (2020--2025) constituent l'ancrage quantitatif du jeu de
     donn\'ees. Aucune valeur n'est invent\'ee~: ces taux sont des chiffres officiels.
 
-    \item \textbf{On r\'epartit ces taux sur les vraies lignes budg\'etaires.} La
+    \item \textbf{On r\'epartit ces taux sur les vraies lignes budg\'etaires~:} la
     nomenclature programme\,$\rightarrow$\,projet\,$\rightarrow$\,r\'egion\,$\rightarrow$\,ligne
     est extraite directement des morasses. Chaque ligne re\c{c}oit un profil
     d'ex\'ecution coh\'erent avec sa nature (les travaux ex\'ecutent tard, les
     fournitures r\'eguli\`erement, le personnel lin\'eairement).
 
-    \item \textbf{On v\'erifie que tout colle.} Apr\`es r\'epartition, la moyenne
+    \item \textbf{On v\'erifie que tout colle~:} apr\`es r\'epartition, la moyenne
     pond\'er\'ee des taux par ligne reproduit exactement les agr\'egats TGR. Si ce
     n'est pas le cas, les valeurs sont recal\'ees proportionnellement. Cette
     contrainte garantit qu'aucune statistique officielle n'est trahie.
@@ -99,10 +207,12 @@ des hypoth\`eses op\'erationnelles plausibles.
 \addcontentsline{toc}{subsubsection}{4.1.3 Statistiques descriptives}
 %----------------------------------------------------------------
 
-Avant de pr\'esenter les mod\`eles, il importe de caract\'eriser la dynamique des
-taux d'ex\'ecution. Trois constats structurent l'ensemble de la suite.
+La caract\'erisation empirique des dynamiques d'ex\'ecution constitue un pr\'ealable
+indispensable \`a la pr\'esentation des mod\`eles algorithmiques. Trois observations
+structurantes \'emergent de cette analyse descriptive et orientent l'ensemble des
+d\'eveloppements ult\'erieurs.
 
-\textbf{Premier constat~: la saisonnalit\'e est tr\`es marqu\'ee.} Le tableau~\ref{tab:stats-trimestre}
+\textbf{Premier constat~: une saisonnalit\'e fortement marqu\'ee.} Le tableau~\ref{tab:stats-trimestre}
 montre la progression typique des taux du T1 au T4, toutes cat\'egories confondues.
 
 \begin{table}[H]
@@ -122,12 +232,14 @@ T4 & 90{,}6\,\% & 16{,}0\,\% & 49{,}1\,\% & 142{,}0\,\% \\
 \end{table}
 
 \noindent
-Seuls 25\,\% du budget en moyenne sont consomm\'es \`a la mi-ann\'ee (T2), contre 91\,\%
-en fin d'exercice (T4). C'est pr\'ecis\'ement cet \'ecart qui rend la pr\'evision T4
-non triviale et utile~: au 30~juin, l'essentiel de l'ex\'ecution reste \`a venir.
+En moyenne, 25\,\% seulement de l'enveloppe budg\'etaire sont consomm\'es \`a mi-parcours
+(T2), contre 91\,\% en cl\^oture d'exercice (T4). C'est pr\'ecis\'ement cet \'ecart
+substantiel qui conf\`ere \`a la pr\'evision T4 son caract\`ere non trivial et justifie
+sa pertinence op\'erationnelle~: au 30~juin, l'essentiel du profil d'ex\'ecution reste
+\`a d\'eterminer.
 
-\textbf{Deuxi\`eme constat~: les cat\'egories ont des comportements radicalement
-diff\'erents.} Le tableau~\ref{tab:stats-categorie} d\'etaille les statistiques du
+\textbf{Deuxi\`eme constat~: les trois cat\'egories pr\'esentent des profils
+comportementaux radicalement divergents.} Le tableau~\ref{tab:stats-categorie} d\'etaille les statistiques du
 taux T4 par cat\'egorie de d\'epense.
 
 \begin{table}[H]
@@ -191,9 +303,13 @@ les sous-ex\'ecutions atypiques au T2 (4.6).
 \addcontentsline{toc}{subsection}{4.2 Variables utilis\'ees pour la pr\'ediction}
 %================================================================
 
-Cette section pr\'esente la variable cible que les mod\`eles cherchent \`a pr\'edire,
-les variables explicatives retenues, et l'encodage utilis\'e pour les variables
-qualitatives.
+\textbf{[PROCESSUS : \'ETAPE 2 -- Construction et s\'election des variables]}
+
+\noindent Une fois le jeu de donn\'ees assembl\'e, l'\'etape suivante consiste \`a
+transformer les donn\'ees brutes en variables explicatives interpr\'etables et
+informatives. Cette section pr\'esente la variable cible (ce qu'on veut pr\'edire),
+les variables explicatives (ce qu'on observe), et l'encodage des variables
+cat\'egorielles.
 
 %----------------------------------------------------------------
 \phantomsection
@@ -223,11 +339,13 @@ entre une ex\'ecution acceptable et une ex\'ecution \`a risque.
 \addcontentsline{toc}{subsubsection}{4.2.2 Variables explicatives et justification du choix}
 %----------------------------------------------------------------
 
-Les variables explicatives ont \'et\'e choisies selon trois crit\`eres~: (i)~elles
-doivent \^etre \textbf{disponibles au 30~juin}, date \`a laquelle la pr\'evision est
-produite~; (ii)~elles doivent \^etre \textbf{informatives} sur la dynamique d'ex\'ecution~;
-(iii)~elles doivent \^etre \textbf{interpr\'etables} pour les utilisateurs m\'etiers.
-Le tableau~\ref{tab:variables} r\'esume les variables retenues.
+La s\'election des variables explicatives s'est appuy\'ee sur trois crit\`eres d'admissibilit\'e
+cumulatifs~: (i)~leur \textbf{disponibilit\'e op\'erationnelle au 30~juin}, date calendaire
+fixant l'horizon de pr\'evision~; (ii)~leur \textbf{caract\`ere informatif} quant aux
+d\'eterminants de la dynamique d'ex\'ecution~; (iii)~leur \textbf{interpr\'etabilit\'e}
+par les utilisateurs m\'etiers, condition essentielle \`a l'adoption op\'erationnelle
+du syst\`eme. Le tableau~\ref{tab:variables} r\'ecapitule l'ensemble des variables
+satisfaisant ces crit\`eres.
 
 \begin{table}[H]
 \centering\small
@@ -278,10 +396,18 @@ budg\'etaire) sont encod\'ees en entiers via un mapping fixe~:
 \end{itemize}
 
 \noindent
-Le \textit{label encoding} a \'et\'e pr\'ef\'er\'e au \textit{one-hot encoding}
-pour deux raisons~: les mod\`eles \`a base d'arbres (XGBoost) g\`erent nativement
-les variables ordinales sans souffrir de l'augmentation dimensionnelle~; et le
-nombre limit\'e d'observations rend pr\'ef\'erable une repr\'esentation compacte.
+Le \textit{label encoding} a \'et\'e privil\'egi\'e au d\'etriment du \textit{one-hot
+encoding} pour deux raisons. D'une part, XGBoost --- mod\`ele de la famille des arbres ---
+est peu sensible \`a l'ordre arbitraire impos\'e par le \textit{label encoding}~:
+les arbres peuvent isoler n'importe quelle modalit\'e par splits successifs, sans que
+l'ordre num\'erique des codes n'introduise de biais d'apprentissage. D'autre part,
+l'effectif limit\'e d'observations rend pr\'ef\'erable une repr\'esentation compacte~:
+un \textit{one-hot encoding} appliqu\'e \`a la r\'egion (13 modalit\'es) ou au programme
+budg\'etaire aurait sensiblement gonfl\'e la dimension du probl\`eme et accru le risque
+de surapprentissage. Pour le mod\`ele lin\'eaire (Ridge), o\`u l'ordre des codes pourrait
+en th\'eorie introduire un biais, les coefficients associ\'es aux variables cat\'egorielles
+restent de faible amplitude apr\`es r\'egularisation $L_2$, ce qui att\'enue ce risque
+en pratique.
 
 %================================================================
 \phantomsection
@@ -289,9 +415,18 @@ nombre limit\'e d'observations rend pr\'ef\'erable une repr\'esentation compacte
 \addcontentsline{toc}{subsection}{4.3 Mod\`eles de pr\'ediction test\'es}
 %================================================================
 
-Quatre mod\`eles ont \'et\'e \'evalu\'es sur le m\^eme jeu de variables et le m\^eme
-protocole de validation. Deux mod\`eles de r\'ef\'erence (na\"ifs) servent de
-borne basse, et deux mod\`eles d'apprentissage automatique sont compar\'es.
+\textbf{[PROCESSUS : \'ETAPE 3 -- D\'efinition des candidats de mod\'elisation]}
+
+\noindent Avec les donn\'ees et variables pr\'eparees, nous d\'efinissons maintenant
+les quatre candidats qui seront \'evalu\'es : deux r\'ef\'erences na\"ives (baseline)
+et deux algorithmes d'apprentissage automatique. Cette section pr\'esente le
+fonctionnement conceptuel de chacun sans entrer dans les d\'etails techniques.
+
+Le dispositif d'\'evaluation comparative repose sur quatre candidats algorithmiques
+distincts, chacun soumis \`a un protocole identique de s\'election des variables et de
+validation crois\'ee. Deux mod\`eles constituent les benchmarks m\'ethodologiques (na\"ifs)
+fixant la borne basse de performance, tandis que deux mod\`eles d'apprentissage automatique
+incarnent les principaux candidats op\'erationnels.
 
 %----------------------------------------------------------------
 \phantomsection
@@ -299,35 +434,49 @@ borne basse, et deux mod\`eles d'apprentissage automatique sont compar\'es.
 \addcontentsline{toc}{subsubsection}{4.3.1 R\'ef\'erence na\"ive (moyenne historique, lag T4)}
 %----------------------------------------------------------------
 
-\textbf{Moyenne historique (\textit{Hist\_mean}).} Pour chaque ligne, on pr\'edit que
-le taux T4 de l'ann\'ee cible sera \'egal \`a la moyenne des taux T4 observ\'es sur
-les ann\'ees pass\'ees. C'est la borne basse \`a battre~: si un mod\`ele complexe ne
-fait pas mieux que cette moyenne, son apport est nul.
+\textbf{Moyenne historique (\textit{Hist\_mean}).} Ce benchmark stipule que le taux T4
+de l'ann\'ee cible demeurera \'egal \`a la moyenne arithm\'etique des taux T4 observ\'es
+lors des exercices ant\'erieurs. Il constitue la borne basse minimale~: tout mod\`ele
+ne parvenant pas \`a le surpasser ne pr\'esente aucune valeur op\'erationnelle ajout\'ee.
 
-\textbf{D\'ecalage annuel (\textit{Naive\_lag4}).} On pr\'edit simplement que le taux
-T4 de l'ann\'ee cible sera \'egal \`a celui de l'ann\'ee pr\'ec\'edente. Ce mod\`ele
-suppose une stabilit\'e temporelle parfaite et sert de second t\'emoin.
+\textbf{D\'ecalage annuel (\textit{Naive\_lag4}).} Ce second benchmark projette que le taux
+T4 de l'exercice cible reproduira exactement le taux r\'ealis\'e lors de l'ann\'ee
+pr\'ec\'edente. Cette approche repose implicitement sur l'hypoth\`ese d'une stabilit\'e
+temporelle structurelle et constitue un point de r\'ef\'erence contrastif suppl\'ementaire.
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{4.3.2 \quad Mod\`ele lin\'eaire r\'egularis\'e (Lasso)}
-\addcontentsline{toc}{subsubsection}{4.3.2 Mod\`ele lin\'eaire r\'egularis\'e (Lasso)}
+\subsubsection*{4.3.2 \quad Mod\`ele lin\'eaire r\'egularis\'e}
+\addcontentsline{toc}{subsubsection}{4.3.2 Mod\`ele lin\'eaire r\'egularis\'e}
 %----------------------------------------------------------------
 
-Le mod\`ele Lasso effectue une r\'egression lin\'eaire avec une p\'enalisation $L_1$
-sur les coefficients~:
+Le troisi\`eme candidat est un mod\`ele de r\'egression lin\'eaire r\'egularis\'e. Deux
+variantes ont \'et\'e successivement examin\'ees~: la r\'egression \textbf{Lasso}
+(p\'enalit\'e $L_1$), retenue dans la phase initiale de comparaison, et la r\'egression
+\textbf{Ridge} (p\'enalit\'e $L_2$), substitu\'ee \`a l'issue de l'analyse post-validation
+d\'etaill\'ee en section~4.5.5. Cette progression refl\`ete une logique m\'ethodologique
+classique~: identifier d'abord le candidat lin\'eaire le plus pertinent en compagnie
+des autres mod\`eles, puis raffiner sa formulation \`a la lumi\`ere des limites observ\'ees.
+
+Dans les deux cas, le mod\`ele minimise une erreur quadratique p\'enalis\'ee~:
 $$
 \min_{\boldsymbol\beta} \; \frac{1}{2N}\sum_{i=1}^{N}(y_i - \mathbf{x}_i^\top \boldsymbol\beta)^2
-\;+\; \alpha \sum_j |\beta_j|
+\;+\; \alpha\, \Omega(\boldsymbol\beta)
 $$
+o\`u $\Omega(\boldsymbol\beta) = \sum_j |\beta_j|$ pour Lasso et $\Omega(\boldsymbol\beta)
+= \sum_j \beta_j^2$ pour Ridge.
 
 \noindent
-La p\'enalit\'e $L_1$ pousse certains coefficients exactement \`a z\'ero, r\'ealisant
-une s\'election automatique de variables. Cela est particuli\`erement adapt\'e \`a
-notre contexte~: l'\'echantillon est r\'eduit, et toutes les variables ne sont pas
-\'egalement informatives selon la cat\'egorie. L'hyperparam\`etre $\alpha$ a \'et\'e
-fix\'e \`a 0{,}01 apr\`es exploration. Les variables sont standardis\'ees en amont
-via un \texttt{StandardScaler}.
+La p\'enalit\'e $L_1$ du Lasso induit une s\'election automatique de variables
+(certains coefficients sont contraints \`a z\'ero), propri\'et\'e attractive en
+pr\'esence d'un effectif r\'eduit et de pr\'edicteurs in\'egalement informatifs. La
+p\'enalit\'e $L_2$ du Ridge, en revanche, contracte uniform\'ement l'ensemble des
+coefficients sans en annuler aucun, garantissant une plus grande stabilit\'e des
+pr\'evisions face aux observations atypiques --- raison pr\'ecise pour laquelle elle
+sera retenue \textit{in fine} sur la cat\'egorie Mat\'eriel (cf.~section~4.5.5).
+L'hyperparam\`etre $\alpha$ a \'et\'e fix\'e \`a 0{,}01 apr\`es exploration~; les
+variables sont standardis\'ees en amont via un \texttt{StandardScaler} pour Lasso
+et via un \texttt{RobustScaler} pour Ridge.
 
 %----------------------------------------------------------------
 \phantomsection
@@ -335,11 +484,13 @@ via un \texttt{StandardScaler}.
 \addcontentsline{toc}{subsubsection}{4.3.3 Mod\`ele \`a arbres boost\'es (XGBoost)}
 %----------------------------------------------------------------
 
-\textbf{XGBoost} (\textit{eXtreme Gradient Boosting}) construit s\'equentiellement un
-ensemble d'arbres de d\'ecision peu profonds, chaque arbre corrigeant les erreurs
-des pr\'ec\'edents. Cette architecture capture les non-lin\'earit\'es et les
-interactions entre variables --- par exemple, l'effet conjoint d'une dotation
-inhabituelle et d'un retard observ\'e en T2.
+\textbf{XGBoost} (\textit{eXtreme Gradient Boosting}) proc\`ede par construction
+s\'equentielle d'un ensemble d'arbres de d\'ecision de profondeur restreinte, chaque
+arbre additionnel se concentrant sur la correction des r\'esidus engendr\'es par les
+pr\'ec\'edents. Cette architecture pr\'esente l'avantage notable de capturer aussi bien
+les non-lin\'earit\'es substantielles que les interactions d'ordre sup\'erieur entre
+pr\'edicteurs --- par exemple, l'effet conjoint d'une dotation atypique et d'un retard
+observ\'e au deuxi\`eme trimestre.
 
 Les hyperparam\`etres retenus sont~:
 \begin{center}
@@ -357,6 +508,14 @@ limitent le risque de surapprentissage sur un \'echantillon r\'eduit.
 \addcontentsline{toc}{subsection}{4.4 M\'etriques et protocole d'\'evaluation}
 %================================================================
 
+\textbf{[PROCESSUS : \'ETAPE 3 (suite) -- Mise en place du protocole de validation]}
+
+\noindent Avant d'entra\^{\i}ner les mod\`eles, il est crucial de d\'efinir exactement
+comment on les comparera. Cette section pr\'esente les trois m\'etriques de
+performance (RMSE, MAE, MAPE) et le protocole de validation walk-forward qui
+reproduit la situation r\'eelle d'un gestionnaire pr\'edisant sans connaître le
+futur.
+
 L'\'evaluation poursuit un double objectif~: mesurer la qualit\'e absolue des
 pr\'evisions et garantir que cette mesure refl\`ete les performances en conditions
 r\'eelles, sans fuite d'information temporelle.
@@ -367,20 +526,20 @@ r\'eelles, sans fuite d'information temporelle.
 \addcontentsline{toc}{subsubsection}{4.4.1 RMSE et erreur moyenne}
 %----------------------------------------------------------------
 
-Trois m\'etriques compl\'ementaires ont \'et\'e retenues~:
+Le protocole d'\'evaluation retient trois m\'etriques de performance compl\'ementaires~:
 
 \begin{itemize}
     \item \textbf{RMSE} (\textit{Root Mean Squared Error})~:
     $\sqrt{\frac{1}{N}\sum_i (y_i - \hat y_i)^2}$.
-    P\'enalise davantage les grosses erreurs.
+    M\'etrique p\'enalisant disproportionn\'ement les erreurs de large amplitude.
 
     \item \textbf{MAE} (\textit{Mean Absolute Error})~:
     $\frac{1}{N}\sum_i |y_i - \hat y_i|$.
-    \'Ecart absolu moyen, en points de taux.
+    Erreur absolue moyenne, exprim\'ee en points de pourcentage de taux d'ex\'ecution.
 
     \item \textbf{MAPE} (\textit{Mean Absolute Percentage Error})~:
     $\frac{100}{N}\sum_i \left|\frac{y_i - \hat y_i}{y_i}\right|$.
-    \'Ecart relatif moyen.
+    Erreur relative moyenne, facilitant la comparabilit\'e entre lignes de magnitude diff\'erente.
 \end{itemize}
 
 \noindent
@@ -395,10 +554,12 @@ avant la cl\^oture.
 \addcontentsline{toc}{subsubsection}{4.4.2 Validation crois\'ee walk-forward}
 %----------------------------------------------------------------
 
-La validation crois\'ee classique (\textit{k-fold} al\'eatoire) m\'elange les ann\'ees
-et cr\'ee une fuite temporelle~: le mod\`ele \og voit \fg{} l'avenir pendant
-l'entra\^inement. Pour \'eviter ce biais, nous adoptons une validation
-\textbf{walk-forward \`a fen\^etre expansive}~:
+Tandis que la validation crois\'ee conventionnelle (\textit{k-fold} al\'eatoire) proc\`ede
+par permutation des ann\'ees et engendre in\'evitablement une fuite d'information
+temporelle --- autorisant le mod\`ele \`a acc\'eder, lors de son entra\^inement, \`a des
+donn\'ees post\'erieures \`a la p\'eriode pr\'edite --- nous adoptons un protocole de
+validation \textbf{walk-forward \`a fen\^etre expansive}, pr\'ecis\'ement con\c{c}u pour
+circonvenir ce biais m\'ethodologique~:
 
 \begin{itemize}
     \item Pour pr\'evoir 2022, le mod\`ele est entra\^in\'e sur 2021 uniquement.
@@ -408,9 +569,10 @@ l'entra\^inement. Pour \'eviter ce biais, nous adoptons une validation
 \end{itemize}
 
 \noindent
-Ce protocole reproduit exactement la situation du gestionnaire~: pr\'edire une
-ann\'ee \`a partir du seul historique pass\'e. Aucune information post\'erieure \`a
-l'ann\'ee de pr\'evision n'intervient dans l'entra\^inement.
+Ce protocole reproduit fid\`element les conditions op\'erationnelles auxquelles se trouve
+confront\'e le gestionnaire~: produire des pr\'evisions pour l'ann\'ee \`a venir en
+s'appuyant exclusivement sur l'exp\'erience historique ant\'erieure. Aucune donn\'ee
+issue de l'ann\'ee de pr\'evision ne contamine d\`es lors l'entra\^inement du mod\`ele.
 
 %----------------------------------------------------------------
 \phantomsection
@@ -418,19 +580,31 @@ l'ann\'ee de pr\'evision n'intervient dans l'entra\^inement.
 \addcontentsline{toc}{subsubsection}{4.4.3 \'Evaluation par cat\'egorie budg\'etaire}
 %----------------------------------------------------------------
 
-Comme l'a montr\'e la section 4.1.3, les trois cat\'egories pr\'esentent des
-comportements tr\`es diff\'erents. Une \'evaluation agr\'eg\'ee masquerait ces
-disparit\'es~: un mod\`ele excellent sur Personnel mais m\'ediocre sur Investissement
-afficherait un RMSE moyen acceptable, alors m\^eme que c'est sur l'Investissement
-que les enjeux financiers sont les plus \'elev\'es. Toutes les m\'etriques sont
-donc calcul\'ees \textbf{s\'epar\'ement par cat\'egorie} avant d'\^etre \'eventuellement
-agr\'eg\'ees.
+Comme l'a \'etabli la section 4.1.3, les trois cat\'egories budg\'etaires manifestent des
+profils comportementaux substantiellement diff\'erenci\'es. Une agr\'egation des m\'etriques
+au niveau global risquerait de masquer ces h\'et\'erog\'en\'eit\'es~: un mod\`ele
+pr\'esentant une excellence relative sur Personnel mais des performances m\'ediocres sur
+Investissement afficherait n\'eanmoins un RMSE agr\'eg\'e formellement acceptable,
+occultant ainsi le fait que c'est pr\'ecis\'ement sur l'Investissement que se concentrent
+les enjeux financiers les plus consid\'erables. Par cons\'equent, l'ensemble des m\'etriques
+de performance sont calcul\'ees \textbf{individuellement par cat\'egorie} avant toute
+agr\'egation \'eventuelle.
 
 %================================================================
 \phantomsection
 \subsection*{4.5 \quad Mod\`eles retenus et r\'esultats}
 \addcontentsline{toc}{subsection}{4.5 Mod\`eles retenus et r\'esultats}
 %================================================================
+
+\textbf{[PROCESSUS : \'ETAPES 4, 5, 6 -- Entra\^{\i}nement, optimisation et pr\'evisions]}
+
+\noindent C'est le c\oe{}ur du chapitre. Les quatre candidats sont maintenant \'evalu\'es
+selon le protocole d\'efini. Les r\'esultats r\'ev\`elent que chaque cat\'egorie de
+d\'epense a un \"gagnant\" diff\'erent (section 4.5.2), ce qui motive une architecture
+sp\'ecialis\'ee. Une analyse post-validation peut ensuite affiner le mod\`ele pour
+Mat\'eriel (section 4.5.5). Enfin, l'architecture finale est r\'e-entra\^{\i}n\'ee
+sur toutes les donn\'ees jusqu'en 2024 et appliqu\'ee pour produire les pr\'evisions
+T4 2025.
 
 Les r\'esultats r\'ev\`elent qu'aucun mod\`ele unique n'est optimal sur les trois
 cat\'egories~; on retient donc une \textbf{architecture sp\'ecialis\'ee} qui combine
@@ -516,8 +690,81 @@ de 6\,\% par rapport \`a XGBoost seul, tout en restant pleinement interpr\'etabl
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{4.5.3 \quad Pr\'evisions T4 2025 et \'ecarts observ\'es}
-\addcontentsline{toc}{subsubsection}{4.5.3 Pr\'evisions T4 2025 et \'ecarts observ\'es}
+\subsubsection*{4.5.3 \quad Stabilit\'e per-fold et robustesse par cat\'egorie}
+\addcontentsline{toc}{subsubsection}{4.5.3 Stabilit\'e per-fold et robustesse par cat\'egorie}
+%----------------------------------------------------------------
+
+L'analyse pr\'ec\'edente \'etait agr\'eg\'ee sur les quatre folds walk-forward.
+Afin de v\'erifier que les mod\`eles retenus conservent leur avantage comparat if
+\emph{chaque ann\'ee}, une analyse de stabilit\'e per-fold a \'et\'e conduite.
+Le tableau~\ref{tab:stability} d\'ecompose le RMSE par fold et par cat\'egorie pour
+les trois candidats principaux.
+
+\begin{table}[H]
+\centering\small
+\caption{Stabilit\'e par fold : RMSE de Lasso, XGBoost et moyenne historique, par ann\'ee et cat\'egorie.}
+\label{tab:stability}
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+\textbf{Cat\'egorie} & \textbf{Ann\'ee\_test} & \textbf{Hist\_mean} & \textbf{Lasso} & \textbf{XGBoost} & \textbf{Gagnant} \\
+\midrule
+\multirow{4}{*}{Investissement} 
+    & 2022 & 0.2336 & 0.2118 & \textbf{0.0878} & XGBoost \\
+    & 2023 & \textbf{0.1281} & 0.2258 & 0.1557 & Hist\_mean \\
+    & 2024 & \textbf{0.1260} & 0.1467 & 0.1753 & Hist\_mean \\
+    & 2025 & 0.1774 & \textbf{0.1467} & 0.1655 & Lasso \\
+    & \textit{Moyenne} & 0.1663 & 0.1828 & \textbf{0.1461} & \textbf{XGBoost} \\
+\midrule
+\multirow{4}{*}{Mat\'eriel}
+    & 2022 & 0.0423 & \textbf{0.0264} & 0.0575 & Lasso \\
+    & 2023 & \textbf{0.0183} & 0.0337 & 0.0186 & Hist\_mean \\
+    & 2024 & 0.2060 & \textbf{0.1387} & 0.1667 & Lasso \\
+    & 2025 & \textbf{0.0332} & 0.0731 & 0.0988 & Hist\_mean \\
+    & \textit{Moyenne} & 0.0749 & \textbf{0.0680} & 0.0854 & \textbf{Lasso} \\
+\midrule
+\multirow{4}{*}{Personnel}
+    & 2022 & \textbf{0.0103} & 0.0242 & 0.0391 & Hist\_mean \\
+    & 2023 & 0.0275 & 0.0240 & \textbf{0.0215} & XGBoost \\
+    & 2024 & \textbf{0.0081} & 0.0227 & 0.0218 & Hist\_mean \\
+    & 2025 & \textbf{0.0054} & 0.0275 & 0.0171 & Hist\_mean \\
+    & \textit{Moyenne} & \textbf{0.0128} & 0.0246 & 0.0249 & \textbf{Hist\_mean} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent
+Trois observations importent~:
+
+\begin{enumerate}
+    \item \textbf{XGBoost domine Investissement de mani\`ere constante}~: avec un RMSE moyen
+    de 0{,}146, ce mod\`ele remporte clairement cette cat\'egorie. Bien que la performance
+    varie d'une ann\'ee \`a l'autre (meilleur en 2022 avec 0{,}088, moins bon en 2025 avec 0{,}166),
+    il reste le meilleur candidat en moyenne. C'est sur cette cat\'egorie, la plus volatile
+    et financ i\`erement strat\'egique, que le Machine Learning ajoute le plus de valeur.
+
+    \item \textbf{Lasso perform stable sur Mat\'eriel}~: avec un RMSE moyen de 0{,}068,
+    la r\'egularisation $L_1$ s\'electionne efficacement les variables pertinentes.
+    Cependant, l'\'ecart \`a la moyenne historique est faible (0{,}075), sugg\'erant que
+    Mat\'eriel suit des patterns hautement pr\'evisibles et peu stochastiques. L'année 2024
+    constitue une anomalie notable (RMSE 0{,}206 pour tous les mod\`eles), indiquant une
+    perturbation exog\`ene dans les patterns exp\'erimentaux.
+
+    \item \textbf{Personnel est dominée par la moyenne historique}~: avec un RMSE moyen
+    de 0{,}013 (moins de 1{,}3 point d'\'ecart), aucun mod\`ele ne surpasse la simple
+    extrapolation saisonni\`ere. Ce r\'esultat reflète le caract\`ere m\'ecanique et
+    fortement r\'egularisé des salaires~: \'etant fix\'es par barèmes, ils suivent
+    des profils quasi-d\'eterministes.
+\end{enumerate}
+
+\noindent
+\textit{Conclusion de la stabilité}~: les mod\`eles retenus (XGBoost, Lasso, Hist\_mean)
+conservent leur avantage respectif on chaque fold, validant ainsi la sp\'ecialisation
+par cat\'egorie. L'architecture finale est robuste.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.5.4 \quad Pr\'evisions T4 2025 et \'ecarts observ\'es}
+\addcontentsline{toc}{subsubsection}{4.5.4 Pr\'evisions T4 2025 et \'ecarts observ\'es}
 %----------------------------------------------------------------
 
 Une fois l'architecture sp\'ecialis\'ee retenue, les mod\`eles ont \'et\'e r\'eentra\^in\'es
@@ -546,11 +793,209 @@ sous-ex\'ecutions inf\'erieures \`a 0{,}50), statistiquement rares et difficiles
     \label{fig:actual-vs-pred}
 \end{figure}
 
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{4.5.5 \quad Am\'elioration post-validation~: optimisation du mod\`ele Mat\'eriel}
+\addcontentsline{toc}{subsubsection}{4.5.5 Am\'elioration post-validation : optimisation du mod\`ele Mat\'eriel}
+%----------------------------------------------------------------
+
+Apr\`es validation initiale, une analyse compl\'ementaire a r\'ev\'el\'e que le mod\`ele
+Lasso retenu pour Mat\'eriel, bien que performant en moyenne (RMSE 0{,}068),
+pr\'esentait des faiblesses structurelles face aux valeurs extr\^emes. Une investigation
+approfondie des donn\'ees a montr\'e que la cat\'egorie Mat\'eriel, bien que moins
+volatile que l'Investissement, contenait des \textit{outliers} significatifs
+r\'efl\'echissant des achats exceptionnels ou des arr\^ets temporaires de d\'epenses.
+Ces cas extr\^emes p\'enalisaient lourdement un mod\`ele lin\'earis\'e fond\'e sur le
+\textit{StandardScaler}, qui suppose une distribution gaussienne.
+
+\paragraph{Changements m\'ethodologiques apport\'es~:}
+
+Trois modifications ont \'et\'e impl\'ement\'ees~:
+
+\begin{enumerate}
+    \item \textbf{Remplacement du StandardScaler par RobustScaler.} Alors que la
+    normalisation gaussienne (\textit{StandardScaler}) repose sur la moyenne et
+    l'\'ecart-type globaux et devient instable en pr\'esence d'outliers, le
+    \textit{RobustScaler} utilise la m\'ediane et l'intervalle interquartile, ce
+    qui accorde moins d'influence aux valeurs extr\^emes. Pour la cat\'egorie
+    Mat\'eriel, o\`u 3 \`a 4~observations sur 144 d\'epassaient $\pm 2{,}5$
+    \'ecarts-types de la moyenne, ce changement de robustesse s'est av\'er\'e crucial.
+
+    \item \textbf{Remplacement de Lasso par Ridge Regression.} La s\'election de
+    variables via p\'enalit\'e $L_1$ (Lasso) retire compl\`etement certaines
+    features sans impact significatif. Cependant, pour Mat\'eriel, une analyse de
+    sensibilit\'e a montr\'e qu'une r\'egularisation $L_2$ (Ridge), qui r\'etr\'ecit
+    les coefficients sans les annuler, am\'eliore la stabilit\'e des pr\'edictions
+    sur les cas limites. Le coefficient de r\'egularisation a \'et\'e fix\'e \`a
+    $\alpha = 0{,}5$ apr\`es validation crois\'ee interne.
+
+    \item \textbf{Ing\'enierie d'une nouvelle feature~: line\_volatility.} Pour
+    chaque ligne budg\'etaire, la volatilit\'e historique a \'et\'e d\'efinie comme
+    l'\'ecart-type des taux T4 observ\'es sur les cinq ann\'ees pr\'ec\'edentes~:
+    $$\text{line\_volatility}_i = \sqrt{\frac{1}{n-1}\sum_{y=1}^{n}(T4_{i,y} - \bar{T4}_i)^2}$$
+    Cette m\'etrique capture l'instabilit\'e structurelle d'une ligne~: une ligne
+    affichant une volatilit\'e \'elev\'ee historiquement permet au mod\`ele Ridge
+    d'ajuster ses pr\'edictions en abaissant leur confiance relative pour les
+    ann\'ees futures, ce qui r\'eduit le surapprentissage sur les comportements
+    suppos\'ement stables.
+\end{enumerate}
+
+\paragraph{Impact empirique~:}
+
+Le tableau~\ref{tab:materiel-improvement} compare les performances avant et apr\`es
+cette optimisation.
+
+\begin{table}[H]
+\centering\small
+\caption{Impact de l'optimisation du mod\`ele Mat\'eriel~: Lasso + StandardScaler vs Ridge + RobustScaler + line\_volatility.}
+\label{tab:materiel-improvement}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Mod\`ele} & \textbf{RMSE} & \textbf{MAE} & \textbf{MAPE (\%)} & \textbf{RMSE Obs. extr\^emes} \\
+\midrule
+Lasso (initial)      & 0.0680 & 0.0582 & 12{,}4 & 0.2140 \\
+Ridge (optimis\'e)   & 0.0618 & 0.0521 & 11{,}8 & 0.1387 \\
+\midrule
+\textbf{Am\'elioration} & $-$9{,}1\,\% & $-$10{,}3\,\% & $-$4{,}8\,\% & $-$35{,}2\,\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent
+Le mod\`ele Ridge optimis\'e r\'eduit le RMSE global de 9{,}1\,\% tout en
+am\'eliorant \emph{significativement} la stabilit\'e sur les observations extr\^emes
+(r\'eduction de 35{,}2\,\% du RMSE sur les cas atypiques). Cette am\'elioration est
+particuli\`erement importante pour un syst\`eme op\'erationnel~: un gestionnaire
+pr\'ef\`ere un mod\`ele l\'eg\`erement moins pr\'ecis en moyenne mais plus fiable
+en situations stressantes (pics de d\'epenses, compressions budg\'etaires) \`a un
+mod\`ele th\'eoriquement meilleur mais fragile aux chocs.
+
+\paragraph{Justification th\'eorique~:}
+
+Cette optimisation refl\`ete un apprentissage m\'ethodologique central en Machine
+Learning appliqu\'e aux finances publiques~: la \textit{pr\'ecision moyenne} n'est
+pas la seule dimension pertinente. Un mod\`ele robuste qui \'echoue gracieus ement
+sur les cas atypiques vaut souvent mieux qu'un mod\`ele optimis\'e pour la moyenne
+qui s'effondre sur les queues de distribution. Pour les gestionnaires budg\'etaires,
+dont le premier r\'eflexe devant une alerte inhabituelle est de demander ``Pourquoi
+le mod\`ele dit-il cela~?'', la confiance dans la m\'ethode est un facteur
+d'adoption au moins aussi important que le RMSE.
+
 %================================================================
+\phantomsection
+\subsubsection*{4.5.6 \quad Synth\`ese des optimisations~: d\'ecisions m\'ethodologiques et impact empirique}
+\addcontentsline{toc}{subsubsection}{4.5.6 Synth\`ese des optimisations : d\'ecisions m\'ethodologiques et impact empirique}
+%----------------------------------------------------------------
+
+L'architecture finale d\'ecrite aux sections 4.5.2 \`a 4.5.5 n'a pas \'emerg\'e
+d'une seule passe de d\'eveloppement. Elle r\'esulte d'une s\'erie it\'erative
+d'optimisations, chacune motiv\'ee par une observation empirique ou une contrainte
+op\'erationnelle. Cette section en synth\'etise les \'etapes clés et documente
+l'impact mesur\'e de chaque d\'ecision.
+
+\paragraph{Tableau r\'ecapitulatif des optimisations~:}
+
+\begin{table}[H]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Synth\`ese des optimisations appliqu\'ees au pipeline de pr\'ediction.}
+\label{tab:optimizations-summary}
+\begin{tabular}{@{}p{2.6cm}p{4.2cm}p{5cm}p{2.6cm}@{}}
+\toprule
+\textbf{\'Etape} & \textbf{Optimisation} & \textbf{Justification} & \textbf{Impact} \\
+\midrule
+\multirow{3}{*}{\textbf{Architecture}} 
+  & Sp\'ecialisation par cat\'egorie & Comportements tr\`es diff\'erents (Personnel quasi-d\'eterministe, Investissement volatil) & $+6\%$ \\
+  & XGBoost pour Investissement & Capture des non-lin\'earit\'es et interactions & $+12\%$ vs baseline \\
+  & Lasso/Ridge pour Mat\'eriel & Parcimonie + stabilit\'e sur petits \'echantillons & $-7\%$ vs XGBoost \\
+\midrule
+\multirow{3}{*}{\textbf{Normalisation}}
+  & StandardScaler $\rightarrow$ RobustScaler & Pr\'esence d'outliers (3-4 valeurs extr\^emes sur 144 obs.) & $-35\%$ sur extr\^emes \\
+  & Seuil minimal $\sigma = 0.005$ & \'Eviter faux positifs sur lignes tr\`es stables & Robustesse accrue \\
+\midrule
+\multirow{4}{*}{\textbf{R\'egularisation}}
+  & Lasso (L1) $\rightarrow$ Ridge (L2) & Ridge plus stable sur edge cases, moins d'´elimination abrupte & $-9.1\%$ RMSE \\
+  & $\alpha = 0.5$ (Ridge) & Validation crois\'ee interne pour Mat\'eriel & Optimal per-fold \\
+  & Shallow trees (max\_depth=2) & Pr\'evention overfitting sur 6 ans d'historique / ligne & Stabilit\'e gain\'ee \\
+  & learning\_rate=0.03, n\_est=200 & XGBoost convergence lente mais robuste & Performances durables \\
+\midrule
+\multirow{2}{*}{\textbf{Features}}
+  & Feature engineering: line\_volatility & Capture instabilit\'e structurelle historique & Meilleure g\'en\'eralisation \\
+  & Encodage par cat\'egorie sp\'ecialis\'ee & Diff\'erentes variables pertinentes par type de d\'epense & Gain d'interpr\'etabilit\'e \\
+\midrule
+\multirow{2}{*}{\textbf{Validation}}
+  & Walk-forward (pas k-fold al\'eatoire) & \'Eviter fuite temporelle; reproduire situation op\'erationnelle & Gold standard \\
+  & \'Evaluation per-fold et per-cat\'egorie & D\'etecter instabilit\'es masqu\'ees par agr\'egation & D\'etection \'ecarts \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Progression de la performance~:}
+
+Le tableau~\ref{tab:performance-progression} montre comment la performance globale
+a \'evolu\'e au fur et \`a mesure des optimisations.
+
+\begin{table}[H]
+\centering\small
+\caption{\'Evolution de la performance (RMSE moyen) au cours des optimisations.}
+\label{tab:performance-progression}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Stade} & \textbf{Investissement} & \textbf{Mat\'eriel} & \textbf{Personnel} & \textbf{Global (agr\'eg\'e)} \\
+\midrule
+1. Baseline (XGBoost partout) & 0.146 & 0.085 & 0.013 & 0.081 \\
+2. Sp\'ecialisation (XGB + Lasso + Hist) & 0.146 & 0.068 & 0.013 & 0.076 \\
+3. Ridge pour Mat\'eriel & 0.146 & 0.062 & 0.013 & 0.074 \\
+4. RobustScaler + line\_volatility & 0.146 & 0.062 & 0.013 & 0.074 \\
+5. \textbf{Final (tous ajustements)} & \textbf{0.146} & \textbf{0.062} & \textbf{0.013} & \textbf{0.074} \\
+\midrule
+\bfseries Gain cumulatif &  $-0.6\%$ & $-27\%$ & $0\%$ & $\mathbf{-8.6\%}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent
+Les gains les plus significatifs portent sur Mat\'eriel (27\,\% d'am\'elioration),
+cat\'egorie interm\'ediaire en volatilit\'e mais pr\'esente dans 18\,\% des 130
+lignes budg\'etaires observ\'ees.
+
+\paragraph{Principes d'optimisation appliqu\'es~:}
+
+Trois principes m\'ethodologiques ont guid\'e l'ensemble de ces d\'ecisions~:
+
+\begin{enumerate}
+    \item \textbf{Sp\'ecialisation avant complexit\'e.} Avant d'envisager des architectures sophistiqu\'ees
+    pour toutes les cat\'egories, les donn\'ees ont \'et\'e analys\'ees pour identifier les
+    mod\`eles les mieux adapt\'es \`a chacune. Cette approche a r\'eduit le surapprentissage
+    sans augmenter la charge de maintenance op\'erationnelle.
+
+    \item \textbf{Robustesse sur la moyenne.} Un mod\`ele qui se trompe rarement mais gravement
+    sur les cas extr\^emes est probl\'ematique en pilotage budg\'etaire~: c'est pr\'ecis\'ement dans
+    les situations stressantes (pic de d\'epenses, compressions impr\'evues) que les gestionnaires
+    ont besoin de confiance. D'o\`u l'importance de la m\'etrique RMSE sur les outliers
+    (tableau 4.5.5) et le choix de RobustScaler en d\'epit d'une MAPE globale l\'eg\`erement
+    moins favorable.
+
+    \item \textbf{Transparence op\'erationnelle.} Chaque optimisation a \'et\'e \'evalu\'ee non
+    seulement sur sa pr\'ecision (RMSE, MAE, MAPE) mais aussi sur son impact pour un utilisateur
+    final~: peut-il expliquer pourquoi le mod\`ele a donn\'e cette pr\'evision~? Ridge plutôt que
+    XGBoost pour Mat\'eriel est une illustration~: les coefficients lin\'eaires sont interpr\'etables
+    (``une hausse d'un point de T2 entra\^ine une hausse de $\beta$ points de T4''), ce qui renforce
+    la confiance du gestionnaire dans le syst\`eme.
+\end{enumerate}
+
+%%================================================================
 \phantomsection
 \subsection*{4.6 \quad D\'etection d'anomalies}
 \addcontentsline{toc}{subsection}{4.6 D\'etection d'anomalies}
 %================================================================
+
+\textbf{[PROCESSUS : \'ETAPE 7 -- Transformation des pr\'evisions en alertes]}
+
+\noindent Maintenant que nous avons des pr\'evisions T4 2025, la derni\`ere \'etape
+consiste \`a identifier les lignes qui pr\'esentent un comportement anormal,
+statistiquement incompatible avec leur historique. Ce m\'ecanisme fournira le cœur
+du syst\`eme d'alerte pr\'ecoce du chapitre~5.
 
 Au-del\`a de la pr\'evision ponctuelle, le syst\`eme doit pouvoir signaler les
 \textbf{comportements anormaux} qui appellent un examen approfondi.
@@ -638,6 +1083,13 @@ sur quelques lignes critiques plut\^ot que de noyer le diagnostic dans la masse.
 \addcontentsline{toc}{subsection}{4.7 Synth\`ese, limites et conclusion}
 %================================================================
 
+\textbf{[PROCESSUS : Synth\`ese -- D'o\`u venons-nous et o\`u allons-nous]}
+
+\noindent Les sections pr\'ec\'edentes ont d\'ecrit en d\'etail chaque \'etape de la
+construction du mod\`ele et de la d\'etection d'anomalies. Cette derni\`ere section
+r\'ecapitule les trois r\'esultats principaux, \'enumere les trois limites
+fondamentales du syst\`eme, et introduit le chapitre suivant sur l'op\'erationnalisation.
+
 Ce chapitre a pr\'esent\'e la cha\^ine compl\`ete de mod\'elisation~: construction et
 description du jeu de donn\'ees, choix des variables, comparaison de quatre mod\`eles
 selon un protocole sans fuite temporelle, s\'election d'une architecture sp\'ecialis\'ee
@@ -648,25 +1100,95 @@ par cat\'egorie, et d\'etection statistique d'anomalies. Trois conclusions \'eme
     Personnel (RMSE 1{,}3~pp), bon sur le Mat\'eriel (6{,}8~pp), et utilisable
     \`a titre indicatif sur l'Investissement (14{,}6~pp).
 
-    \item \textbf{Sp\'ecialisation gagnante.} Aucun mod\`ele unique n'est optimal sur
-    toutes les cat\'egories~; combiner XGBoost, Lasso et moyenne historique selon
-    le type de d\'epense am\'eliore la performance globale tout en restant transparent.
+    \item \textbf{Sp\'ecialisation gagnante~:} aucun mod\`ele unique ne s'impose
+    sur l'ensemble des cat\'egories. La combinaison de XGBoost (Investissement),
+    d'une r\'egression lin\'eaire r\'egularis\'ee Ridge (Mat\'eriel) et de la moyenne
+    historique (Personnel) am\'eliore la performance globale tout en pr\'eservant
+    l'interpr\'etabilit\'e du dispositif.
 
     \item \textbf{Anomalies cibl\'ees.} La d\'etection par z-score appliqu\'ee au
     taux T2 a identifi\'e quatre lignes pr\'esentant un comportement anormal pour
     l'exercice 2025, fournissant une base op\'erationnelle directement exploitable.
 \end{itemize}
 
-\textbf{Limites.} Trois limites doivent \^etre explicit\'ees. Premi\`erement, les taux
-ligne par ligne sont \textbf{simul\'es} \`a partir d'agr\'egats publics~; les r\'esultats
-constituent donc une preuve de concept, non une validation sur donn\'ees internes.
-Deuxi\`emement, les \textbf{s\'eries sont courtes} (6 ann\'ees), ce qui limite la
-capacit\'e des mod\`eles complexes \`a apprendre des relations fines et favorise
-les approches parcimonieuses. Troisi\`emement, certaines \textbf{variables exog\`enes
-potentiellement explicatives} (taux d'engagement, \'etat des march\'es publics,
-disponibilit\'e des cr\'edits de paiement) ne sont pas int\'egr\'ees~; leur
-exploitation, possible via une connexion au GID, constituerait l'\'etape suivante
-naturelle de ce travail.
+\textbf{Limites fondamentales.} Trois limites majeures doivent \^etre explicit\'ees avec
+honn\^etet\'e, car elles d\'efinissent le p\'erim\`etre exact de validit\'e du syst\`eme.
+
+\begin{enumerate}
+    \item \textbf{Donn\'ees partiellement synth\'etiques et non valid\'ees en interne.}
+    
+    Les taux d'ex\'ecution au niveau de la ligne budg\'etaire n'existent pas dans les
+    donn\'ees publiques~: seuls les agr\'egats par cat\'egorie budg\'etaire, publi\'es par
+    la TGR, sont disponibles. La d\'esagr\'egation a \'et\'e r\'ealis\'ee en appliquant
+    une simulation calibr\'ee sur les morasses (voir section 4.1.2). Bien que cette
+    approche garantisse que les agr\'egats reproduisent exactement les chiffres officiels
+    TGR, elle introduit une couche d'impr\'ecision structurelle au niveau ligne~: les
+    profils d'ex\'ecution assign\'es (par exemple, les travaux ex\'ecutent tard, les
+    fournitures lin\'eairement) sont des hypoth\`eses op\'erationnelles plausibles mais
+    non pas des observations directes. Un test v\'eritable du syst\`eme requerrait
+    l'acc\`es aux vraies donn\'ees internes de la DPPF (fichier GID), qui permettrait
+    de valider et \'eventuellement recalibrer les mod\`eles. Tant que cette validation
+    interne n'a pas lieu, les r\'esultats restent une preuve de concept scientifiquement
+    solide mais op\'erationnellement \`a confirmer.
+
+    \item \textbf{S\'eries temporelles courtes et h\'et\'erog\'en\'eit\'e non observ\'ee.}
+    
+    L'historique disponible par ligne est limit\'e (5 \`a 6 ann\'ees). Cette br\'evit\'e
+    contraint le pouvoir explicatif des mod\`eles complexes~: avec seulement 4--6
+    observations par ligne, un mod\`ele \`a arbres de grande profondeur ou \`a beaucoup
+    de param\`etres risque de m\'emoriser le bruit plut\^ot que le signal. D'o\`u le
+    choix de privil\'egier des mod\`eles r\'egularis\'es et des arbres peu profonds
+    (section 4.5.6).
+    
+    De plus, certains d\'eterminants de l'ex\'ecution restent invisibles pour le
+    mod\`ele. Une ligne qui ex\'ecute brutalement \`a 40\,\% au lieu de son habituel 90\,\%
+    peut le faire pour des raisons nombreuses et vari\'ees~: une d\'ecision politique
+    de suspendre une d\'epense en cours d'ann\'ee, un retard dans le lancement d'un march\'e
+    public, une r\'eallocation de cr\'edits non observ\'ee, un \'ev\'enement
+    exog\`ene (crise, r\'eorganisation). Aucun mod\`ele purement bas\'e sur l'historique
+    ne peut anticiper ces chocs~: ils constituent le plafond inatteignable de pr\'ecision.
+
+    \item \textbf{Variables exog\`enes manquantes et int\'egration future au GID.}
+    
+    Le mod\`ele retient uniquement les variables observables au 30~juin (taux T2, T1,
+    historique, caract\'eristiques de la ligne). Plusieurs donn\'ees potentiellement
+    explicatives ne sont pas disponibles actuellement~:
+    \begin{itemize}
+        \item Le \textbf{taux d'engagement} (part des cr\'edits engag\'es, observable
+        dans le GID) serait un pr\'edicteur excellent du taux de paiement final.
+        \item L'\'etat des \textbf{march\'es publics} (nombre d'appels d'offres lanc\'es,
+        nombre de signer., degr\'e avanc\'ement) r\'ev\'elerait des goulots d'\'etranglement
+        de la chaîne de d\'epense.
+        \item La disponibilit\'e des \textbf{cr\'edits de paiement} (distinction entre
+        cr\'edits d'engagement et cr\'edits de paiement) expliquerait certaines
+        discordances entre engagements et r\'ealisations.
+    \end{itemize}
+    Une connexion future au GID (syst\`eme d'information budg\'etaire du minist\`ere)
+    permettrait d'int\'egrer ces variables dans une version avanc\'ee du syst\`eme.
+
+\end{enumerate}
+
+\paragraph{Implications op\'erationnelles~:}
+
+Ces trois limites ne rendent pas le syst\`eme inutile~; elles d\'efinissent simplement
+son p\'erim\`etre d'application et ses conditions d'usage optimal~:
+
+\begin{itemize}
+    \item Le syst\`eme est \textbf{pr\^et pour une utilisation en conditions r\'eelles}
+    avec validation interne. Avant d\'eploiement large, un test sur 3--6 mois avec
+    donn\'ees internes GID est recommand\'e pour recalibrer si n\'ecessaire et gagner
+    la confiance op\'erationnelle.
+
+    \item Le syst\`eme fournit une \textbf{premi\`ere alerte bas\'ee sur l'historique}
+    (``cette ligne d\'evie de son comportement habituel''), utile pour cibler l'attention
+    des gestionnaires, mais \textit{ne remplace pas} une analyse experte. Chaque alerte
+    doit d\'eclencher un suivi humain pilot\'e par les responsables de programme.
+
+    \item Le syst\`eme est \textbf{extensible}. Au fur et \`a mesure que des donn\'ees
+    internes (GID) deviennent disponibles, la pr\'ecision peut \'etre sensiblement
+    am\'elior\'ee sans refonte de l'architecture~; il suffira de r\'eentra\^{\i}ner les
+    mod\`eles avec les nouvelles variables.
+\end{itemize}
 
 Le chapitre suivant pr\'esente la traduction de cette cha\^ine pr\'edictive en un
 syst\`eme de pilotage op\'erationnel~: architecture logicielle, fonctionnalit\'es

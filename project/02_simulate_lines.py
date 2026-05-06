@@ -391,10 +391,10 @@ for year in YEARS:
             calibrated[:, q] = np.clip(raw[:, q] * scale, 0.0, 1.60)
         else:
             calibrated[:, q] = 0.0
-    # Soft monotonicity (allow tiny reductions as MATERIEL taux can vary)
+    # Enforce monotonicity (cumulative execution rates must not decrease)
     for i in range(n_mat_lines):
         for q in range(1, 4):
-            calibrated[i, q] = max(calibrated[i, q], calibrated[i, q - 1] * 0.98)
+            calibrated[i, q] = max(calibrated[i, q], calibrated[i, q - 1])
     for i, row in enumerate(MAT_LINES):
         prog, prog_l, reg, reg_l, proj, proj_l, lig, lig_l, type_l, share = row
         lf_ligne = round(lf_total * share, 3)

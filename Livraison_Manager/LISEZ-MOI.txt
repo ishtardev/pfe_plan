@@ -1,0 +1,32 @@
+LIVRAISON
+=========
+
+Mémoire de fin d'études — Master Finance, Actuariat et Data Science
+Auteur : ABBARI Fatima Ezzahraa
+Encadrant professionnel : M. Iliass Zabaratou
+Encadrant académique : Pr. Mohamed Dakkon
+
+Contenu
+-------
+1. Rapport.pdf
+   Mémoire complet (cinq chapitres + introduction et conclusion).
+
+2. Dashboard_PowerBI.pbix
+   Tableau de bord interactif Power BI à deux pages :
+   - Page 1 : synthèse prédictive et exploration par ligne (KPI,
+     prévisions T4 2025 par catégorie, table de synthèse, filtres
+     programme et région).
+   - Page 2 : détection d'anomalies et contexte historique (table
+     des lignes signalées avec z-scores, trajectoires T2 sur 2020-2025).
+
+3. Donnees_lignes_budgetaires.xlsx
+   Jeu de données consolidé utilisé par le tableau de bord :
+   nomenclature des lignes budgétaires, dotations, taux d'exécution
+   trimestriels (2020-2025), prévisions T4 2025 et signaux d'alerte.
+
+Comment ouvrir le dashboard
+---------------------------
+1. Installer Power BI Desktop (gratuit, Microsoft Store).
+2. Ouvrir Dashboard_PowerBI.pbix.
+3. Si Power BI demande de réactualiser la source, pointer vers
+   Donnees_lignes_budgetaires.xlsx.

@@ -199,7 +199,7 @@ C'est au sein de cette direction, et plus pr\'ecis\'ement dans la \textbf{Divisi
 
     \item \textbf{\'Elaboration des programmes contractuels et suivi de leur ex\'ecution}~: mise en \oe{}uvre des engagements contractualis\'es avec le MEF, pilotage des programmes d'investissement pluriannuels et reporting p\'eriodique sur l'avancement physique et financier.
 
-    \item \textbf{D\'eclinaison financi\`ere des projets, suivi des conventions et projets soutenus, et coordination avec les intervenants du domaine financier}~: gestion des partenariats, suivi des conventions de financement et articulation avec les bailleurs de fonds institutionnels.
+    \item \textbf{Pilotage financier des projets et coordination avec les partenaires institutionnels}~: gestion des partenariats, suivi des conventions de financement et articulation avec les bailleurs de fonds institutionnels.
 
     \item \textbf{Pr\'evision, suivi et \'evaluation de l'ex\'ecution budg\'etaire, et accompagnement des services d\'econcentr\'es} en mati\`ere financi\`ere et comptable~: c'est la mission \textit{cardinale} au regard de notre recherche. Elle implique la production de pr\'evisions de taux d'ex\'ecution \`a horizon mensuel et trimestriel, le suivi des \'ecarts entre cr\'edits ouverts et cr\'edits consomm\'es, et le conseil proactif aux ordonnateurs secondaires sur les risques de sous-ex\'ecution ou de d\'epassement.
 
@@ -249,10 +249,10 @@ Pour r\'epondre \`a ces enjeux, ce m\'emoire poursuit trois objectifs articul\'e
     Collecter, nettoyer et structurer les rapports trimestriels d'ex\'ecution budg\'etaire publi\'es par la Tr\'esorerie G\'en\'erale du Royaume (TGR) sur la p\'eriode 2020--2025 (24~observations), compl\'et\'es par les morasses annuelles extraites du portail \texttt{lof.finances.gov.ma}~; analyser les propri\'et\'es statistiques des s\'eries reconstitu\'ees (stationnarit\'e, saisonnalit\'e, effet COVID-19).
 
     \item \textbf{D\'evelopper et \'evaluer des mod\`eles de pr\'evision du taux d'ex\'ecution~:}
-    Construire, calibrer et \'evaluer deux mod\`eles ML (Lasso et XGBoost) ainsi que deux benchmarks na\"\i fs (lag-4 et moyenne historique) selon un protocole de validation walk-forward \`a fen\^etre expansive~; mesurer leurs performances relatives via des m\'etriques standardis\'ees (RMSE, MAE, MAPE)~; analyser ce que ces r\'esultats r\'ev\`elent sur la structure des d\'epenses du minist\`ere de la Justice.
+    Construire, calibrer et \'evaluer plusieurs mod\`eles, comprenant une r\'egression lin\'eaire r\'egularis\'ee (Lasso, puis Ridge apr\`es validation) et un algorithme de gradient boosting (XGBoost), ainsi que deux benchmarks na\"\i fs (d\'ecalage annuel et moyenne historique), selon un protocole de validation \textit{walk-forward} \`a fen\^etre expansive~; mesurer leurs performances relatives via des m\'etriques standardis\'ees (RMSE, MAE, MAPE)~; analyser ce que ces r\'esultats r\'ev\`elent sur la structure des d\'epenses du minist\`ere de la Justice.
 
-    \item \textbf{Concevoir et impl\'ementer un syst\`eme d'aide \`a la d\'ecision bas\'e sur l'IA~:}
-    D\'evelopper un prototype op\'erationnel (tableau de bord interactif, syst\`eme d'alertes par ligne budg\'etaire, estimation du risque de non-ex\'ecution [VaR budg\'etaire]) illustrant comment les mod\`eles ML peuvent \^etre int\'egr\'es dans le dispositif de contr\'ole de gestion du minist\`ere conform\'ement au D\'ecret n\textsuperscript{o}~2-22-580~; formuler une feuille de route concr\`ete pour l'int\'egration progressive de ces outils.
+    \item \textbf{Concevoir et impl\'ementer un syst\`eme d'aide \`a la d\'ecision op\'erationnel~:}
+    D\'evelopper un tableau de bord interactif sous Power BI int\'egrant les pr\'evisions T4 ligne par ligne et un module de d\'etection d'anomalies fond\'e sur le score~$z$ du taux T2, illustrant comment les mod\`eles pr\'edictifs peuvent \^etre mobilis\'es au service du pilotage budg\'etaire courant et formuler des recommandations concr\`etes pour leur appropriation par les \'equipes de la Direction du Budget.
 \end{itemize}
 
 %----------------------------------------------------------------

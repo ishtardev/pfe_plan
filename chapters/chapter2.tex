@@ -119,7 +119,7 @@ Chaque programme se d\'efinit selon trois dimensions \citep{MEF2015b}~:
 \begin{itemize}
     \item \textbf{Dimension budg\'etaire}~: le programme correspond \`a une enveloppe de cr\'edits consacr\'ee \`a une politique publique. C'est \`a ce niveau que s'op\`ere la \textit{fongibilit\'e asym\'etrique}~: les gestionnaires peuvent red\'eployer des cr\'edits \`a l'int\'erieur d'un m\^eme programme, \`a l'exception des cr\'edits de personnel \citep{Abdelali2019}.
 
-    \item \textbf{Dimension man\'ageriale}~: un responsable de programme, d\'esign\'e par le ministre, est charg\'e de d\'efinir les objectifs, piloter la mise en \oe{}uvre et rendre compte des r\'esultats. Il constitue le sommet d'une pyramide de pilotage couvrant les niveaux central et d\'econcentr\'e.
+    \item \textbf{Dimension man\'ageriale}~: chaque programme est plac\'e sous la responsabilit\'e d'un responsable de programme, charg\'e de d\'efinir les objectifs, de piloter la mise en \oe{}uvre et de rendre compte des r\'esultats. Cette responsabilit\'e peut \^etre port\'ee par une personne ou par une \'equipe d\'edi\'ee, et s'inscrit au sommet d'une pyramide de pilotage couvrant les niveaux central et d\'econcentr\'e.
 
     \item \textbf{Dimension performance}~: les objectifs et indicateurs du programme sont pr\'esent\'es dans le \textbf{Projet de Performance (PdP)}, transmis au Parlement en accompagnement du PLF. La reddition de comptes s'effectue \`a travers le \textbf{Rapport Annuel de Performance (RAP)}, publi\'e avec le projet de loi de r\`eglement.
 \end{itemize}
@@ -169,7 +169,7 @@ Le \textbf{cr\'edit de paiement (CP)} repr\'esente la limite sup\'erieure des d\
 
 Le cycle complet de la d\'epense publique comprend quatre phases r\'eglementaires, telles que d\'efinies par le D\'ecret royal n\textsuperscript{o}~330-66 portant R\`eglement G\'en\'eral de Comptabilit\'e Publique (RGCP) \citep{RGCP1967}. Ces phases s'organisent en deux volets distincts selon le principe fondamental de s\'eparation des fonctions d'ordonnateur et de comptable public.
 
-\paragraph{La phase administrative : du ressort de l'ordonnateur.}
+\paragraph{La phase administrative~: du ressort de l'ordonnateur~:}
 
 \begin{enumerate}
     \item \textbf{L'engagement}~: acte par lequel l'organisme public cr\'ee ou constate une obligation de nature \`a entra\^iner une charge. C'est la d\'ecision initiale qui pr\'el\`eve une partie des cr\'edits budg\'etaires en faveur d'un cr\'eancier~;
@@ -177,7 +177,7 @@ Le cycle complet de la d\'epense publique comprend quatre phases r\'eglementaire
     \item \textbf{L'ordonnancement}~: acte administratif donnant l'ordre de payer la dette. La liquidation \'etablit la dette~; l'ordonnancement lui conf\`ere un caract\`ere ex\'ecutoire.
 \end{enumerate}
 
-\paragraph{La phase comptable : du ressort du comptable public (TGR).}
+\paragraph{La phase comptable~: du ressort du comptable public (TGR)~:}
 
 \begin{enumerate}
     \setcounter{enumi}{3}
@@ -268,9 +268,9 @@ Les insuffisances diagnostiqu\'ees dessinent un cahier des charges pr\'ecis pour
 Les approches d'intelligence artificielle offrent des r\'eponses adapt\'ees \`a ces d\'efis, \`a condition d'\^etre s\'electionn\'ees en tenant compte des contraintes sp\'ecifiques du secteur public~: un mod\`ele qui pr\'edit mieux mais ne peut pas \^etre expliqu\'e est inutile dans ce contexte. Quatre mod\`eles seront \'evalu\'es au chapitre~3, selon un double crit\`ere de pr\'ecision et d'interpr\'etabilit\'e~:
 
 \begin{itemize}
-    \item Les \textbf{benchmarks na\"\i fs} (moyenne historique et lag-4)~: des r\'ef\'erences simples sans apprentissage statistique, qui fixent la barre minimale que tout mod\`ele ML doit d\'epasser pour justifier sa complexit\'e.
+    \item Les \textbf{benchmarks na\"\i fs} (moyenne historique et d\'ecalage annuel)~: des r\'ef\'erences simples sans apprentissage statistique, qui fixent la barre minimale que tout mod\`ele ML doit d\'epasser pour justifier sa complexit\'e.
 
-    \item La \textbf{r\'egression Lasso}~: mod\`ele lin\'eaire p\'enalis\'e, particulièrement adapt\'e aux d\'epenses de mat\'eriel o\`u les relations sont relativement stables et o\`u la parcimonie favorise l'interpr\'etabilit\'e.
+    \item La \textbf{r\'egression lin\'eaire r\'egularis\'ee} (Lasso, puis Ridge apr\`es validation)~: mod\`ele lin\'eaire p\'enalis\'e, particuli\`erement adapt\'e aux d\'epenses de mat\'eriel o\`u les relations sont relativement stables et o\`u la parcimonie favorise l'interpr\'etabilit\'e. La p\'enalit\'e $L_1$ du Lasso a d'abord \'et\'e retenue pour ses propri\'et\'es de s\'election automatique de variables~; l'analyse post-validation a conduit \`a lui substituer une p\'enalit\'e $L_2$ (Ridge), plus stable sur les configurations \`a faible effectif (cf.~\S4.5.5).
 
     \item \textbf{XGBoost} (gradient boosting par arbres)~: capable de capturer des relations non lin\'eaires et des effets de seuil, particulièrement performant sur les d\'epenses d'investissement \`a forte variabilit\'e.
 \end{itemize}

@@ -13,34 +13,34 @@ outils de Machine Learning retenus pour y répondre, en expliquant à chaque ét
 \textit{pourquoi} ces outils ont été choisis, comment ils fonctionnent, et quelles
 précautions ont été prises pour garantir la fiabilité des résultats.
 
-La première section pose le cadre conceptuel du ML et son positionnement par rapport
-aux approches classiques. La deuxième section développe la théorie de la généralisation
-et le compromis biais-variance. La troisième présente les quatre modèles évalués.
-La quatrième traite d'un enjeu technique central~: comment s'assurer qu'un modèle
-prédit vraiment l'avenir, et non qu'il «~triche~» en regardant des données futures.
+La première section expose les défis spécifiques de la prévision budgétaire.
+La deuxième section développe les fondamentaux de l'apprentissage supervisé et du 
+compromis biais-variance. La troisième présente les quatre modèles retenus.
+La quatrième traite de la validation rigoureuse et de la prévention de la fuite de données.
 
 %================================================================
 \phantomsection
-\subsection*{3.1 \quad Cadre conceptuel du Machine Learning en prévision budgétaire}
-\addcontentsline{toc}{subsection}{3.1 Cadre conceptuel du Machine Learning en prévision budgétaire}
+\subsection*{3.1 \quad Prévision budgétaire}
+\addcontentsline{toc}{subsection}{3.1 Prévision budgétaire}
 %================================================================
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.1.1 \quad Positionnement méthodologique}
-\addcontentsline{toc}{subsubsection}{3.1.1 Positionnement méthodologique}
+\subsubsection*{3.1.1 \quad Les défis spécifiques}
+\addcontentsline{toc}{subsubsection}{3.1.1 Les défis spécifiques}
 %----------------------------------------------------------------
 
 \paragraph{Définition et principe~:}
 
-Le \textbf{Machine Learning} (ML) est une branche de l'intelligence artificielle
-qui dote les systèmes informatiques de la capacité d'apprendre automatiquement
-à partir de données, sans que chaque règle de décision soit codée explicitement
-par un expert. L'idée fondamentale est la suivante~: plutôt que de définir manuellement
-des règles (par exemple \textit{«~si le taux de réalisation en juin dépasse 40\,\%,
-alors la ligne sera satisfaisante en fin d'année~»}), on soumet à l'algorithme un ensemble
-d'exemples historiques dont on connaît l'issue, et il en déduit lui-même les
-régularités statistiques sous-jacentes.
+Le \textbf{Machine Learning} (ML) constitue une branche de l'intelligence artificielle
+qui dote les systèmes informatiques d'une capacité d'apprentissage automatique
+à partir des données, sans qu'une codification explicite des règles de décision
+par un expert ne soit nécessaire. Son principe directeur s'oppose à l'approche
+déterministe consistant à spécifier les règles a priori (par exemple~: \textit{«~si
+le taux de réalisation en juin dépasse 40\,\%, alors la ligne sera satisfaisante en fin
+d'année~»})~: l'algorithme se voit soumettre un ensemble d'exemples historiques dont
+l'issue est connue, à partir desquels il infert lui-même les régularités statistiques
+sous-jacentes.
 
 Cette capacité est particulièrement précieuse pour la prévision budgétaire~: les
 déterminants de l'exécution d'une ligne dépendent de facteurs nombreux et
@@ -120,7 +120,12 @@ pénalise davantage les grandes erreurs de prédiction.
 
 \paragraph{Comment se déroule un projet de Machine Learning~?}
 
-Tout projet ML suit les mêmes étapes, de la collecte des données au déploiement opérationnel. Le cycle ci-dessous est décrit dans le contexte de notre application~:
+Un projet de Machine Learning s'inscrit dans un cycle méthodologique structuré, allant
+de la collecte des données à leur intégration opérationnelle. Bien que présenté de
+manière séquentielle, il convient de souligner d'emblée qu'il s'agit d'un processus
+fondamentalement itératif, dans lequel les résultats de chaque phase informent en retour
+les décisions prises lors des phases antérieures. Dans le contexte du présent travail,
+ce cycle se décline selon les étapes suivantes~:
 
 \begin{enumerate}
     \item \textbf{Collecte des données}~: rassembler des données fiables et
@@ -133,7 +138,7 @@ Tout projet ML suit les mêmes étapes, de la collecte des données au déploiem
     l'encodage des identifiants catégoriels (programme, région).
     \item \textbf{Choix de l'algorithme}~: sélectionner le type de modèle adapté
     au problème. Pour une prévision sur données tabulaires avec historique court,
-    Lasso et XGBoost ont été retenus (voir section~3.3).
+    Ridge et XGBoost ont été retenus (voir section~3.3).
     \item \textbf{Entraînement du modèle}~: présenter les exemples historiques
     à l'algorithme. Celui-ci ajuste ses paramètres internes pour minimiser l'écart
     entre ses prédictions et les valeurs réelles, selon la formule ci-dessus.
@@ -164,8 +169,8 @@ les problèmes de fuite de données décrits en section~3.4.
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.1.2 \quad Apports du Machine Learning dans les finances publiques}
-\addcontentsline{toc}{subsubsection}{3.1.2 Apports du Machine Learning dans les finances publiques}
+\subsubsection*{3.1.2 \quad Pourquoi le Machine Learning}
+\addcontentsline{toc}{subsubsection}{3.1.2 Pourquoi le Machine Learning}
 %----------------------------------------------------------------
 
 La pr\'evision des taux d'ex\'ecution budg\'etaire pr\'esente trois caract\'eristiques
@@ -189,16 +194,16 @@ l'avance.
 
 \paragraph{Int\'egration des variables contextuelles~:}
 
-La capacit\'e d'ex\'ecution d'une ligne d\'epend de nombreux facteurs
-contextuels~: la cat\'egorie budg\'etaire de la ligne (Investissement ou
-Fonctionnement selon la nature de la d\'epense), le programme de rattachement
-(Soutien et pilotage, Performance de l'administration judiciaire, Modernisation
-du syst\`eme judiciaire et juridique, ou Renforcement des droits et des
-libert\'es), la r\'egion de rattachement, la part de la ligne dans le budget
-total, les ann\'ees pr\'ec\'edentes de lignes similaires. Les
-algorithmes ML absorbent toutes ces informations simultan\'ement et apprennent
-automatiquement \`a pond\'erer leur importance relative selon le type de d\'epense
-et l'horizon de pr\'evision.
+La capacit\'e d'ex\'ecution d'une ligne budg\'etaire est tributaire d'une multiplicit\'e
+de facteurs contextuels~: la cat\'egorie budg\'etaire (Investissement ou Fonctionnement
+selon la nature de la d\'epense), le programme de rattachement (Soutien et pilotage,
+Performance de l'administration judiciaire, Modernisation du syst\`eme judiciaire et
+juridique, ou Renforcement des droits et des libert\'es), la localisation r\'egionale,
+la part relative de la ligne dans le budget global, ou encore les profils historiques
+de lignes comparables. Les algorithmes ML se distinguent pr\'ecis\'ement par leur capacit\'e
+\`a int\'egrer simultan\'ement l'ensemble de ces dimensions et \`a \'etablir, de mani\`ere
+automatis\'ee, le poids relatif de chacune d'entre elles selon le type de d\'epense et
+l'horizon de pr\'evision consid\'er\'e.
 
 \paragraph{Mutualisation de l'information entre lignes budg\'etaires~:}
 
@@ -223,12 +228,12 @@ Le tableau suivant synth\'etise ces propri\'et\'es~:
 \begin{tabular}{lll}
 \hline
 \textbf{Propri\'et\'e} & \textbf{M\'ethodes classiques}
-& \textbf{ML (Lasso / XGBoost)} \\
+& \textbf{ML (Ridge / XGBoost)} \\
 \hline
-Non-lin\'earit\'es et effets de seuil & Non & Oui \\
-Variables contextuelles multiples & Limit\'e & Naturellement int\'egr\'ees \\
-Courtes s\'eries par ligne & Fragile & Robuste (mutualisation) \\
-Interpr\'etabilit\'e & Coefficients & Coefficients (Lasso), importance (XGB) \\
+Non-linéarités et effets de seuil & Non & Oui \\
+Variables contextuelles multiples & Limité & Naturellement intégrées \\
+Courtes séries par ligne & Fragile & Robuste (mutualisation) \\
+Interprétabilité & Coefficients & Coefficients (Ridge), importance (XGB) \\
 \hline
 \end{tabular}
 \end{table}
@@ -264,14 +269,14 @@ présentés en section~3.1.2.
 
 %================================================================
 \phantomsection
-\subsection*{3.2 \quad Théorie de la généralisation en apprentissage supervisé}
-\addcontentsline{toc}{subsection}{3.2 Théorie de la généralisation en apprentissage supervisé}
+\subsection*{3.2 \quad Apprentissage supervisé}
+\addcontentsline{toc}{subsection}{3.2 Apprentissage supervisé}
 %================================================================
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.2.1 \quad Problématique de la généralisation}
-\addcontentsline{toc}{subsubsection}{3.2.1 Problématique de la généralisation}
+\subsubsection*{3.2.1 \quad Généralisation}
+\addcontentsline{toc}{subsubsection}{3.2.1 Généralisation}
 %----------------------------------------------------------------
 
 Un modèle ML n'a de valeur que s'il prédit correctement des situations qu'il n'a
@@ -290,8 +295,8 @@ Cet équilibre est formalisé par le compromis biais-variance.
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.2.2 \quad Compromis biais--variance}
-\addcontentsline{toc}{subsubsection}{3.2.2 Compromis biais--variance}
+\subsubsection*{3.2.2 \quad Le compromis biais-variance}
+\addcontentsline{toc}{subsubsection}{3.2.2 Le compromis biais-variance}
 %----------------------------------------------------------------
 
 L'erreur totale d'un modèle peut toujours se décomposer en trois termes~:
@@ -335,8 +340,8 @@ MAE et MAPE sont présentés en complément dans les tableaux du chapitre~4.
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.2.3 \quad Surapprentissage et robustesse des modèles}
-\addcontentsline{toc}{subsubsection}{3.2.3 Surapprentissage et robustesse des modèles}
+\subsubsection*{3.2.3 \quad Surapprentissage et robustesse}
+\addcontentsline{toc}{subsubsection}{3.2.3 Surapprentissage et robustesse}
 %----------------------------------------------------------------
 
 Avec seulement 5 à 6 années d'historique par ligne, un modèle très complexe risque
@@ -371,8 +376,8 @@ atteignable~:
 
 %================================================================
 \phantomsection
-\subsection*{3.3 \quad Modèles de prévision retenus}
-\addcontentsline{toc}{subsection}{3.3 Modèles de prévision retenus}
+\subsection*{3.3 \quad Les modèles retenus}
+\addcontentsline{toc}{subsection}{3.3 Les modèles retenus}
 %================================================================
 
 Quatre modèles ont été évalués dans ce travail~: deux \textbf{benchmarks naïfs}
@@ -388,15 +393,16 @@ coûteux à maintenir n'a pas de valeur opérationnelle).
 \addcontentsline{toc}{subsubsection}{3.3.1 Modèles de référence (benchmarks naïfs)}
 %----------------------------------------------------------------
 
-Avant tout modèle sophistiqué, il est indispensable de définir des références simples~:
-des prévisions que n'importe quel gestionnaire pourrait produire sans algorithme, et
-que tout modèle ML doit surpasser pour justifier sa complexité supplémentaire.
+Avant l'introduction de tout modèle sophistiqué, il convient d'établir des références
+méthodologiques simples~: des prévisions qu'un gestionnaire pourrait produire sans recours
+à des techniques avancées, et qui constituent dès lors la borne minimale que tout modèle
+de Machine Learning se doit de surpasser pour justifier sa complexité additionnelle.
 
-\paragraph{Benchmark 1~: Moyenne historique.}
+\paragraph{Benchmark 1~: Moyenne historique~:}
 
-La prévision la plus simple consiste à regarder comment une ligne s'est comportée
-par le passé et à répéter ce niveau~: si une ligne a réalisé en moyenne 82\,\% de
-son budget lors des cinq dernières années, on prédit 82\,\% pour l'année en cours.
+Le benchmark le plus élémentaire repose sur l'extrapolation directe de la performance
+historique~: si une ligne a réalisé en moyenne 82\,\% de son enveloppe annuelle au cours
+des cinq derniers exercices, on projette ce même taux d'exécution pour l'année en cours.
 
 $$\hat{y}_i = \frac{1}{N} \sum_{t=1}^{N} y_{i,t}$$
 
@@ -406,26 +412,28 @@ Ce benchmark capture la \textbf{persistance structurelle} du taux d'exécution~:
 certaines lignes sont structurellement bien exécutées, d'autres chroniquement
 sous-exécutées. Ignorer cet historique serait une erreur.
 
-\paragraph{Benchmark 2~: Naïf saisonnier lag-4.}
+\paragraph{Benchmark 2~: Naïf saisonnier lag-4~:}
 
-Une variante encore plus simple~: prévoir pour cette année exactement ce qui s'est
-passé l'an dernier.
+Une variante alternative consiste à projeter, pour l'année courante, le taux d'exécution
+exactement réalisé lors de l'exercice antérieur.
 
 $$\hat{y}_i = y_{i,\, Y-1}$$
 
 \noindent\small\textit{où $y_{i,\, Y-1}$ est le taux d'exécution réel de la ligne $i$ l'année précédente.}\normalsize
 
-Ce benchmark est souvent difficile à battre, car il capte implicitement les tendances
-récentes et l'inertie institutionnelle. Un modèle ML qui ne fait pas mieux qu'un
-simple «~copier-coller de l'an dernier~» n'apporte aucune valeur ajoutée.
+Ce benchmark s'avère souvent difficile à surpasser en pratique, dans la mesure où il
+capture implicitement les phénomènes d'inertie institutionnelle et les tendances récentes
+de la dynamique budgétaire. Par conséquent, un modèle de Machine Learning incapable de
+produire des prévisions plus fiables que cette simple reconduction n'apporte aucune
+valeur ajoutée opérationnelle.
 
 Ces deux benchmarks constituent la \textbf{barre minimale} que les modèles ML doivent
 franchir pour justifier leur déploiement.
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.3.2 \quad Régression régularisée (Lasso)}
-\addcontentsline{toc}{subsubsection}{3.3.2 Régression régularisée (Lasso)}
+\subsubsection*{3.3.2 \quad Ridge (régularisation)}
+\addcontentsline{toc}{subsubsection}{3.3.2 Ridge (régularisation)}
 %----------------------------------------------------------------
 
 \paragraph{Principe en langage clair~:}
@@ -434,30 +442,41 @@ La régression linéaire classique cherche la combinaison de variables qui préd
 mieux le taux final~: «~le taux final vaut approximativement $a$ fois le taux T2,
 plus $b$ fois la part budgétaire, plus une constante~». Le problème~: avec beaucoup
 de variables et peu d'observations, le modèle peut attribuer des coefficients
-aberrants à des variables peu informatives, ce qui nuit à la généralistion.
+aberrants à des variables peu informatives, ce qui nuit à la généralisation.
 
-Le \textbf{Lasso} (Least Absolute Shrinkage and Selection Operator) ajoute une
-contrainte~: les coefficients trop grands sont pénalisés. L'effet est double~:
-les variables peu utiles se voient attribuer un coefficient exactement égal à zéro
-(elles sont éliminées), et les variables retenues ont des coefficients plus stables.
+Le \textbf{Ridge} (Tikhonov regularization) ajoute une contrainte~: les coefficients
+trop grands sont pénalisés. Contrairement au Lasso qui force certains coefficients
+à zéro, Ridge réduit progressivement tous les coefficients vers zéro sans les
+éliminer complètement. Cela produit un modèle plus stable et robuste, particulièrement
+utile en présence de données avec outliers.
 
-$$\min_{\beta_1,\ldots,\beta_p} \;\; \underbrace{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}_{\text{erreur de pr\'ediction}} \;+\; \lambda \underbrace{\sum_{j=1}^{p}|\beta_j|}_{\text{p\'enalit\'e sur les coefficients}}$$
+$$\min_{\beta_1,\ldots,\beta_p} \;\; \underbrace{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}_{\text{erreur de prédiction}} \;+\; \lambda \underbrace{\sum_{j=1}^{p}\beta_j^2}_{\text{pénalité L2 sur les coefficients}}$$
 
-\noindent\small\textit{Les $\beta_j$ sont les coefficients du mod\`ele. $\lambda$ est choisi par validation crois\'ee.}\normalsize
+\noindent\small\textit{Les $\beta_j$ sont les coefficients du modèle. $\lambda$ est choisi par validation croisée.}\normalsize
 
 Le paramètre $\lambda$ contrôle l'intensité de cette contrainte~: plus $\lambda$ est
-grand, plus le modèle est parcimonieux. Sa valeur est choisie automatiquement par
+grand, plus les coefficients sont réduits. Sa valeur est choisie automatiquement par
 validation croisée (voir section~3.4).
 
-\paragraph{Pourquoi Lasso pour les dépenses de matériel~?}
+\paragraph{Pourquoi Ridge pour les dépenses de matériel~?}
 
 Les dépenses de matériel et dépenses diverses ont un profil d'exécution
 \textbf{régulier et prévisible}, avec peu de variation d'une année à l'autre. Dans
-ce contexte, l'hypothèse de linéarité est raisonnable, et la parcimonie du Lasso
-limite le surapprentissage. De plus, ses résultats sont directement interprétables~:
-un gestionnaire peut comprendre qu'«~une hausse d'un point de pourcentage du taux
-au deuxième trimestre se traduit par une hausse de $\beta_{T2}$ points du taux
-annuel final~».
+ce contexte, l'hypothèse de linéarité est raisonnable. Ridge est particulièrement
+adapté car (1) il limite le surapprentissage sur peu de données, (2) il conserve
+tous les prédicteurs même faibles, ce qui améliore la stabilité face aux outliers,
+et (3) ses résultats restent interprétables~: un gestionnaire peut comprendre qu'
+«~une hausse d'un point de pourcentage du taux au deuxième trimestre se traduit par
+une hausse de $\beta_{T2}$ points du taux annuel final~».
+
+\textbf{Note sur la normalisation~:} Les variables d'entrée doivent être normalisées avant
+d'être soumises à Ridge. Deux stratégies sont possibles~: le \textit{StandardScaler},
+fondé sur la moyenne et l'écart-type (optimal pour distributions gaussiennes, sensible
+aux valeurs extrêmes), ou le \textit{RobustScaler}, fondé sur la médiane et l'intervalle
+interquartile (plus robuste en présence d'outliers). Le choix dépend de la structure
+des données. Dans ce travail, le \textit{RobustScaler} s'est révélé supérieur sur
+les dépenses de matériel car il neutralise les anomalies de courte durée (voir
+section 4.5.5 pour les détails d'optimisation post-validation).
 
 %----------------------------------------------------------------
 \phantomsection
@@ -467,12 +486,13 @@ annuel final~».
 
 \paragraph{Principe en langage clair~:}
 
-Imaginez un groupe d'experts qui travaillent en équipe pour faire une prévision.
-Le premier expert fait une estimation rapide. Le second examine les cas où le premier
-s'est trompé et tente de corriger ces erreurs. Le troisième corrige les erreurs
-restantes du duo précédent, et ainsi de suite. À la fin, toutes les corrections
-s'additionnent pour produire une prévision bien meilleure que celle du premier expert
-seul. C'est exactement le principe du \textbf{gradient boosting}.
+Le \textbf{gradient boosting} repose sur un principe de correction itérative des erreurs
+mis en œuvre par un ensemble séquentiel de modèles faibles~: un premier modèle produit
+une estimation initiale~; chaque modèle subséquent se concentre spécifiquement sur la
+correction des résidus engendrés par les précédents. Cette approche cumulative, par laquelle
+l'ensemble des corrections successives s'agrègent, conduit à une prévision globale
+sensiblement plus fidèle que celle qu'aurait pu fournir un modèle unique considéré
+isolément.
 
 Dans XGBoost, chaque «~expert~» est un \textbf{arbre de décision}~: une suite de
 questions simples du type «~est-ce que le taux T2 est supérieur à 45\,\%~?~» qui
@@ -493,11 +513,14 @@ sur les feuilles, et sous-échantillonnage aléatoire des données à chaque ét
 
 \paragraph{Pourquoi XGBoost pour les dépenses d'investissement~?}
 
-Les dépenses d'investissement présentent des \textbf{non-linéarités fortes}~: une
-ligne à 5\,\% au deuxième trimestre avec un programme d'investissement infrastructure
-peut tout à fait atteindre 80\,\% en fin d'année grâce à des décaissements massifs
-en fin d'exercice, ce qu'un modèle linéaire ne peut pas prédire. XGBoost est
-particulièrement adapté à ces situations car~:
+Le choix de XGBoost pour les dépenses d'investissement se fonde sur une observation
+empirique déterminante~: les dynamiques d'exécution de cette catégorie présentent des
+\textbf{non-linéarités prononcées}. À titre d'illustration, une ligne dont le taux
+d'exécution s'établit à 5\,\% au deuxième trimestre, rattachée à un programme
+d'investissement en infrastructure, peut atteindre 80\,\% en clôture d'exercice grâce
+à des décaissements massifs concentrés en fin d'année --- phénomène qu'un modèle
+linéaire ne saurait anticiper. XGBoost s'avère particulièrement adapté à ce type de
+configuration, et ce pour les raisons suivantes~:
 
 \begin{itemize}
     \item Il capture naturellement les \textbf{effets de seuil et les interactions}~:
@@ -568,6 +591,28 @@ $$\hat{y}_i = \frac{1}{B} \sum_{b=1}^{B} \underbrace{T_b(x_i)}_{\text{r\'eponse 
 Cette indépendance réduit le risque de surapprentissage, mais elle a un coût~: les
 arbres ne se corrigent pas mutuellement, ce qui les rend moins précis individuellement.
 
+\paragraph{Pourquoi Lasso a été écarté~:}
+
+Lasso (Least Absolute Shrinkage and Selection Operator) a initialement été considéré
+pour prédire les dépenses de matériel, car il offre une sélection automatique des
+prédicteurs. Cependant, la validation walk-forward a révélé ses limitations~:
+
+\begin{enumerate}
+    \item \textbf{Sensibilité aux outliers}~: Le mécanisme de sélection (force
+    certains coefficients à zéro) peut ètre fragilisé par quelques valeurs extrêmes,
+    conduisant à des modèles instables d'une année à l'autre.
+    \item \textbf{Ridge plus stable}~: Ridge (Régularisation L2) réduit progressivement
+    tous les coefficients sans les éliminer, produisant une meilleure stabilité
+    face aux outliers par normalisation avec RobustScaler.
+    \item \textbf{Performance empirique}~: Sur les données du ministère de la Justice,
+    Ridge + RobustScaler a surpassé Lasso + StandardScaler de 9,1~points de RMSE
+    (voir section 4.5.5).
+\end{enumerate}
+
+Lasso est néanmoins documenté dans les tableaux de comparaison du chapitre~4 comme
+algorithme initialement testé ; sa évaluation comparative appuie la pertinence du
+choix de Ridge pour ce contexte.
+
 \paragraph{Pourquoi Random Forest a été écarté~:}
 
 Random Forest a été évalué lors de la validation walk-forward (détaillée au
@@ -581,7 +626,7 @@ chapitre~4), mais n'a pas été retenu comme modèle de production, pour trois r
     \item \textbf{Incapacité à extrapoler}~: les arbres de décision ne peuvent pas
     prédire au-delà des valeurs observées pendant l'entraînement. Pour des lignes
     dont les taux 2025 dépassent tous les niveaux historiques, Random Forest plafonne
-    mécaniquement, tandis que XGBoost peut s'ajuster prudemment.
+    méchaniquement, tandis que XGBoost peut s'ajuster prudemment.
     \item \textbf{Parcimonie opérationnelle}~: dans un contexte de déploiement réel,
     retenir le modèle le plus performant par catégorie est préférable à empiler
     plusieurs algorithmes dans un ensemble hybride difficile à expliquer et à maintenir.
@@ -593,8 +638,8 @@ comme point de comparaison ; sa mise en concurrence avec les autres modèles est
 
 %================================================================
 \phantomsection
-\subsection*{3.4 \quad Validation en séries temporelles et fuite de données}
-\addcontentsline{toc}{subsection}{3.4 Validation en séries temporelles et fuite de données}
+\subsection*{3.4 \quad La validation rigoureuse}
+\addcontentsline{toc}{subsection}{3.4 La validation rigoureuse}
 %================================================================
 
 Construire un modèle ML n'est que la moitié du travail. L'autre moitié consiste à
@@ -604,16 +649,18 @@ piège redoutable dans le contexte des séries temporelles.
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.4.1 \quad Spécificités des données temporelles}
-\addcontentsline{toc}{subsubsection}{3.4.1 Spécificités des données temporelles}
+\subsubsection*{3.4.1 \quad Les données temporelles}
+\addcontentsline{toc}{subsubsection}{3.4.1 Les données temporelles}
 %----------------------------------------------------------------
 
-\paragraph{La validation croisée standard~: efficace mais inadaptée ici.}
+\paragraph{La validation croisée standard~: efficace mais inadaptée ici~:}
 
-La méthode classique pour évaluer un modèle ML est la \textbf{validation croisée
-$k$-fold}~: on divise les données en $k$ groupes~; tour à tour, chaque groupe sert
-de test pendant que le modèle s'entraîne sur les autres. La performance finale est
-la moyenne sur tous les groupes.
+La validation croisée en $k$ groupes (\textit{k-fold}) constitue la méthode standard
+d'évaluation des modèles de Machine Learning~: l'ensemble des données est partitionné
+en $k$ sous-ensembles disjoints~; à chaque itération, l'un de ces sous-ensembles est
+réservé au test, tandis que le modèle est entraîné sur les $k-1$ sous-ensembles
+restants. La performance globale est alors estimée par la moyenne des erreurs sur
+l'ensemble des folds.
 
 \begin{table}[h]
 \centering
@@ -629,13 +676,16 @@ Entr. & \textbf{Test} & Entr. & Entr. & Entr. \\
 {\scriptsize Groupe 2 = test~; groupes 1, 3, 4, 5 = entra\^inement}
 \end{table}
 
-Cette méthode est valide quand les observations sont indépendantes. Mais pour des
-données temporelles, elle commet une erreur grave~: en mélangeant aléatoirement les
-années, elle permet au modèle de \textbf{s'entraîner sur le futur pour prédire
-le passé}. Un modèle qui a «~vu~» les données de 2024 pour prédire 2022 ne fait
-pas vraiment de la prévision : il triche.
+Si cette approche demeure valide lorsque les observations satisfont l'hypothèse
+d'indépendance mutuelle, son application à des données temporelles introduit un biais
+méthodologique critique~: la permutation aléatoire des années au sein des groupes de
+validation autorise le modèle à accéder, lors de son entraînement, à des informations
+postérieures à la période qu'il est censé prédire. Autrement dit, un modèle ayant
+«~observé~» les réalisations de 2024 pour prédire celles de 2022 bénéficie d'une
+divulgation implicite d'information temporelle, ce qui invalide dès lors la mesure de
+sa capacité prédictive réelle.
 
-\paragraph{La contrainte fondamentale~: toujours prédire vers l'avant.}
+\paragraph{La contrainte fondamentale~: toujours prédire vers l'avant~:}
 
 Pour les séries temporelles, une règle doit être respectée absolument~: les données
 d'entraînement doivent toujours être antérieures aux données de test. Cela donne
@@ -648,7 +698,8 @@ naissance à des protocoles de validation spécifiques.
 %----------------------------------------------------------------
 
 Le protocole retenu dans ce travail est la \textbf{validation walk-forward à fenêtre
-expansive}~: on simule exactement ce que vivra le gestionnaire en production.
+expansive}, qui reproduit fidèlement le cadre opérationnel auquel se trouvera confronté
+le décideur en conditions réelles. Concrètement~:
 
 \begin{itemize}
     \item Pour prédire l'année 2022, le modèle s'entraîne uniquement sur 2020--2021.
@@ -657,9 +708,12 @@ expansive}~: on simule exactement ce que vivra le gestionnaire en production.
     \item Pour prédire 2025, il s'entraîne sur 2020--2024.
 \end{itemize}
 
-La fenêtre d'entraînement \textit{s'élargit} à chaque fold~: plus on avance dans
-le temps, plus le modèle dispose d'historique. La performance finale est la moyenne
-des erreurs sur les quatre années de test.
+La caractéristique centrale de cette approche réside dans l'élargissement progressif
+de la fenêtre d'entraînement à chaque étape temporelle, reflétant l'accumulation
+naturelle d'expérience historique au fil du temps. Ainsi, plus l'horizon de prévision
+se rapproche du présent, plus le modèle bénéficie d'un volume substantiel de données
+antérieures. La performance globale est in fine estimée en moyennant les erreurs commises
+sur les quatre périodes de test ainsi définies.
 
 \begin{table}[h]
 \centering
@@ -695,8 +749,8 @@ Ce protocole présente trois avantages majeurs~:
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.4.3 \quad Risque de data leakage et implications}
-\addcontentsline{toc}{subsubsection}{3.4.3 Risque de data leakage et implications}
+\subsubsection*{3.4.3 \quad Risque de data leakage}
+\addcontentsline{toc}{subsubsection}{3.4.3 Risque de data leakage}
 %----------------------------------------------------------------
 
 \paragraph{Qu'est-ce que la fuite de données~?}
@@ -707,7 +761,7 @@ disponibles au moment d'une vraie prévision. Le modèle apprend alors des patte
 «~trop faciles~» qui disparaissent en production. Le symptôme est trompeur~: les
 métriques de validation semblent excellentes, mais le modèle déçoit une fois déployé.
 
-\paragraph{Mécanisme 1~: fuite par le protocole de validation.}
+\paragraph{Mécanisme 1~: fuite par le protocole de validation~:}
 
 Si le jeu de test est l'année~2022 mais que le modèle s'entraîne sur des données
 incluant 2023, 2024 et 2025, il «~voit l'avenir~» pendant l'entraînement. La méthode
@@ -716,7 +770,7 @@ elle entraîne sur toutes les autres années y compris les années ultérieures,
 produit des métriques artificiellement optimistes. Le walk-forward élimine ce risque
 par construction.
 
-\paragraph{Mécanisme 2~: fuite par les variables explicatives.}
+\paragraph{Mécanisme 2~: fuite par les variables explicatives~:}
 
 Même avec un bon protocole, la fuite peut s'introduire lors de la construction des
 variables. Exemple typique~: si on calcule «~la moyenne historique des taux T3 de
@@ -727,8 +781,67 @@ n'utiliser que les années strictement antérieures à $Y$.
 
 %----------------------------------------------------------------
 \phantomsection
-\subsubsection*{3.4.4 \quad Conséquences sur l'évaluation des modèles}
-\addcontentsline{toc}{subsubsection}{3.4.4 Conséquences sur l'évaluation des modèles}
+\subsubsection*{3.4.4 \quad Prévision directe vs roulante}
+\addcontentsline{toc}{subsubsection}{3.4.4 Prévision directe vs roulante}
+%----------------------------------------------------------------
+
+\paragraph{Motivation pratique~:}
+
+La validation walk-forward présentée en section~3.4.2 garantit une séparation temporelle
+stricte~: le modèle ne voit jamais d'information future. Cependant, cette approche
+reflète un scénario académique où l'on prédisait à~$t=0$ l'intégralité d'une année
+budgétaire sans aucune donnée intra-annuelle.
+
+En réalité, les gestionnaires budgétaires ne prédisent pas deux ans à l'avance~: ils
+ont besoin de réviser les prévisions en cours d'exécution. Par exemple, à la mi-année
+(T2 écoulé), on dispose déjà des taux d'exécution réels pour T1 et T2, et l'enjeu est
+de prédire le taux final T4. Cette situation est fondamentalement différente, car elle
+combine~:
+\begin{enumerate}
+  \item Une \textbf{fenêtre d'observation}~: données passées réelles (T1, T2)
+  \item Une \textbf{fenêtre de prédiction}~: données futures inconnues (T4)
+  \item Une \textbf{fenêtre intermédiaire}~: T3, potentiellement prédite ou observée
+\end{enumerate}
+
+\paragraph{Deux stratégies de prédiction~:}
+
+\textbf{Approche directe~:} Le modèle reçoit directement T1 et T2 observés comme entrées
+et produit en un seul passage la prédiction de T4 finale. Cette approche suppose que la
+relation $(T1, T2) \to T4$ peut être apprise directement depuis les données historiques,
+sans étape intermédiaire.
+
+\textbf{Approche roulante~:} Le processus de prédiction se décompose en deux étapes
+séquentielles~:
+\begin{enumerate}
+  \item \textbf{Étape 1~:} Prédire T3 à partir de T1 et T2 observés
+  \item \textbf{Étape 2~:} Prédire T4 à partir de T1, T2 observés \textit{et} T3 prédit
+\end{enumerate}
+
+L'approche roulante capture une structure temporelle progressive~: on suppose que T3 est
+informatif pour prédire T4, et que les modèles bénéficient de cette information
+intermédiaire, même si elle est elle-même entachée d'erreur de prédiction.
+
+\paragraph{Implications méthodologiques~:}
+
+Cette distinction revêt une importance capitale pour la conception du système de
+prévision. Alors que la validation walk-forward teste la capacité du modèle à
+généraliser dans le temps, la comparaison directe vs roulante interroge la
+\textbf{structure causale} de la prédiction~: faut-il modéliser la dépendance
+$(T1, T2) \to T4$ de façon monolithique, ou la décomposer en étapes qui reflètent le
+déroulement temporel réel du trimestre~?
+
+Les deux stratégies restent dans le cadre de la validation walk-forward~: aucune
+information de T4 (année de test) ne fuit dans l'entraînement. Cependant, elles
+interrogent comment \textit{structurer} la prédiction lorsqu'on dispose d'information
+partielle en cours d'année. Cette question présente un caractère à la fois théorique
+(quelle est la meilleure approche conceptuellement~?) et pratique (laquelle produit
+des prévisions plus fiables en situation opérationnelle~?). Les résultats empiriques
+figurent au chapitre~4.
+
+%----------------------------------------------------------------
+\phantomsection
+\subsubsection*{3.4.5 \quad Évaluation des modèles}
+\addcontentsline{toc}{subsubsection}{3.4.5 Évaluation des modèles}
 %----------------------------------------------------------------
 
 Le taux de réalisation au troisième trimestre ($T3$, disponible fin septembre) est
@@ -755,11 +868,14 @@ Ce chapitre a établi les fondements sur lesquels repose la démarche empirique
 du mémoire. Le Machine Learning a été justifié face aux approches classiques par sa
 capacité à mutualiser l'information entre lignes, à capturer des non-linéarités, et
 à fonctionner avec peu d'historique individuel. Parmi les quatre modèles évalués,
-Lasso et XGBoost ont été retenus pour leurs performances et leur adéquation au
-contexte opérationnel~; Random Forest a été évalué mais écarté. Enfin, la validation
-walk-forward (section~3.4) a été présentée comme le seul protocole qui simule
-fidèlement les conditions de déploiement réel, en éliminant par construction tout
-risque de fuite temporelle.
+Ridge et XGBoost ont été retenus pour leurs performances et leur adéquation au
+contexte opérationnel~; Lasso et Random Forest ont été évalués mais écartés. Enfin,
+la validation walk-forward (section~3.4.2) a été présentée comme le seul protocole
+qui simule fidèlement les conditions de déploiement réel, en éliminant par
+construction tout risque de fuite temporelle. Une variante pratique a également été
+proposée (section~3.4.4)~: la prévision \textit{directe} vs \textit{roulante}, qui
+capture deux stratégies de prédiction selon que le gestionnaire dispose déjà de
+l'observation de T3 ou non.
 
 Le chapitre suivant décrit la mise en œuvre empirique de ces principes~: construction
 des données, implémentation des folds walk-forward, et résultats comparatifs obtenus
