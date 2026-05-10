@@ -9,7 +9,6 @@
 *.toc
 *.synctex.gz
 *.toc
-*.pdf
 *.dvi
 *.ps
 *.lof
@@ -27,3 +26,10 @@
 *.glg
 *.glo
 *.gls
+*.aux
+*.bbl
+*.out
+*.lof
+*.log
+*.blg
+*.toc
