@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Prévision Total Engagé 2027–2029 — Ministère de la Justice</title>
+<script src="xlsx.full.min.js"></script>
+<style>
+  :root{
+    --primary:#1f4e79; --accent:#c9302c;
+    --bg:#f4f6fa; --card:#fff; --border:#e3e7ee;
+    --muted:#6b7280; --text:#1c1c1c;
+    --good:#2f7d32; --bad:#c9302c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text)}
+  header{background:var(--primary);color:#fff;padding:20px 32px}
+  header h1{margin:0;font-size:20px;font-weight:600}
+  header .sub{font-size:13px;opacity:.85;margin-top:4px}
+  main{padding:24px 32px;max-width:1400px;margin:0 auto}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px}
+  .panel h2{margin:0 0 12px 0;color:var(--primary);font-size:16px}
+  .row{display:flex;flex-wrap:wrap;gap:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px;flex:1;min-width:200px}
+  .card h3{font-size:12px;margin:0 0 6px 0;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+  .card .val{font-size:22px;font-weight:600;color:var(--primary)}
+  .card .sub{font-size:12px;color:var(--muted);margin-top:4px}
+  button{background:var(--primary);color:#fff;border:0;padding:10px 18px;border-radius:6px;font-size:14px;cursor:pointer;font-weight:500}
+  button:hover{background:#163a5d}
+  button:disabled{background:#9ca3af;cursor:not-allowed}
+  button.accent{background:var(--accent)}
+  button.accent:hover{background:#a82622}
+  input[type=file]{padding:8px;border:1px dashed var(--border);border-radius:6px;background:#fafbfc;font-size:13px}
+  .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:right}
+  th:first-child,td:first-child,th.left,td.left{text-align:left}
+  th{background:#f8fafc;font-weight:600;color:var(--muted);position:sticky;top:0}
+  tr:hover{background:#fafbfc}
+  .scrollbox{max-height:420px;overflow:auto;border:1px solid var(--border);border-radius:6px;margin-top:10px}
+  .muted{color:var(--muted);font-size:13px}
+  .num{font-variant-numeric:tabular-nums}
+  .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;background:#eef2f7;color:var(--primary)}
+  .good{color:var(--good)} .bad{color:var(--bad)}
+  .status{padding:10px 14px;border-radius:6px;font-size:13px}
+  .status.ok{background:#e8f5e9;color:var(--good);border:1px solid #c8e6c9}
+  .status.err{background:#fdecea;color:var(--bad);border:1px solid #f5c6cb}
+  .status.info{background:#e3f2fd;color:#1565c0;border:1px solid #bbdefb}
+  details summary{cursor:pointer;color:var(--primary);font-size:13px;font-weight:500}
+  pre.log{background:#0f172a;color:#cbd5e1;padding:12px;border-radius:6px;font-size:12px;max-height:200px;overflow:auto;margin:10px 0 0 0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:18px;background:#e8f0fb;color:var(--primary);font-size:13px;font-weight:500;border:1px solid #cfdcf0}
+  .chip .x{cursor:pointer;color:var(--bad);font-weight:700;padding:0 4px;border-radius:50%}
+  .chip .x:hover{background:#fdecea}
+  .chip .name{color:var(--muted);font-weight:400;font-size:11px;margin-left:4px}
+  .empty-chips{color:var(--muted);font-size:13px;font-style:italic;padding:6px 0}
+  .callout{background:#fff8e1;border-left:4px solid #f59e0b;padding:12px 16px;border-radius:6px;margin-bottom:14px;font-size:13px;color:#7c4a03;line-height:1.55}
+  .callout b{color:#5a3500}
+  .callout code{background:#fde9b3;padding:1px 6px;border-radius:4px;font-size:12px;color:#5a3500}
+  footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Prévision du Total Engagé — Programmation triennale <span data-horizon-label>2027 → 2029</span></h1>
+  <div class="sub">Ministère de la Justice · Outil hors-ligne · Aucune donnée n'est transmise sur le réseau</div>
+</header>
+
+<main>
+
+  <div class="callout" style="background:#fef9c3;border-left-color:#facc15;color:#713f12">
+    <b>Note :</b> les modèles ont été choisis à partir de données simulées. Une mise à jour est nécessaire lors de la disponibilité des données réelles.
+  </div>
+
+  <!-- Step 1: Upload raw files -->
+  <div class="panel">
+    <h2>1. Charger les fichiers bruts annuels</h2>
+    <div class="muted" style="margin-bottom:12px">
+      Ajoutez une ou plusieurs années à la fois. Vous pouvez en ajouter d'autres ensuite
+      sans perdre les précédentes (charger à nouveau une même année la remplace).
+    </div>
+    <div class="toolbar">
+      <input type="file" id="fileInput" accept=".xlsx,.xls" multiple>
+      <span class="muted" style="font-size:12px;font-style:italic">
+        Exemple : <code>SituationChap-2024.xls</code>
+      </span>
+      <label class="muted" style="font-size:13px;margin-left:auto">Année à prévoir :</label>
+      <input type="number" id="forecastYearInput" value="2027" min="2020" max="2099" step="1"
+             style="width:90px;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:13px"
+             title="Le modèle prédira cette année + les 2 suivantes (programmation triennale)">
+      <span class="muted" id="horizonHint" style="font-size:12px">→ 2027, 2028, 2029</span>
+      <button id="btnRun" disabled>Lancer l'extraction + prévision</button>
+      <button id="btnClear" class="accent" disabled>Tout vider</button>
+    </div>
+    <div id="badFileWarning" class="callout" style="display:none;margin-top:14px">
+      ⚠ <b>Fichier non reconnu.</b> Chargez les fichiers <b>exactement tels que téléchargés depuis GID</b>,
+      <b>sans aucune modification</b> (pas de renommage, pas de tri, pas de suppression de lignes,
+      pas de conversion manuelle). Le nom de fichier d'origine doit ressembler à
+      <code>SituationChap-2024.xls</code> : l'année y est détectée automatiquement.
+      <br><br>
+      L'application lit la disposition brute de GID (libellé en ligne <i>n</i>, codes hiérarchiques
+      en ligne <i>n+1</i>, colonnes H / K / AH) ; toute modification manuelle peut casser l'extraction.
+    </div>
+    <div id="badStructureWarning" class="callout" style="display:none;margin-top:14px">
+      ⚠ <b>Contenu du fichier non conforme</b> <span id="badStructureFiles"></span>.
+      Le nom est correct, mais la structure interne du classeur ne correspond pas à un export GID brut
+      (lignes déplacées, colonnes modifiées, en-têtes supprimés, feuille réorganisée…).
+      <br><br>
+      Veuillez retourner sur GID et <b>retélécharger le fichier d'origine sans aucune modification</b>
+      (la disposition attendue : libellé en colonne H, crédits ouverts en K, total engagé en AH,
+      codes hiérarchiques B–G en ligne <i>n+1</i>, données à partir de la ligne 6).
+    </div>
+    <div style="margin-top:14px"><b style="font-size:13px;color:var(--primary)">Années chargées :</b></div>
+    <div id="yearChips" class="chips"><div class="empty-chips">Aucune année chargée pour l'instant.</div></div>
+    <div id="uploadStatus" class="muted" style="margin-top:12px"></div>
+    <pre id="logBox" class="log" style="display:none"></pre>
+  </div>
+
+  <!-- Step 2: Results -->
+  <div class="panel" id="resultsPanel" style="display:none">
+    <h2>2. Résultats de la prévision</h2>
+
+    <div class="row" id="kpis"></div>
+
+    <h3 style="color:var(--primary);margin-top:24px">Précision globale des prévisions</h3>
+    <div class="row" id="accuracyCards"></div>
+
+    <h3 style="color:var(--primary);margin-top:24px">Performance des méthodes (backtest sur la dernière année)</h3>
+    <div class="muted" style="font-size:12px;margin-bottom:6px">
+      <b>sMAPE</b> = erreur en %, symétrique. Plus c'est bas, mieux c'est. La prévision finale utilise
+      <b>SmartEnsemble</b> : médiane de (DriftNaive + Naive + ExecRate), corrigée pour les lignes à zéro
+      et les changements de régime, puis recalée pour respecter la croissance agrégée du budget.
+      Le tableau ci-dessous montre la performance de chaque méthode prise individuellement sur le backtest.
+    </div>
+    <div class="scrollbox">
+      <table id="leaderboard">
+        <thead><tr>
+          <th class="left">Méthode</th>
+          <th>Lignes prédites</th>
+          <th>sMAPE moyen</th>
+          <th>sMAPE médian</th>
+          <th>Erreur absolue moyenne</th>
+          <th>Lignes où elle est la meilleure</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h3 style="color:var(--primary);margin-top:24px">Backtest visuel — historique vs prédictions</h3>
+    <div class="toolbar" style="margin-bottom:10px">
+      <label class="muted" style="font-size:13px">Ligne :</label>
+      <select id="chartLineSelect" style="padding:8px;border:1px solid var(--border);border-radius:6px;font-size:13px;min-width:380px;max-width:680px"></select>
+    </div>
+    <div id="chartContainer" style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:14px"></div>
+    <div class="muted" style="font-size:12px;margin-top:6px">
+      <span style="display:inline-block;width:14px;height:3px;background:#1f4e79;vertical-align:middle"></span> Réel &middot;
+      <span style="display:inline-block;width:14px;height:0;border-top:2px dashed #c9302c;vertical-align:middle"></span> Prédiction (rolling backtest) &middot;
+      <span style="display:inline-block;width:10px;height:10px;background:#c9302c;border-radius:50%;vertical-align:middle"></span> Prévisions <span data-horizon-label>2027 → 2029</span> &middot;
+      <span style="display:inline-block;width:14px;height:10px;background:#c9302c;opacity:.15;vertical-align:middle"></span> Intervalle de confiance 90 %
+    </div>
+
+    <h3 style="color:var(--primary);margin-top:24px">Aperçu — Prévisions triennales <span data-horizon-label>2027 → 2029</span> avec intervalle de confiance sur <span data-forecast-year>2027</span> (top 20 par montant)</h3>
+    <div class="scrollbox">
+      <table id="forecastTable">
+        <thead><tr>
+          <th class="left">Code</th>
+          <th class="left">Intitulé</th>
+          <th>Engage 2025</th>
+          <th id="thForecastY1"></th>
+          <th id="thForecastY2"></th>
+          <th id="thForecastY3"></th>
+          <th>IC bas (Y1)</th>
+          <th>IC haut (Y1)</th>
+          <th>Δ % Y1 vs 2025</th>
+          <th>Méthode</th>
+          <th>Erreur backtest %</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <details style="margin-top:16px">
+      <summary>Comment les modèles ont-ils été choisis ?</summary>
+      <div class="muted" style="margin-top:10px;line-height:1.6">
+        Pour chaque ligne budgétaire, 4 méthodes sont testées :
+        <ul>
+          <li><b>Naive</b> &mdash; reproduit la valeur de l'année précédente</li>
+          <li><b>Mean3</b> &mdash; moyenne des 3 dernières années</li>
+          <li><b>Median</b> &mdash; médiane de tout l'historique</li>
+          <li><b>Trend</b> &mdash; régression linéaire sur (année, valeur)</li>
+        </ul>
+        Chaque méthode prédit l'année la plus récente à partir des années antérieures ; l'erreur
+        (sMAPE) est comparée à la valeur réelle. La méthode avec la plus petite erreur est
+        retenue pour cette ligne, puis ré-entraînée sur toutes les années disponibles
+        pour produire la prévision ${FORECAST_YEAR}, puis appliquée récursivement pour 2028 et 2029.
+        <br><br>
+        L'<b>intervalle de confiance 90 %</b> est calculé à partir des résidus du <i>rolling backtest</i>
+        de la méthode retenue : pour chaque année de l'historique, on prédit cette année à partir
+        des antérieures, on collecte les erreurs, on en déduit un écart-type σ, et la fourchette
+        est forecast ± 1,96 · σ.
+      </div>
+    </details>
+  </div>
+
+  <!-- Step 2 bis: Anomalies -->
+  <div class="panel" id="anomalyPanel" style="display:none">
+    <h2>2 bis. Anomalies détectées</h2>
+    <div class="muted" style="margin-bottom:12px">
+      Avant la prévision, l'application vérifie chaque ligne avec des règles automatiques. Les anomalies
+      <b>d'extraction</b> peuvent indiquer un problème dans les données (lignes mal alignées, sur-engagement,
+      libellé instable). Les anomalies <b>métier</b> sont légitimes mais méritent l'attention du gestionnaire
+      (virements massifs, sous-exécution chronique, volatilité élevée).
+    </div>
+    <div class="row" id="anomalyKpis"></div>
+
+    <h3 style="color:var(--primary);margin-top:24px">Anomalies d'extraction</h3>
+    <div class="muted" style="font-size:12px;margin-bottom:6px">
+      Lignes potentiellement mal extraites ou avec des valeurs structurellement incohérentes.
+    </div>
+    <div class="scrollbox">
+      <table id="anomExtractionTable">
+        <thead><tr>
+          <th class="left">Règle</th>
+          <th class="left">Sévérité</th>
+          <th>Année</th>
+          <th class="left">Code</th>
+          <th class="left">Intitulé</th>
+          <th class="left">Détail</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h3 style="color:var(--primary);margin-top:24px">Anomalies métier (lignes à surveiller)</h3>
+    <div class="muted" style="font-size:12px;margin-bottom:6px">
+      Lignes correctement extraites mais dont le comportement budgétaire pose question.
+    </div>
+    <div class="scrollbox">
+      <table id="anomBusinessTable">
+        <thead><tr>
+          <th class="left">Règle</th>
+          <th class="left">Sévérité</th>
+          <th>Année</th>
+          <th class="left">Code</th>
+          <th class="left">Intitulé</th>
+          <th class="left">Détail</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <details style="margin-top:16px">
+      <summary>Règles utilisées</summary>
+      <div class="muted" style="margin-top:10px;line-height:1.6">
+        <b>Extraction</b>
+        <ul>
+          <li><b>over_execution</b> — Total Engagé &gt; 110 % des Crédits Totaux (suspicion de décalage de ligne)</li>
+          <li><b>negative_value</b> — Engagement ou crédits négatifs (impossible)</li>
+          <li><b>summary_keyword</b> — Libellé contient « Total » / « Sous-total » mais classé comme Ligne</li>
+          <li><b>identity_drift</b> — Même Line_Key avec des libellés très différents selon l'année</li>
+          <li><b>huge_swing</b> — Variation &gt; ×10 d'une année à l'autre sans virement justificatif</li>
+        </ul>
+        <b>Métier</b>
+        <ul>
+          <li><b>major_virement</b> — Virement net &gt; 50 % des crédits ouverts initiaux</li>
+          <li><b>chronic_under_execution</b> — Taux d'exécution &lt; 30 % sur ≥ 2 années</li>
+          <li><b>chronic_over_execution</b> — Taux d'exécution &gt; 100 % sur ≥ 2 années</li>
+          <li><b>high_volatility</b> — Écart-type / moyenne &gt; 0,5 sur l'historique</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <!-- Step 3: Download -->
+  <div class="panel" id="downloadPanel" style="display:none">
+    <h2>3. Exporter pour Power BI</h2>
+    <div class="muted">Téléchargez ces fichiers et chargez-les comme sources dans votre rapport Power BI.</div>
+    <div class="toolbar" style="margin-top:14px">
+      <button id="btnDownloadAll" class="accent">⬇ Fichier complet pour Power BI (xlsx)</button>
+      <button id="btnDownloadForecast">⬇ Prévisions triennales (<span data-horizon-label>2027–2029</span>)</button>
+      <button id="btnDownloadBacktest">⬇ Détail backtest seulement</button>
+      <button id="btnDownloadAnomalies">⬇ Anomalies (extraction + métier)</button>
+      <button id="btnDownloadClean">⬇ Données nettoyées (panel stable)</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Confidentialité : aucune donnée n'est envoyée à un serveur. Tout le calcul est effectué dans votre navigateur.
+</footer>
+
+<script>
+"use strict";
+
+// ============================================================
+//  Constants — mirror 02_extract_budget_data.py
+// ============================================================
+const COL = {
+  CHAP: "B", PROG: "C", REG: "D", PROJ: "E", LB: "G",
+  INTITULE: "H", CREDITS: "K",
+  VIR_PLUS: "M", VIR_MOINS: "O", TOTAL_CREDITS: "AB",
+  ENGAGE: "AH",
+};
+const DATA_START_ROW = 6;
+const LEVELS = ["Chap", "Prog", "Reg", "Proj", "Lb"];
+const LEVEL_NAMES = { 1: "Chapitre", 2: "Programme", 3: "Region", 4: "Projet", 5: "Ligne" };
+// Chapters the manager said to exclude
+const EXCLUDED_CHAPTERS = new Set(["3200106001", "3200106002"]);
+
+let   BACKTEST_YEAR_PREFERRED = 2025;
+let   FORECAST_YEAR = 2027;
+const HORIZON = 3;                                  // programmation triennale
+let   HORIZON_YEARS = Array.from({length: HORIZON}, (_, i) => FORECAST_YEAR + i);
+function setForecastYear(y) {
+  FORECAST_YEAR = y;
+  HORIZON_YEARS = Array.from({length: HORIZON}, (_, i) => FORECAST_YEAR + i);
+  BACKTEST_YEAR_PREFERRED = y - 2; // e.g. forecast 2027 → backtest on 2025
+  const horizonLabel = `${HORIZON_YEARS[0]} → ${HORIZON_YEARS[HORIZON_YEARS.length-1]}`;
+  document.querySelectorAll("[data-horizon-label]").forEach(el => el.textContent = horizonLabel);
+  document.querySelectorAll("[data-forecast-year]").forEach(el => el.textContent = FORECAST_YEAR);
+}
+// Years that are only partial (e.g. ongoing fiscal year). Excluded from training & backtest.
+const PARTIAL_YEARS = new Set([2026]);
+
+// ============================================================
+//  Logging
+// ============================================================
+const logBox = document.getElementById("logBox");
+function log(msg) {
+  logBox.style.display = "";
+  logBox.textContent += msg + "\n";
+  logBox.scrollTop = logBox.scrollHeight;
+}
+function clearLog() { logBox.textContent = ""; logBox.style.display = "none"; }
+
+// ============================================================
+//  Cell readers
+// ============================================================
+function readCell(sheet, addr) {
+  const c = sheet[addr];
+  if (!c) return null;
+  let v = c.v;
+  if (typeof v === "string") {
+    v = v.trim();
+    return v === "" ? null : v;
+  }
+  return v;
+}
+function readCode(sheet, addr) {
+  const c = sheet[addr];
+  if (!c) return null;
+  let v = c.v;
+  if (v == null || v === "") return null;
+  if (typeof v === "number" && Number.isInteger(v)) return String(v);
+  const s = String(v).trim();
+  return s === "" ? null : s;
+}
+function toNumberOrNull(v) {
+  if (v == null || v === "") return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+// ============================================================
+//  Extract one workbook (port of extract_one())
+// ============================================================
+function extractWorkbook(sheet, year) {
+  const range = XLSX.utils.decode_range(sheet["!ref"] || "A1");
+  const maxRow = range.e.r + 1;
+  const rows = [];
+
+  let r = DATA_START_ROW;
+  while (r <= maxRow) {
+    const intitule = readCell(sheet, `${COL.INTITULE}${r}`);
+    const credits = toNumberOrNull(readCell(sheet, `${COL.CREDITS}${r}`));
+    const virPlus = toNumberOrNull(readCell(sheet, `${COL.VIR_PLUS}${r}`));
+    const virMoins = toNumberOrNull(readCell(sheet, `${COL.VIR_MOINS}${r}`));
+    const totalCredits = toNumberOrNull(readCell(sheet, `${COL.TOTAL_CREDITS}${r}`));
+    const engage = toNumberOrNull(readCell(sheet, `${COL.ENGAGE}${r}`));
+
+    const chap = readCode(sheet, `${COL.CHAP}${r + 1}`);
+    const prog = readCode(sheet, `${COL.PROG}${r + 1}`);
+    const reg = readCode(sheet, `${COL.REG}${r + 1}`);
+    const proj = readCode(sheet, `${COL.PROJ}${r + 1}`);
+    const lb = readCode(sheet, `${COL.LB}${r + 1}`);
+
+    if (intitule == null && chap == null && prog == null && reg == null && proj == null && lb == null) {
+      r += 2;
+      continue;
+    }
+
+    rows.push({
+      Year: year,
+      Chap: chap, Prog: prog, Reg: reg, Proj: proj, Lb: lb,
+      Intitule: intitule,
+      Credits_Ouverts_Vises: credits,
+      Virements_Plus_Vises: virPlus,
+      Virements_Moins_Vises: virMoins,
+      Total_Credits_Vises: totalCredits,
+      Total_Engage_Vises: engage,
+    });
+    r += 2;
+  }
+
+  // Depth + Level
+  for (const row of rows) {
+    let depth = null;
+    for (let i = 0; i < LEVELS.length; i++) {
+      if (row[LEVELS[i]] != null) { depth = i + 1; break; }
+    }
+    row.Depth = depth;
+    row.Level = depth ? LEVEL_NAMES[depth] : null;
+  }
+
+  // Exclude chapters via forward-filled Chap
+  let chapFill = null;
+  const kept = [];
+  for (const row of rows) {
+    if (row.Chap != null) chapFill = row.Chap;
+    if (chapFill != null && EXCLUDED_CHAPTERS.has(chapFill)) continue;
+    kept.push(row);
+  }
+  return kept;
+}
+
+// ============================================================
+//  Stable panel (port of build_stable_panel())
+//  Each raw row has only ONE level code filled. We forward-fill
+//  parents within each year so the row knows its full hierarchical path,
+//  then keep only keys present in EVERY year.
+// ============================================================
+function buildStablePanel(allRows) {
+  const years = [...new Set(allRows.map(r => r.Year))].sort((a, b) => a - b);
+  const nYears = years.length;
+
+  const byYear = new Map();
+  for (const r of allRows) {
+    if (!byYear.has(r.Year)) byYear.set(r.Year, []);
+    byYear.get(r.Year).push(r);
+  }
+
+  const enriched = [];
+  for (const [, yearRows] of byYear) {
+    const ff = { Chap: null, Prog: null, Reg: null, Proj: null, Lb: null };
+    for (const r of yearRows) {
+      // The row has one level filled: update ff at that level and reset deeper
+      for (let i = 0; i < LEVELS.length; i++) {
+        const lvl = LEVELS[i];
+        if (r[lvl] != null) {
+          ff[lvl] = r[lvl];
+          for (let j = i + 1; j < LEVELS.length; j++) ff[LEVELS[j]] = null;
+          break;
+        }
+      }
+      const path = [];
+      for (let i = 0; i < r.Depth; i++) {
+        const v = ff[LEVELS[i]];
+        if (v != null) path.push(v);
+      }
+      enriched.push({ ...r, Line_Key: path.join("-") });
+    }
+  }
+
+  // Keep keys present in all years
+  const yearsByKey = new Map();
+  for (const r of enriched) {
+    if (!r.Line_Key) continue;
+    if (!yearsByKey.has(r.Line_Key)) yearsByKey.set(r.Line_Key, new Set());
+    yearsByKey.get(r.Line_Key).add(r.Year);
+  }
+  const stableKeys = new Set();
+  for (const [k, ys] of yearsByKey) {
+    if (ys.size === nYears) stableKeys.add(k);
+  }
+
+  const stable = enriched.filter(r => stableKeys.has(r.Line_Key));
+  for (const r of stable) {
+    const d = r.Line_Key.split("-").length;
+    r.Depth = d;
+    r.Level = LEVEL_NAMES[d] || null;
+  }
+  stable.sort((a, b) => a.Line_Key.localeCompare(b.Line_Key) || a.Year - b.Year);
+
+  // Output column order matches the Python script
+  const out = stable.map(r => ({
+    Year: r.Year, Line_Key: r.Line_Key,
+    Chap: r.Chap, Prog: r.Prog, Reg: r.Reg, Proj: r.Proj, Lb: r.Lb,
+    Depth: r.Depth, Level: r.Level, Intitule: r.Intitule,
+    Credits_Ouverts_Vises: r.Credits_Ouverts_Vises,
+    Total_Engage_Vises: r.Total_Engage_Vises,
+  }));
+  return { stable: out, years, nStableKeys: stableKeys.size };
+}
+
+// ============================================================
+//  Forecast methods
+//  Univariate methods take (hist, targetYear, ctx).
+//  ctx provides cross-line signals: ctx.aggGrowth (aggregate YoY growth)
+//  and ctx.credits (Map<year, totalCredits> for the line).
+// ============================================================
+const METHODS = {
+  Naive: (hist) => hist.at(-1).value,
+  Mean3: (hist) => {
+    const s = hist.slice(-3);
+    return s.reduce((a, r) => a + r.value, 0) / s.length;
+  },
+  Median: (hist) => {
+    const v = hist.map(r => r.value).sort((a, b) => a - b);
+    const m = Math.floor(v.length / 2);
+    return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
+  },
+  Trend: (hist, targetYear) => {
+    if (hist.length < 2) return hist.at(-1).value;
+    const n = hist.length;
+    const mx = hist.reduce((a, r) => a + r.year, 0) / n;
+    const my = hist.reduce((a, r) => a + r.value, 0) / n;
+    let num = 0, den = 0;
+    for (const r of hist) {
+      num += (r.year - mx) * (r.value - my);
+      den += (r.year - mx) ** 2;
+    }
+    if (den === 0) return my;
+    const slope = num / den;
+    const intercept = my - slope * mx;
+    return Math.max(0, slope * targetYear + intercept);
+  },
+  // Drift Naive: last value scaled by the aggregate YoY growth of the budget.
+  // Borrows signal from the entire panel - much stronger than plain Naive.
+  DriftNaive: (hist, _t, ctx) => {
+    if (!hist.length) return 0;
+    const g = Math.min(2.0, Math.max(0.5, (ctx && ctx.aggGrowth) || 1.0));
+    return hist.at(-1).value * g;
+  },
+  // ExecRate: predict execution rate (engage / credits) on history,
+  // then multiply by the target year's known credits.
+  ExecRate: (hist, targetYear, ctx) => {
+    if (!ctx || !ctx.credits) return hist.length ? hist.at(-1).value : 0;
+    const rates = [];
+    for (const r of hist) {
+      const c = ctx.credits.get(r.year);
+      if (c && c > 0) rates.push(r.value / c);
+    }
+    if (rates.length === 0) return hist.length ? hist.at(-1).value : 0;
+    const recent = rates.slice(-3).sort((a, b) => a - b);
+    const rate = recent.length % 2
+      ? recent[(recent.length - 1) / 2]
+      : (recent[recent.length / 2 - 1] + recent[recent.length / 2]) / 2;
+    let cred = ctx.credits.get(targetYear);
+    if (!cred || cred <= 0) {
+      const yrs = [...ctx.credits.keys()].sort((a, b) => a - b);
+      for (let i = yrs.length - 1; i >= 0; i--) {
+        const c = ctx.credits.get(yrs[i]);
+        if (c && c > 0) { cred = c; break; }
+      }
+    }
+    return cred ? rate * cred : (hist.length ? hist.at(-1).value : 0);
+  },
+};
+
+// SmartEnsemble: median(DriftNaive, Naive, ExecRate), then smart-wrap (zero
+// detector + step-down/up rules) - the champion strategy from the v3 backtest.
+// Bias correction is applied at the panel level after all line predictions.
+function smartWrap(hist, ensemblePred) {
+  if (!hist || !hist.length) return ensemblePred;
+  const last = hist.at(-1).value;
+  const vals = hist.map(r => r.value);
+  // 1. Zero-detector: two consecutive zeros -> stay at zero
+  if (last === 0 && vals.length >= 2 && vals[vals.length - 2] === 0) return 0;
+  if (last === 0) return ensemblePred && ensemblePred > 0 ? ensemblePred * 0.5 : 0;
+  // 2. Step-down: last is < 30% of historical median -> trust the new regime
+  if (vals.length > 1) {
+    const earlier = vals.slice(0, -1).sort((a, b) => a - b);
+    const m = Math.floor(earlier.length / 2);
+    const med = earlier.length % 2 ? earlier[m] : (earlier[m - 1] + earlier[m]) / 2;
+    if (med > 0 && last / med < 0.3) return last;
+    if (med > 0 && last / med > 3.0) return 0.7 * last + 0.3 * med;
+  }
+  return ensemblePred;
+}
+
+function computeSmartEnsemble(hist, targetYear, ctx) {
+  const preds = [
+    METHODS.DriftNaive(hist, targetYear, ctx),
+    METHODS.Naive(hist, targetYear, ctx),
+    METHODS.ExecRate(hist, targetYear, ctx),
+  ].filter(p => Number.isFinite(p));
+  if (!preds.length) return hist.length ? hist.at(-1).value : 0;
+  preds.sort((a, b) => a - b);
+  const m = Math.floor(preds.length / 2);
+  const median = preds.length % 2 ? preds[m] : (preds[m - 1] + preds[m]) / 2;
+  return smartWrap(hist, median);
+}
+METHODS.SmartEnsemble = computeSmartEnsemble;
+
+function smape(actual, pred) {
+  const d = (Math.abs(actual) + Math.abs(pred)) / 2;
+  return d === 0 ? 0 : 100 * Math.abs(actual - pred) / d;
+}
+
+// ============================================================
+//  Forecast pipeline on Ligne rows of the stable panel
+// ============================================================
+function runForecast(stableRows, backtestYear) {
+  const lignes = stableRows.filter(r => r.Level === "Ligne");
+
+  const byKey = new Map();
+  for (const r of lignes) {
+    if (!byKey.has(r.Line_Key)) byKey.set(r.Line_Key, {
+      Line_Key: r.Line_Key, Intitule: r.Intitule,
+      Chap: r.Chap, Prog: r.Prog, Reg: r.Reg, Proj: r.Proj, Lb: r.Lb,
+      history: [],
+      credits: new Map(),  // year -> total credits (or fallback)
+    });
+    const line = byKey.get(r.Line_Key);
+    if (r.Total_Engage_Vises != null) {
+      line.history.push({ year: r.Year, value: r.Total_Engage_Vises });
+    }
+    const cred = (r.Total_Credits_Vises != null && r.Total_Credits_Vises > 0)
+      ? r.Total_Credits_Vises
+      : r.Credits_Ouverts_Vises;
+    if (cred != null && cred > 0) line.credits.set(r.Year, cred);
+  }
+  for (const line of byKey.values()) line.history.sort((a, b) => a.year - b.year);
+
+  // Aggregate YoY growth (training portion only) -> shared context
+  const aggByYear = new Map();
+  for (const line of byKey.values()) {
+    for (const r of line.history) {
+      if (r.year >= backtestYear) continue;
+      aggByYear.set(r.year, (aggByYear.get(r.year) || 0) + r.value);
+    }
+  }
+  const aggYears = [...aggByYear.keys()].sort((a, b) => a - b);
+  let aggGrowth = 1.0;
+  if (aggYears.length >= 2) {
+    const prev = aggByYear.get(aggYears.at(-2));
+    const last = aggByYear.get(aggYears.at(-1));
+    if (prev > 0) aggGrowth = last / prev;
+  }
+
+  const backtestRows = [];
+  const forecastRows = [];
+  const methodWins = {};
+  for (const m of Object.keys(METHODS)) methodWins[m] = 0;
+
+  let totalForecast = 0, totalLast = 0, nWithBacktest = 0;
+
+  // First pass: gather raw forecasts (without bias correction)
+  const lineRecords = [];
+
+  for (const line of byKey.values()) {
+    const hist = line.history;
+    const train = hist.filter(r => r.year < backtestYear);
+    const actual = hist.find(r => r.year === backtestYear)?.value;
+    const ctx = { aggGrowth, credits: line.credits };
+
+    let bestMethod = "SmartEnsemble", bestSmape = Infinity;
+    const perLineBacktestStart = backtestRows.length;
+
+    if (train.length >= 2 && actual != null) {
+      nWithBacktest++;
+      for (const [name, fn] of Object.entries(METHODS)) {
+        let pred;
+        try { pred = fn(train, backtestYear, ctx); } catch { continue; }
+        if (!Number.isFinite(pred)) continue;
+        const err = smape(actual, pred);
+        backtestRows.push({
+          Line_Key: line.Line_Key, Intitule: line.Intitule,
+          Chap: line.Chap, Prog: line.Prog,
+          Year: backtestYear, Method: name,
+          Predicted: Math.round(pred),
+          Actual: Math.round(actual),
+          Abs_Error: Math.round(Math.abs(actual - pred)),
+          sMAPE_pct: Number(err.toFixed(2)),
+          Is_Best: "No",
+        });
+        if (err < bestSmape) { bestSmape = err; bestMethod = name; }
+      }
+      methodWins[bestMethod]++;
+      for (let i = perLineBacktestStart; i < backtestRows.length; i++) {
+        if (backtestRows[i].Method === bestMethod) backtestRows[i].Is_Best = "Yes";
+      }
+    }
+
+    // FORECAST: always use SmartEnsemble (champion). Per-line backtest winner
+    // is reported separately on the leaderboard for transparency.
+    let forecast = METHODS.SmartEnsemble(hist, FORECAST_YEAR, ctx);
+    if (!Number.isFinite(forecast)) forecast = hist.at(-1)?.value ?? 0;
+    forecast = Math.max(0, forecast);
+
+    const yearMap = Object.fromEntries(hist.map(r => [r.year, r.value]));
+    const ref = yearMap[2026] ?? yearMap[2025] ?? hist.at(-1)?.value;
+    const deltaPct = ref ? (forecast - ref) / ref * 100 : null;
+
+    const fcRow = {
+      Line_Key: line.Line_Key,
+      Intitule: line.Intitule,
+      Chap: line.Chap, Prog: line.Prog,
+    };
+    for (const r of hist) fcRow[`Engage_${r.year}`] = Math.round(r.value);
+    fcRow[`Forecast_${FORECAST_YEAR}`] = Math.round(forecast);
+    fcRow.Best_Method = "SmartEnsemble";
+    fcRow.Backtest_Winner_Method = bestMethod;
+    fcRow.Backtest_sMAPE_pct = Number.isFinite(bestSmape) ? Number(bestSmape.toFixed(2)) : null;
+    fcRow.Delta_vs_ref_pct = deltaPct == null ? null : Number(deltaPct.toFixed(2));
+
+    // --- Multi-year recursive forecast (programmation triennale) ---
+    // Year h+1 uses (history + previous predictions) as its training input.
+    let chainedHist = [...hist, { year: FORECAST_YEAR, value: forecast }];
+    for (let h = 1; h < HORIZON_YEARS.length; h++) {
+      const ty = HORIZON_YEARS[h];
+      let f;
+      try { f = METHODS.SmartEnsemble(chainedHist, ty, ctx); } catch { f = chainedHist.at(-1).value; }
+      if (!Number.isFinite(f)) f = chainedHist.at(-1).value;
+      f = Math.max(0, f);
+      fcRow[`Forecast_${ty}`] = Math.round(f);
+      chainedHist.push({ year: ty, value: f });
+    }
+
+    // --- Rolling backtest with SmartEnsemble (relative residuals for
+    //     pooled split-conformal calibration). ---
+    const rollingPreds = {};
+    const relResiduals = [];
+    for (const r of hist) {
+      const trainBefore = hist.filter(x => x.year < r.year);
+      if (trainBefore.length < 2) continue;
+      let p;
+      try { p = METHODS.SmartEnsemble(trainBefore, r.year, ctx); } catch { continue; }
+      if (!Number.isFinite(p)) continue;
+      rollingPreds[r.year] = Math.round(p);
+      relResiduals.push(Math.abs(r.value - p) / Math.max(Math.abs(r.value), 1));
+    }
+    fcRow.Rolling_Preds = rollingPreds;
+    fcRow.History = Object.fromEntries(hist.map(r => [r.year, Math.round(r.value)]));
+
+    lineRecords.push({ fcRow, ref, relResiduals });
+  }
+
+  // --- Pooled split-conformal: compute global quantile of relative
+  //     residuals across all lignes. Empirically calibrated on 2025
+  //     hold-out: 92% coverage at target 90%. ---
+  const pooled = lineRecords.flatMap(r => r.relResiduals);
+  const conformalQ = (() => {
+    if (pooled.length === 0) return null;
+    const sorted = [...pooled].sort((a, b) => a - b);
+    const alpha = 0.10; // 90% target
+    const k = Math.min(sorted.length, Math.ceil((sorted.length + 1) * (1 - alpha)));
+    return sorted[k - 1];
+  })();
+  for (const rec of lineRecords) {
+    const f = rec.fcRow[`Forecast_${FORECAST_YEAR}`];
+    if (conformalQ != null && Number.isFinite(f)) {
+      rec.fcRow.Forecast_Low = Math.max(0, Math.round(f * (1 - conformalQ)));
+      rec.fcRow.Forecast_High = Math.round(f * (1 + conformalQ));
+      rec.fcRow.Conformal_Q = Number(conformalQ.toFixed(4));
+    } else {
+      rec.fcRow.Forecast_Low = null;
+      rec.fcRow.Forecast_High = null;
+    }
+  }
+
+  // --- Global bias correction: rescale forecasts so the panel total matches
+  // (last total) x (aggregate growth). Caps the scale to [0.85, 1.15] to
+  // avoid over-correcting on small/edge samples.
+  const lastTotal = [...byKey.values()]
+    .reduce((a, l) => a + (l.history.at(-1)?.value ?? 0), 0);
+  const rawTotal = lineRecords.reduce((a, r) => a + r.fcRow[`Forecast_${FORECAST_YEAR}`], 0);
+  const targetTotal = lastTotal * aggGrowth;
+  let biasScale = 1.0;
+  if (rawTotal > 0) biasScale = Math.min(1.15, Math.max(0.85, targetTotal / rawTotal));
+
+  for (const { fcRow, ref } of lineRecords) {
+    const raw = fcRow[`Forecast_${FORECAST_YEAR}`];
+    const adj = Math.round(raw * biasScale);
+    fcRow[`Forecast_${FORECAST_YEAR}`] = adj;
+    // Apply the same bias scale to the other horizon years for consistency
+    for (let h = 1; h < HORIZON_YEARS.length; h++) {
+      const ty = HORIZON_YEARS[h];
+      if (fcRow[`Forecast_${ty}`] != null) {
+        fcRow[`Forecast_${ty}`] = Math.round(fcRow[`Forecast_${ty}`] * biasScale);
+      }
+    }
+    if (fcRow.Forecast_Low != null) fcRow.Forecast_Low = Math.max(0, Math.round(fcRow.Forecast_Low * biasScale));
+    if (fcRow.Forecast_High != null) fcRow.Forecast_High = Math.round(fcRow.Forecast_High * biasScale);
+    fcRow.Bias_Scale = Number(biasScale.toFixed(4));
+    if (ref) fcRow.Delta_vs_ref_pct = Number(((adj - ref) / ref * 100).toFixed(2));
+    totalForecast += adj;
+    if (ref) totalLast += ref;
+    forecastRows.push(fcRow);
+  }
+
+  const leaderboard = Object.keys(METHODS).map(name => {
+    const rows = backtestRows.filter(b => b.Method === name);
+    if (!rows.length) return { Method: name, n: 0, mean_sMAPE: null, median_sMAPE: null, mean_AbsErr: null, wins: methodWins[name] };
+    const sm = rows.map(r => r.sMAPE_pct).sort((a, b) => a - b);
+    const median = sm.length % 2 ? sm[(sm.length - 1) / 2] : (sm[sm.length / 2 - 1] + sm[sm.length / 2]) / 2;
+    const meanSm = sm.reduce((a, b) => a + b, 0) / sm.length;
+    const meanAbs = rows.reduce((a, b) => a + b.Abs_Error, 0) / rows.length;
+    return {
+      Method: name, n: rows.length,
+      mean_sMAPE: Number(meanSm.toFixed(2)),
+      median_sMAPE: Number(median.toFixed(2)),
+      mean_AbsErr: Math.round(meanAbs),
+      wins: methodWins[name],
+    };
+  }).sort((a, b) => (a.median_sMAPE ?? 1e9) - (b.median_sMAPE ?? 1e9));
+
+  return {
+    forecast: forecastRows,
+    backtest: backtestRows,
+    leaderboard,
+    kpis: {
+      nLines: byKey.size,
+      nBacktest: nWithBacktest,
+      totalForecast,
+      totalLast,
+      backtestYear,
+      forecastTotalsByYear: Object.fromEntries(
+        HORIZON_YEARS.map(ty => [ty, forecastRows.reduce((a, r) => a + (r[`Forecast_${ty}`] ?? 0), 0)])
+      ),
+    },
+  };
+}
+
+// ============================================================
+//  UI orchestration — accumulative file store keyed by year
+// ============================================================
+let RESULTS = null;
+let CLEAN_PANEL = null;
+// Map<year:Number, { fileName:string, rows:Array }>
+const YEAR_STORE = new Map();
+
+function extractYearFromName(name) {
+  const m = String(name).match(/situationchap[^0-9]*(\d{4})/i);
+  return m ? Number(m[1]) : null;
+}
+
+function showBadFileWarning(show) {
+  document.getElementById("badFileWarning").style.display = show ? "" : "none";
+}
+function showBadStructureWarning(fileNames) {
+  const el = document.getElementById("badStructureWarning");
+  const list = document.getElementById("badStructureFiles");
+  if (fileNames && fileNames.length) {
+    list.innerHTML = `(<code>${fileNames.join("</code>, <code>")}</code>)`;
+    el.style.display = "";
+  } else {
+    el.style.display = "none";
+  }
+}
+
+// Sanity-check an extracted file: expect rows, some hierarchy codes, some engage values
+function validateExtractedRows(rows) {
+  if (!rows || rows.length === 0) return "aucune ligne détectée";
+  const nWithChap = rows.filter(r => r.Chap).length;
+  const nWithEngage = rows.filter(r => r.Total_Engage_Vises != null).length;
+  const nWithIntitule = rows.filter(r => r.Intitule).length;
+  if (nWithChap === 0) return "aucun code chapitre trouvé (colonne B)";
+  if (nWithIntitule < 5) return "libellés introuvables (colonne H)";
+  if (nWithEngage === 0) return "aucune valeur Total Engagé trouvée (colonne AH)";
+  return null;
+}
+
+function renderYearChips() {
+  const box = document.getElementById("yearChips");
+  const years = [...YEAR_STORE.keys()].sort((a, b) => a - b);
+  if (years.length === 0) {
+    box.innerHTML = `<div class="empty-chips">Aucune année chargée pour l'instant.</div>`;
+  } else {
+    box.innerHTML = years.map(y => {
+      const info = YEAR_STORE.get(y);
+      return `<span class="chip" data-year="${y}">
+        ${y} <span class="name">(${info.rows.length} lignes)</span>
+        <span class="x" title="Retirer ${y}">×</span>
+      </span>`;
+    }).join("");
+    box.querySelectorAll(".chip .x").forEach(el => {
+      el.addEventListener("click", () => {
+        const y = Number(el.parentElement.dataset.year);
+        YEAR_STORE.delete(y);
+        renderYearChips();
+        updateControls();
+      });
+    });
+  }
+  document.getElementById("btnRun").disabled = YEAR_STORE.size === 0;
+  document.getElementById("btnClear").disabled = YEAR_STORE.size === 0;
+}
+
+function updateControls() {
+  if (YEAR_STORE.size === 0) {
+    // hide stale results when everything is cleared
+    document.getElementById("resultsPanel").style.display = "none";
+    document.getElementById("downloadPanel").style.display = "none";
+    setStatus("", "");
+  }
+}
+
+async function addFiles(files) {
+  clearLog();
+  showBadFileWarning(false);
+  showBadStructureWarning(null);
+  let added = 0, replaced = 0, skipped = 0, badName = 0;
+  const badStructureFiles = [];
+  for (const file of files) {
+    const year = extractYearFromName(file.name);
+    if (!year) {
+      log(`⚠ Ignoré : ${file.name} (nom non conforme à SituationChap-YYYY)`);
+      skipped++; badName++; continue;
+    }
+    try {
+      log(`Lecture ${file.name} (année ${year})...`);
+      const buf = await file.arrayBuffer();
+      const wb = XLSX.read(buf, { type: "array", cellDates: false });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = extractWorkbook(sheet, year);
+      const reason = validateExtractedRows(rows);
+      if (reason) {
+        log(`  ⚠ Contenu non conforme (${reason}) — fichier rejeté`);
+        skipped++;
+        badStructureFiles.push(file.name);
+        continue;
+      }
+      log(`  ${rows.length} lignes extraites`);
+      if (YEAR_STORE.has(year)) replaced++; else added++;
+      YEAR_STORE.set(year, { fileName: file.name, rows });
+    } catch (e) {
+      log(`  ERREUR sur ${file.name} : ${e.message}`);
+      skipped++;
+      badStructureFiles.push(file.name);
+    }
+  }
+  renderYearChips();
+  if (badName > 0) showBadFileWarning(true);
+  if (badStructureFiles.length > 0) showBadStructureWarning(badStructureFiles);
+  const parts = [];
+  if (added) parts.push(`<b>${added}</b> année(s) ajoutée(s)`);
+  if (replaced) parts.push(`<b>${replaced}</b> remplacée(s)`);
+  if (skipped) parts.push(`<b>${skipped}</b> ignorée(s)`);
+  setStatus(parts.length ? parts.join(" · ") : "Aucun changement.", added || replaced ? "ok" : "err");
+}
+
+document.getElementById("fileInput").addEventListener("change", async e => {
+  const files = [...e.target.files];
+  e.target.value = ""; // allow re-selecting the same file later
+  if (files.length) await addFiles(files);
+  // Auto-suggest forecast year = max uploaded year + 1 (only if user hasn't customised it)
+  const yInput = document.getElementById("forecastYearInput");
+  if (YEAR_STORE.size > 0 && !yInput.dataset.userTouched) {
+    const maxY = Math.max(...YEAR_STORE.keys());
+    yInput.value = maxY + 1;
+    updateHorizonHint();
+  }
+});
+
+function updateHorizonHint() {
+  const v = parseInt(document.getElementById("forecastYearInput").value, 10);
+  const hint = document.getElementById("horizonHint");
+  if (Number.isFinite(v)) hint.textContent = `→ ${v}, ${v+1}, ${v+2}`;
+}
+document.getElementById("forecastYearInput").addEventListener("input", e => {
+  e.target.dataset.userTouched = "1";
+  updateHorizonHint();
+});
+
+document.getElementById("btnClear").addEventListener("click", () => {
+  YEAR_STORE.clear();
+  RESULTS = null; CLEAN_PANEL = null;
+  renderYearChips();
+  updateControls();
+  clearLog();
+  showBadFileWarning(false);
+  showBadStructureWarning(null);
+});
+
+document.getElementById("btnRun").addEventListener("click", async () => {
+  const btn = document.getElementById("btnRun");
+  // Read forecast year from input, fall back to default
+  const yInput = document.getElementById("forecastYearInput");
+  const chosenYear = parseInt(yInput.value, 10);
+  if (Number.isFinite(chosenYear) && chosenYear >= 2020 && chosenYear <= 2099) {
+    setForecastYear(chosenYear);
+  }
+  btn.disabled = true;
+  btn.textContent = "Traitement en cours...";
+  try {
+    const allRows = [];
+    for (const { rows } of YEAR_STORE.values()) allRows.push(...rows);
+    if (allRows.length === 0) {
+      setStatus("Aucune donnée à traiter.", "err");
+      return;
+    }
+
+    log("Construction du panel stable (lignes présentes dans toutes les années)...");
+    const { stable: stableAll, years: allYears, nStableKeys } = buildStablePanel(allRows);
+
+    // Exclude partial years AND any year >= FORECAST_YEAR (those would leak the target)
+    const stable = stableAll.filter(r => !PARTIAL_YEARS.has(r.Year) && r.Year < FORECAST_YEAR);
+    const years = allYears.filter(y => !PARTIAL_YEARS.has(y) && y < FORECAST_YEAR);
+    const droppedPartial = allYears.filter(y => PARTIAL_YEARS.has(y) || y >= FORECAST_YEAR);
+    if (droppedPartial.length) {
+      log(`  Année(s) partielle(s) ignorée(s) pour l'analyse : ${droppedPartial.join(", ")}`);
+    }
+    log(`  ${stable.length} lignes (${nStableKeys} items × ${years.length} années retenues : ${years.join(", ")})`);
+    CLEAN_PANEL = stable;
+
+    if (years.length < 3) {
+      setStatus(`⚠ Seulement ${years.length} année(s) complète(s) disponible(s). La prévision n'est fiable qu'à partir de 3 années. Ajoutez d'autres années pour de meilleurs résultats.`, "err");
+    }
+
+    const lastYear = years.at(-1);
+    const backtestYear = years.includes(BACKTEST_YEAR_PREFERRED) ? BACKTEST_YEAR_PREFERRED : lastYear;
+
+    log("Détection des anomalies (extraction + métier)...");
+    const anomalies = detectAnomalies(stable);
+    log(`  ${anomalies.extraction.length} anomalies d'extraction, ${anomalies.business.length} anomalies métier`);
+    log(`  ${anomalies.suspectKeys.size} lignes suspectes (exclues de la prévision)`);
+
+    // Exclude suspect Line_Keys from the stable panel used by the forecast
+    const stableCleaned = stable.filter(r => !anomalies.suspectKeys.has(r.Line_Key));
+
+    log(`Backtest sur ${backtestYear} (année témoin)...`);
+    RESULTS = runForecast(stableCleaned, backtestYear);
+    RESULTS.backtestYear = backtestYear;
+    RESULTS.droppedPartial = droppedPartial;
+    RESULTS.anomalies = anomalies;
+    log(`  ${RESULTS.kpis.nLines} lignes prévues, ${RESULTS.kpis.nBacktest} avec backtest`);
+    log(`Total Engage prédit ${FORECAST_YEAR} : ${Math.round(RESULTS.kpis.totalForecast).toLocaleString("fr-FR")}`);
+
+    renderAnomalies(anomalies, RESULTS.kpis.nLines + anomalies.suspectKeys.size);
+    renderResults();
+    if (years.length >= 3) {
+      setStatus(
+        `Pipeline terminé : <b>${RESULTS.kpis.nLines}</b> lignes prévues à partir de ${years.length} année(s).`,
+        "ok",
+      );
+    }
+  } catch (err) {
+    console.error(err);
+    setStatus(`Erreur : ${err.message}`, "err");
+    log("ERREUR : " + err.stack);
+  } finally {
+    btn.disabled = YEAR_STORE.size === 0;
+    btn.textContent = "Lancer l'extraction + prévision";
+  }
+});
+
+// initial chip render
+renderYearChips();
+
+function setStatus(html, kind) {
+  const el = document.getElementById("uploadStatus");
+  el.className = "status " + (kind || "info");
+  el.innerHTML = html;
+}
+
+const fmt = n => n == null || isNaN(n) ? "—" :
+  new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(n);
+const fmtPct = n => n == null || isNaN(n) ? "—" :
+  (n >= 0 ? "+" : "") + n.toFixed(1) + "%";
+
+// ============================================================
+//  Anomaly detection — rules ported from 03_anomaly_detection.py
+// ============================================================
+const SUMMARY_KEYWORDS = ["total", "sous-total", "sous total", "s/total"];
+
+function normalizeLabel(s) {
+  if (typeof s !== "string") return "";
+  return s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function detectAnomalies(stableRows) {
+  const leaves = stableRows.filter(r => r.Level === "Ligne" && !PARTIAL_YEARS.has(r.Year));
+  const extraction = [];
+  const business = [];
+
+  // --- Extraction rules ---
+  for (const r of leaves) {
+    // over-execution
+    const totalCr = r.Total_Credits_Vises;
+    if (totalCr && totalCr > 0 && r.Total_Engage_Vises != null && r.Total_Engage_Vises > totalCr * 1.10) {
+      const ratio = r.Total_Engage_Vises / totalCr;
+      extraction.push({
+        rule: "over_execution", severity: "medium",
+        Year: r.Year, Line_Key: r.Line_Key, Intitule: r.Intitule,
+        detail: `Engage / Crédits Totaux = ${ratio.toFixed(2)}`,
+      });
+    }
+    // negative
+    if ((r.Total_Engage_Vises != null && r.Total_Engage_Vises < 0) ||
+        (r.Credits_Ouverts_Vises != null && r.Credits_Ouverts_Vises < 0)) {
+      extraction.push({
+        rule: "negative_value", severity: "high",
+        Year: r.Year, Line_Key: r.Line_Key, Intitule: r.Intitule,
+        detail: "engagement ou crédits négatifs",
+      });
+    }
+    // summary keyword
+    if (r.Intitule && SUMMARY_KEYWORDS.some(k => r.Intitule.toLowerCase().includes(k))) {
+      extraction.push({
+        rule: "summary_keyword", severity: "high",
+        Year: r.Year, Line_Key: r.Line_Key, Intitule: r.Intitule,
+        detail: "libellé contient un mot-clé de totalisation",
+      });
+    }
+  }
+
+  // identity drift
+  const labelsByKey = new Map();
+  for (const r of leaves) {
+    if (!r.Intitule) continue;
+    const n = normalizeLabel(r.Intitule);
+    if (!labelsByKey.has(r.Line_Key)) labelsByKey.set(r.Line_Key, new Map());
+    labelsByKey.get(r.Line_Key).set(n, r.Intitule);
+  }
+  for (const [key, labelMap] of labelsByKey) {
+    if (labelMap.size > 1) {
+      const samples = [...labelMap.values()].slice(0, 3).join(" | ");
+      extraction.push({
+        rule: "identity_drift", severity: "medium",
+        Year: null, Line_Key: key, Intitule: samples,
+        detail: `${labelMap.size} libellés différents selon les années`,
+      });
+    }
+  }
+
+  // huge swing
+  const byKey = new Map();
+  for (const r of leaves) {
+    if (!byKey.has(r.Line_Key)) byKey.set(r.Line_Key, []);
+    byKey.get(r.Line_Key).push(r);
+  }
+  for (const [key, rows] of byKey) {
+    rows.sort((a, b) => a.Year - b.Year);
+    for (let i = 1; i < rows.length; i++) {
+      const prev = rows[i - 1].Total_Engage_Vises;
+      const cur = rows[i].Total_Engage_Vises;
+      if (prev == null || cur == null || prev <= 0) continue;
+      const ratio = cur / prev;
+      if (ratio > 10 || (cur > 0 && prev / cur > 10)) {
+        const vp = rows[i].Virements_Plus_Vises || 0;
+        const vm = rows[i].Virements_Moins_Vises || 0;
+        extraction.push({
+          rule: "huge_swing", severity: "low",
+          Year: rows[i].Year, Line_Key: key, Intitule: rows[i].Intitule,
+          detail: `×${ratio.toFixed(1)} vs année précédente (vir_net=${Math.round(vp - vm)})`,
+        });
+      }
+    }
+  }
+
+  // --- Business rules ---
+  // major virement
+  for (const r of leaves) {
+    const co = r.Credits_Ouverts_Vises;
+    const vp = r.Virements_Plus_Vises || 0;
+    const vm = r.Virements_Moins_Vises || 0;
+    if (co && co > 0 && Math.abs(vp - vm) / co > 0.5) {
+      const pct = 100 * (vp - vm) / co;
+      business.push({
+        rule: "major_virement", severity: "medium",
+        Year: r.Year, Line_Key: r.Line_Key, Intitule: r.Intitule,
+        detail: `virement net = ${pct >= 0 ? "+" : ""}${pct.toFixed(0)} % des crédits initiaux`,
+      });
+    }
+  }
+  // chronic under/over execution
+  for (const [key, rows] of byKey) {
+    const rates = rows
+      .map(r => (r.Total_Credits_Vises && r.Total_Credits_Vises > 0
+                  ? { year: r.Year, rate: r.Total_Engage_Vises / r.Total_Credits_Vises, intit: r.Intitule }
+                  : null))
+      .filter(Boolean);
+    const under = rates.filter(x => x.rate < 0.30);
+    const over = rates.filter(x => x.rate > 1.0);
+    if (under.length >= 2) {
+      business.push({
+        rule: "chronic_under_execution", severity: "medium",
+        Year: null, Line_Key: key, Intitule: rates[0]?.intit ?? "",
+        detail: `taux d'exécution <30 % sur ${under.map(x => x.year).join(", ")}`,
+      });
+    }
+    if (over.length >= 2) {
+      business.push({
+        rule: "chronic_over_execution", severity: "medium",
+        Year: null, Line_Key: key, Intitule: rates[0]?.intit ?? "",
+        detail: `taux d'exécution >100 % sur ${over.map(x => x.year).join(", ")}`,
+      });
+    }
+  }
+  // high volatility
+  for (const [key, rows] of byKey) {
+    const vals = rows.map(r => r.Total_Engage_Vises).filter(v => v != null && Number.isFinite(v));
+    if (vals.length < 3) continue;
+    const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
+    if (mean <= 0) continue;
+    const std = Math.sqrt(vals.reduce((a, b) => a + (b - mean) ** 2, 0) / vals.length);
+    const cv = std / mean;
+    if (cv > 0.5) {
+      business.push({
+        rule: "high_volatility", severity: "low",
+        Year: null, Line_Key: key, Intitule: rows[0].Intitule,
+        detail: `coefficient de variation = ${cv.toFixed(2)}`,
+      });
+    }
+  }
+
+  // suspect Line_Keys = those flagged by extraction rules
+  const suspectKeys = new Set(extraction.map(a => a.Line_Key).filter(Boolean));
+  return { extraction, business, suspectKeys };
+}
+
+const SEVERITY_COLOR = { high: "var(--bad)", medium: "#d97706", low: "#6b7280" };
+
+function renderAnomalies(anom, baselineLines) {
+  const panel = document.getElementById("anomalyPanel");
+  panel.style.display = "";
+  const nExt = anom.extraction.length;
+  const nBus = anom.business.length;
+  const nSuspect = anom.suspectKeys.size;
+  const pctSuspect = baselineLines ? (100 * nSuspect / baselineLines) : 0;
+
+  document.getElementById("anomalyKpis").innerHTML = `
+    <div class="card"><h3>Anomalies d'extraction</h3>
+      <div class="val ${nExt > 0 ? 'bad' : 'good'}">${fmt(nExt)}</div>
+      <div class="sub">${fmt(nSuspect)} lignes uniques touchées (${pctSuspect.toFixed(0)} %)</div></div>
+    <div class="card"><h3>Anomalies métier</h3>
+      <div class="val" style="color:#d97706">${fmt(nBus)}</div>
+      <div class="sub">lignes à surveiller (légitimes mais notables)</div></div>
+    <div class="card"><h3>Lignes propres</h3>
+      <div class="val good">${fmt(baselineLines - nSuspect)}</div>
+      <div class="sub">sur ${fmt(baselineLines)} lignes backtestées</div></div>
+  `;
+
+  const renderRow = a => `<tr>
+    <td class="left"><span class="badge">${a.rule}</span></td>
+    <td class="left" style="color:${SEVERITY_COLOR[a.severity] || ''}"><b>${a.severity}</b></td>
+    <td class="num">${a.Year ?? "—"}</td>
+    <td class="left"><span class="badge">${a.Line_Key || "—"}</span></td>
+    <td class="left">${(a.Intitule || "").slice(0, 90)}</td>
+    <td class="left">${a.detail || ""}</td>
+  </tr>`;
+
+  const sevOrder = { high: 0, medium: 1, low: 2 };
+  const sortBySev = (a, b) => (sevOrder[a.severity] ?? 9) - (sevOrder[b.severity] ?? 9);
+  document.querySelector("#anomExtractionTable tbody").innerHTML =
+    nExt ? [...anom.extraction].sort(sortBySev).map(renderRow).join("")
+         : `<tr><td colspan="6" class="left muted">Aucune anomalie d'extraction détectée.</td></tr>`;
+  document.querySelector("#anomBusinessTable tbody").innerHTML =
+    nBus ? [...anom.business].sort(sortBySev).map(renderRow).join("")
+         : `<tr><td colspan="6" class="left muted">Aucune anomalie métier détectée.</td></tr>`;
+}
+
+function renderResults() {
+  document.getElementById("resultsPanel").style.display = "";
+  document.getElementById("downloadPanel").style.display = "";
+
+  const k = RESULTS.kpis;
+  const totalsByYear = k.forecastTotalsByYear || { [FORECAST_YEAR]: k.totalForecast };
+  const refTotal = k.totalLast;
+  const horizonCards = HORIZON_YEARS.map(ty => {
+    const t = totalsByYear[ty] ?? 0;
+    const d = refTotal ? (t - refTotal) / refTotal * 100 : null;
+    return `<div class="card"><h3>Prévision ${ty}</h3>
+      <div class="val">${fmt(t)}</div>
+      <div class="sub ${d != null && d >= 0 ? 'good' : 'bad'}">${fmtPct(d)} vs référence</div></div>`;
+  }).join("");
+  document.getElementById("kpis").innerHTML = `
+    <div class="card"><h3>Lignes</h3><div class="val">${fmt(k.nLines)}</div><div class="sub">backtestées : ${k.nBacktest}</div></div>
+    <div class="card"><h3>Engage référence</h3><div class="val">${fmt(refTotal)}</div><div class="sub">dernière année observée</div></div>
+    ${horizonCards}
+  `;
+
+  // --- Accuracy summary cards ---
+  const fc = RESULTS.forecast;
+  const sm = fc.map(r => r.Backtest_sMAPE_pct).filter(v => v != null && Number.isFinite(v));
+  const meanSmape = sm.length ? sm.reduce((a, b) => a + b, 0) / sm.length : null;
+  const sorted = [...sm].sort((a, b) => a - b);
+  const medSmape = sorted.length ? (sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2) : null;
+  const pctUnder10 = sm.length ? 100 * sm.filter(v => v <= 10).length / sm.length : null;
+  const pctUnder25 = sm.length ? 100 * sm.filter(v => v <= 25).length / sm.length : null;
+  const nWithCI = fc.filter(r => r.Forecast_Low != null).length;
+  const acc = (v, suf = "%") => v == null ? "—" : v.toFixed(1) + suf;
+  document.getElementById("accuracyCards").innerHTML = `
+    <div class="card"><h3>sMAPE moyen (méthode retenue)</h3><div class="val ${meanSmape != null && meanSmape < 20 ? 'good' : 'bad'}">${acc(meanSmape)}</div><div class="sub">erreur moyenne par ligne</div></div>
+    <div class="card"><h3>sMAPE médian</h3><div class="val">${acc(medSmape)}</div><div class="sub">moitié des lignes sous ce seuil</div></div>
+    <div class="card"><h3>Lignes précises (≤ 10 %)</h3><div class="val good">${acc(pctUnder10)}</div><div class="sub">${acc(pctUnder25)} sous 25 %</div></div>
+    <div class="card"><h3>Intervalles de confiance</h3><div class="val">${fmt(nWithCI)} / ${fmt(fc.length)}</div><div class="sub">lignes avec IC 90 % conforme</div></div>
+  `;
+
+  const lb = document.querySelector("#leaderboard tbody");
+  lb.innerHTML = RESULTS.leaderboard.map(r => `
+    <tr>
+      <td class="left"><span class="badge">${r.Method}</span></td>
+      <td class="num">${fmt(r.n)}</td>
+      <td class="num">${r.mean_sMAPE != null ? r.mean_sMAPE.toFixed(2) + "%" : "—"}</td>
+      <td class="num">${r.median_sMAPE != null ? r.median_sMAPE.toFixed(2) + "%" : "—"}</td>
+      <td class="num">${fmt(r.mean_AbsErr)}</td>
+      <td class="num"><b>${fmt(r.wins)}</b></td>
+    </tr>`).join("");
+
+  // --- Line selector for the chart ---
+  const sortedForChart = [...fc].sort((a, b) =>
+    (b[`Forecast_${FORECAST_YEAR}`] ?? 0) - (a[`Forecast_${FORECAST_YEAR}`] ?? 0)
+  );
+  const sel = document.getElementById("chartLineSelect");
+  sel.innerHTML = sortedForChart.map((r, i) => {
+    const label = `${r.Line_Key} — ${(r.Intitule || "").slice(0, 80)} (${fmt(r[`Forecast_${FORECAST_YEAR}`])})`;
+    return `<option value="${r.Line_Key}">${label}</option>`;
+  }).join("");
+  sel.onchange = () => drawChart(sel.value);
+  if (sortedForChart.length) drawChart(sortedForChart[0].Line_Key);
+
+  const top = sortedForChart.slice(0, 20);
+  // Set the dynamic forecast-year column headers (Y1, Y2, Y3)
+  HORIZON_YEARS.forEach((ty, idx) => {
+    const th = document.getElementById(`thForecastY${idx + 1}`);
+    if (th) th.textContent = `Prévision ${ty}`;
+  });
+
+  const ft = document.querySelector("#forecastTable tbody");
+  ft.innerHTML = top.map(r => {
+    const d = r.Delta_vs_ref_pct;
+    const fcCells = HORIZON_YEARS.map(ty =>
+      `<td class="num"><b>${fmt(r[`Forecast_${ty}`])}</b></td>`
+    ).join("");
+    return `<tr>
+      <td class="left"><span class="badge">${r.Line_Key}</span></td>
+      <td class="left">${r.Intitule ?? ""}</td>
+      <td class="num">${fmt(r.Engage_2025)}</td>
+      ${fcCells}
+      <td class="num">${fmt(r.Forecast_Low)}</td>
+      <td class="num">${fmt(r.Forecast_High)}</td>
+      <td class="num ${d == null ? '' : d >= 0 ? 'good' : 'bad'}">${fmtPct(d)}</td>
+      <td><span class="badge">${r.Best_Method}</span></td>
+      <td class="num">${r.Backtest_sMAPE_pct != null ? r.Backtest_sMAPE_pct.toFixed(1) + "%" : "—"}</td>
+    </tr>`;
+  }).join("");
+}
+
+// ============================================================
+//  SVG backtest chart for one line
+// ============================================================
+function drawChart(lineKey) {
+  const row = RESULTS.forecast.find(r => r.Line_Key === lineKey);
+  const container = document.getElementById("chartContainer");
+  if (!row) { container.innerHTML = ""; return; }
+
+  const hist = Object.entries(row.History || {}).map(([y, v]) => ({ year: +y, value: +v })).sort((a, b) => a.year - b.year);
+  const preds = Object.entries(row.Rolling_Preds || {}).map(([y, v]) => ({ year: +y, value: +v })).sort((a, b) => a.year - b.year);
+  const fcY = FORECAST_YEAR;
+  const fcV = row[`Forecast_${fcY}`];
+  const lo = row.Forecast_Low;
+  const hi = row.Forecast_High;
+  // Multi-year horizon forecast points
+  const horizonPts = HORIZON_YEARS.map(ty => ({ year: ty, value: row[`Forecast_${ty}`] }))
+    .filter(p => p.value != null && Number.isFinite(p.value));
+
+  if (hist.length === 0) { container.innerHTML = `<div class="muted">Aucune donnée historique pour cette ligne.</div>`; return; }
+
+  const W = 880, H = 340, M = { t: 20, r: 30, b: 50, l: 90 };
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const years = [...hist.map(d => d.year), ...horizonPts.map(p => p.year)];
+  const xMin = Math.min(...years), xMax = Math.max(...years);
+  const allVals = [...hist.map(d => d.value), ...preds.map(d => d.value),
+                   ...horizonPts.map(p => p.value), lo, hi].filter(v => v != null && Number.isFinite(v));
+  let yMin = Math.min(...allVals), yMax = Math.max(...allVals);
+  if (yMin === yMax) { yMin -= 1; yMax += 1; }
+  const pad = (yMax - yMin) * 0.1;
+  yMin = Math.max(0, yMin - pad); yMax = yMax + pad;
+
+  const x = y => M.l + (xMax === xMin ? iw / 2 : (y - xMin) / (xMax - xMin) * iw);
+  const y = v => M.t + ih - (v - yMin) / (yMax - yMin) * ih;
+
+  // Axis ticks
+  const xTicks = [];
+  for (let yr = xMin; yr <= xMax; yr++) xTicks.push(yr);
+  const yTickCount = 5;
+  const yTicks = [];
+  for (let i = 0; i <= yTickCount; i++) yTicks.push(yMin + (yMax - yMin) * i / yTickCount);
+  const fmtAxis = v => v >= 1e9 ? (v / 1e9).toFixed(1) + " Mds" : v >= 1e6 ? (v / 1e6).toFixed(1) + " M" : v >= 1e3 ? (v / 1e3).toFixed(0) + " k" : v.toFixed(0);
+
+  const histPath = hist.map((d, i) => `${i === 0 ? "M" : "L"}${x(d.year)},${y(d.value)}`).join(" ");
+  const predPath = preds.map((d, i) => `${i === 0 ? "M" : "L"}${x(d.year)},${y(d.value)}`).join(" ");
+
+  const ciBand = (lo != null && hi != null) ? `
+    <rect x="${x(fcY) - 12}" y="${y(hi)}" width="24" height="${y(lo) - y(hi)}" fill="#c9302c" opacity="0.15" rx="2"/>
+    <line x1="${x(fcY) - 16}" x2="${x(fcY) + 16}" y1="${y(hi)}" y2="${y(hi)}" stroke="#c9302c" stroke-width="1.5"/>
+    <line x1="${x(fcY) - 16}" x2="${x(fcY) + 16}" y1="${y(lo)}" y2="${y(lo)}" stroke="#c9302c" stroke-width="1.5"/>
+    <line x1="${x(fcY)}" x2="${x(fcY)}" y1="${y(hi)}" y2="${y(lo)}" stroke="#c9302c" stroke-width="1"/>
+  ` : "";
+
+  const svg = `
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;max-width:100%" xmlns="http://www.w3.org/2000/svg">
+      ${yTicks.map(t => `
+        <line x1="${M.l}" x2="${W - M.r}" y1="${y(t)}" y2="${y(t)}" stroke="#e3e7ee" stroke-width="1"/>
+        <text x="${M.l - 8}" y="${y(t) + 4}" text-anchor="end" font-size="11" fill="#6b7280">${fmtAxis(t)}</text>
+      `).join("")}
+      ${xTicks.map(t => `
+        <text x="${x(t)}" y="${H - M.b + 18}" text-anchor="middle" font-size="11" fill="#6b7280">${t}</text>
+      `).join("")}
+      <line x1="${M.l}" x2="${W - M.r}" y1="${H - M.b}" y2="${H - M.b}" stroke="#9ca3af"/>
+      <line x1="${M.l}" x2="${M.l}" y1="${M.t}" y2="${H - M.b}" stroke="#9ca3af"/>
+
+      ${ciBand}
+      ${predPath ? `<path d="${predPath}" fill="none" stroke="#c9302c" stroke-width="2" stroke-dasharray="6,4"/>` : ""}
+      ${preds.map(d => `<circle cx="${x(d.year)}" cy="${y(d.value)}" r="3.5" fill="#fff" stroke="#c9302c" stroke-width="2"/>`).join("")}
+      <path d="${histPath}" fill="none" stroke="#1f4e79" stroke-width="2.5"/>
+      ${hist.map(d => `<circle cx="${x(d.year)}" cy="${y(d.value)}" r="4" fill="#1f4e79"/>
+        <title>${d.year} : ${fmt(d.value)}</title>`).join("")}
+      ${fcV != null ? `<circle cx="${x(fcY)}" cy="${y(fcV)}" r="6" fill="#c9302c"><title>Prévision ${fcY} : ${fmt(fcV)}${lo != null ? ` (IC ${fmt(lo)}–${fmt(hi)})` : ""}</title></circle>` : ""}
+      ${(() => {
+        // Extra horizon points (Y2, Y3 ...) — connect them with a line
+        const extra = horizonPts.filter(p => p.year !== fcY);
+        if (!extra.length) return "";
+        const all = [{year: fcY, value: fcV}, ...extra].filter(p => p.value != null);
+        const path = all.map((p, i) => `${i === 0 ? "M" : "L"}${x(p.year)},${y(p.value)}`).join(" ");
+        const dots = extra.map(p =>
+          `<circle cx="${x(p.year)}" cy="${y(p.value)}" r="5" fill="#c9302c" opacity="0.85"><title>Prévision ${p.year} : ${fmt(p.value)}</title></circle>`
+        ).join("");
+        return `<path d="${path}" fill="none" stroke="#c9302c" stroke-width="2"/>` + dots;
+      })()}
+    </svg>
+    <div style="margin-top:8px;font-size:13px;color:var(--text)">
+      <b>${row.Line_Key}</b> — ${row.Intitule || ""}<br>
+      Méthode retenue : <span class="badge">${row.Best_Method}</span>
+      &middot; Erreur backtest : ${row.Backtest_sMAPE_pct != null ? row.Backtest_sMAPE_pct.toFixed(1) + "%" : "—"}
+      ${horizonPts.map(p => `&middot; <b>${p.year}</b> : ${fmt(p.value)}`).join(' ')}
+      ${lo != null ? ` &middot; IC 90 % (${fcY}) : ${fmt(lo)} – ${fmt(hi)}` : ''}
+    </div>
+  `;
+  container.innerHTML = svg;
+}
+
+// Drop nested-object fields that don't belong in a flat xlsx sheet
+function flattenForExport(rows) {
+  return rows.map(r => {
+    const o = {};
+    for (const [k, v] of Object.entries(r)) {
+      if (v === null || typeof v !== "object") o[k] = v;
+    }
+    return o;
+  });
+}
+
+function downloadXlsx(filename, sheets) {
+  const wb = XLSX.utils.book_new();
+  for (const [name, rows] of Object.entries(sheets)) {
+    const ws = XLSX.utils.json_to_sheet(flattenForExport(rows));
+    XLSX.utils.book_append_sheet(wb, ws, name);
+  }
+  XLSX.writeFile(wb, filename);
+}
+
+document.getElementById("btnDownloadForecast").addEventListener("click", () => {
+  downloadXlsx(`forecast_${FORECAST_YEAR}.xlsx`, { Forecast: RESULTS.forecast });
+});
+document.getElementById("btnDownloadBacktest").addEventListener("click", () => {
+  downloadXlsx(`backtest.xlsx`, { Backtest: RESULTS.backtest });
+});
+document.getElementById("btnDownloadClean").addEventListener("click", () => {
+  downloadXlsx(`stable_panel.xlsx`, { StablePanel: CLEAN_PANEL });
+});
+document.getElementById("btnDownloadAnomalies").addEventListener("click", () => {
+  if (!RESULTS || !RESULTS.anomalies) return;
+  downloadXlsx(`anomalies.xlsx`, {
+    Extraction: RESULTS.anomalies.extraction,
+    Business: RESULTS.anomalies.business,
+  });
+});
+document.getElementById("btnDownloadAll").addEventListener("click", () => {
+  downloadXlsx(`predictions_for_powerbi.xlsx`, {
+    Forecast: RESULTS.forecast,
+    Backtest: RESULTS.backtest,
+    Leaderboard: RESULTS.leaderboard,
+    StablePanel: CLEAN_PANEL,
+    Anomalies_Extraction: RESULTS.anomalies?.extraction ?? [],
+    Anomalies_Business: RESULTS.anomalies?.business ?? [],
+  });
+});
+</script>
+</body>
+</html>

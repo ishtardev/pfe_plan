@@ -1,0 +1,393 @@
+rule,severity,Year,Line_Key,Intitule,detail
+major_virement,medium,2025.0,1211006000-300-00-10-50,Indemnités horaires pour travaux supplémentaires,net virement = -96% of initial credits
+major_virement,medium,2025.0,1211006000-300-00-10-62,Aide exceptionnelle au logement,net virement = -86% of initial credits
+major_virement,medium,2023.0,1211006000-300-00-10-67,Indemnités de permanence aux secrétaires greffiers,net virement = +113% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-11,Impôts et taxes,net virement = -92% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-10-11,Impôts et taxes,net virement = +122% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-11,Impôts et taxes,net virement = +75% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-10-11,Impôts et taxes,net virement = -72% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-12,Locations de bâtiments administratifs et charges connexes,net virement = -62% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-10-13,Entretien et réparation des bâtiments administratifs,net virement = -83% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-10-13,Entretien et réparation des bâtiments administratifs,net virement = -51% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-13,Entretien et réparation des bâtiments administratifs,net virement = -94% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-14,Achat de fournitures et accessoires électriques,net virement = -79% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-10-14,Achat de fournitures et accessoires électriques,net virement = -59% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-10-14,Achat de fournitures et accessoires électriques,net virement = +105% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-15,"Frais de sécurité, gardiennage, nettoyage des bâtiments administratifs",net virement = -72% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-10-15,"Frais de sécurité, gardiennage, nettoyage des bâtiments administratifs",net virement = -84% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-10-15,"Frais de sécurité, gardiennage, nettoyage des bâtiments administratifs",net virement = -84% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-15,"Frais de sécurité, gardiennage, nettoyage des bâtiments administratifs",net virement = -81% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-10-15,"Frais de sécurité, gardiennage, nettoyage des bâtiments administratifs",net virement = -81% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-16,"Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage",net virement = +91% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-10-16,"Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage",net virement = +52% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-10-16,"Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage",net virement = -100% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-16,"Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage",net virement = -100% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-10-16,"Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage",net virement = -100% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-17,Entretien des espaces verts,net virement = -59% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-18,Frais d'autorisation de construire,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-10-18,Frais d'autorisation de construire,net virement = -67% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-10-18,Frais d'autorisation de construire,net virement = -64% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-18,Frais d'autorisation de construire,net virement = +100% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-10-18,Frais d'autorisation de construire,net virement = -100% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-21,"Fournitures de bureau, produits d'impression, papeterie et imprimés",net virement = +391% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-10-22,Entretien et réparation du mobilier et du matériel de bureau,net virement = -82% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-22,Entretien et réparation du mobilier et du matériel de bureau,net virement = -100% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-10-22,Entretien et réparation du mobilier et du matériel de bureau,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-10-31,Frais de maintenance du matériel informatique et des logiciels,net virement = -98% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-33,Achat de fournitures pour matériel technique et informatique,net virement = -61% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-10-33,Achat de fournitures pour matériel technique et informatique,net virement = -62% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-33,Achat de fournitures pour matériel technique et informatique,net virement = -92% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-10-40,Achat de détergents et produits de nettoyage,net virement = -97% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-10-40,Achat de détergents et produits de nettoyage,net virement = -81% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-10-50,Frais de recharge d'extincteurs,net virement = +214% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-10-60,Achat de matériaux de construction,net virement = +137% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-10-60,Achat de matériaux de construction,net virement = -76% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-10-60,Achat de matériaux de construction,net virement = -63% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-10-80,"Frais de transport et manutention du matériel, de mobilier et de documents",net virement = +596% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-11,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-11,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-12,Taxes postales et frais d'affranchissement,net virement = +600% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-12,Taxes postales et frais d'affranchissement,net virement = +150% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-15,Redevances d'eau,net virement = +400% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-15,Redevances d'eau,net virement = +180% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-15,Redevances d'eau,net virement = +200% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-16,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-16,Redevances d'électricité,net virement = +90% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-20-16,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-16,Redevances d'électricité,net virement = +400% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-16,Redevances d'électricité,net virement = +85% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-21,Frais d'entretien et de réparation des véhicules,net virement = +88% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-21,Frais d'entretien et de réparation des véhicules,net virement = +469% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-22,Achat de carburants et lubrifiants,net virement = +89% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-20-22,Achat de carburants et lubrifiants,net virement = +179% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-22,Achat de carburants et lubrifiants,net virement = +89% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-22,Achat de carburants et lubrifiants,net virement = +744% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-31,Frais de transport du personnel à l'intérieur du Maroc,net virement = +86% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-31,Frais de transport du personnel à l'intérieur du Maroc,net virement = +83% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-31,Frais de transport du personnel à l'intérieur du Maroc,net virement = +73% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,net virement = -91% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,net virement = +128% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,net virement = +57% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,net virement = +106% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-34,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +97% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-34,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +105% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-35,Indemnités de mission à l'étranger,net virement = -93% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-35,Indemnités de mission à l'étranger,net virement = +52% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-42,Achat de cadeaux présentés aux délégations,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-42,Achat de cadeaux présentés aux délégations,net virement = +211% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-20-42,Achat de cadeaux présentés aux délégations,net virement = +82% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-42,Achat de cadeaux présentés aux délégations,net virement = -100% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-51,Habillement,net virement = -67% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-51,Habillement,net virement = -61% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-20-51,Habillement,net virement = -81% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-51,Habillement,net virement = +158% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-51,Habillement,net virement = -98% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-52,Frais de réception et de cérémonies officielles,net virement = +173% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,net virement = +5011% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,net virement = +824% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,net virement = +500% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,net virement = +430% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-54,"Publicité, impression et insertion",net virement = +131% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-54,"Publicité, impression et insertion",net virement = +159% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-55,Abonnement et documentation,net virement = +165% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-55,Abonnement et documentation,net virement = +198% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-55,Abonnement et documentation,net virement = -54% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-55,Abonnement et documentation,net virement = -80% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-56,Achat de produits  énergétiques pour chauffage et cuisson,net virement = +78% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-56,Achat de produits  énergétiques pour chauffage et cuisson,net virement = -81% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-20-60,Assistance au titre du pélerinage aux Lieux Saints de l'Islam,net virement = -100% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-20-71,"Frais de formation, d'organisation et de participation aux séminaires, stages et congrés",net virement = +61% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-71,"Frais de formation, d'organisation et de participation aux séminaires, stages et congrés",net virement = -77% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-71,"Frais de formation, d'organisation et de participation aux séminaires, stages et congrés",net virement = -55% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-20-73,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +97% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-20-73,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +105% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-20-84,Subvention aux associations et aux amicales professionnelles des magistrats et fonctionnaires du Ministère de la Justice,net virement = -64% of initial credits
+major_virement,medium,2021.0,1212006000-300-00-40-10,Maintenance et conservation des archives,net virement = +55% of initial credits
+major_virement,medium,2022.0,1212006000-300-00-40-10,Maintenance et conservation des archives,net virement = +193% of initial credits
+major_virement,medium,2023.0,1212006000-300-00-40-10,Maintenance et conservation des archives,net virement = +302% of initial credits
+major_virement,medium,2024.0,1212006000-300-00-40-10,Maintenance et conservation des archives,net virement = -87% of initial credits
+major_virement,medium,2025.0,1212006000-300-00-40-10,Maintenance et conservation des archives,net virement = +101% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-10-21,Taxes postales et frais d'affranchissement,net virement = +600% of initial credits
+major_virement,medium,2025.0,1212006000-301-00-10-21,Taxes postales et frais d'affranchissement,net virement = +150% of initial credits
+major_virement,medium,2021.0,1212006000-301-00-10-22,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-301-00-10-22,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2021.0,1212006000-301-00-10-23,Redevances d'eau,net virement = +400% of initial credits
+major_virement,medium,2022.0,1212006000-301-00-10-23,Redevances d'eau,net virement = +180% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-10-23,Redevances d'eau,net virement = +200% of initial credits
+major_virement,medium,2021.0,1212006000-301-00-10-24,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2022.0,1212006000-301-00-10-24,Redevances d'électricité,net virement = +90% of initial credits
+major_virement,medium,2023.0,1212006000-301-00-10-24,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-10-24,Redevances d'électricité,net virement = +400% of initial credits
+major_virement,medium,2025.0,1212006000-301-00-10-24,Redevances d'électricité,net virement = +85% of initial credits
+major_virement,medium,2021.0,1212006000-301-00-10-31,"Fournitures de bureau, produits d'impression, papeterie et imprimés",net virement = +391% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-10-41,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +97% of initial credits
+major_virement,medium,2025.0,1212006000-301-00-10-41,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +105% of initial credits
+major_virement,medium,2022.0,1212006000-301-00-10-51,Règlement et exécution des décisions judiciaires et administratives,net virement = +304% of initial credits
+major_virement,medium,2023.0,1212006000-301-00-10-51,Règlement et exécution des décisions judiciaires et administratives,net virement = -68% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-10-51,Règlement et exécution des décisions judiciaires et administratives,net virement = +67% of initial credits
+major_virement,medium,2025.0,1212006000-301-00-10-51,Règlement et exécution des décisions judiciaires et administratives,net virement = +236% of initial credits
+major_virement,medium,2023.0,1212006000-301-00-10-62,Subvention aux associations de droit non gouvernementales,net virement = -98% of initial credits
+major_virement,medium,2023.0,1212006000-301-00-20-20,Indemnités allouées aux huissiers de justice en matière pénale,net virement = +50% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-20-31,Taxes postales et frais d'affranchissement,net virement = +600% of initial credits
+major_virement,medium,2025.0,1212006000-301-00-20-31,Taxes postales et frais d'affranchissement,net virement = +150% of initial credits
+major_virement,medium,2021.0,1212006000-301-00-20-32,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-301-00-20-32,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2021.0,1212006000-301-00-20-33,Redevances d'eau,net virement = +400% of initial credits
+major_virement,medium,2022.0,1212006000-301-00-20-33,Redevances d'eau,net virement = +180% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-20-33,Redevances d'eau,net virement = +200% of initial credits
+major_virement,medium,2021.0,1212006000-301-00-20-34,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2022.0,1212006000-301-00-20-34,Redevances d'électricité,net virement = +90% of initial credits
+major_virement,medium,2023.0,1212006000-301-00-20-34,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-20-34,Redevances d'électricité,net virement = +400% of initial credits
+major_virement,medium,2025.0,1212006000-301-00-20-34,Redevances d'électricité,net virement = +85% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-20-51,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +97% of initial credits
+major_virement,medium,2025.0,1212006000-301-00-20-51,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +105% of initial credits
+major_virement,medium,2024.0,1212006000-301-00-20-60,Frais de justice criminelle,net virement = +73% of initial credits
+major_virement,medium,2023.0,1212006000-301-00-20-80,Subvention aux associations de droit non gouvernementales,net virement = -98% of initial credits
+major_virement,medium,2021.0,1212006000-301-00-30-10,Frais d'assistance judiciaire,net virement = +67% of initial credits
+major_virement,medium,2022.0,1212006000-302-00-10-10,Frais d'édition et d'impression et travaux de tirage,net virement = -80% of initial credits
+major_virement,medium,2023.0,1212006000-302-00-10-10,Frais d'édition et d'impression et travaux de tirage,net virement = -100% of initial credits
+major_virement,medium,2024.0,1212006000-302-00-10-10,Frais d'édition et d'impression et travaux de tirage,net virement = -100% of initial credits
+major_virement,medium,2021.0,1212006000-302-00-10-21,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-302-00-10-21,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2024.0,1212006000-302-00-10-22,Taxes postales et frais d'affranchissement,net virement = +600% of initial credits
+major_virement,medium,2025.0,1212006000-302-00-10-22,Taxes postales et frais d'affranchissement,net virement = +150% of initial credits
+major_virement,medium,2024.0,1212006000-302-00-10-41,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +97% of initial credits
+major_virement,medium,2025.0,1212006000-302-00-10-41,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +105% of initial credits
+major_virement,medium,2025.0,1212006000-302-00-10-50,Frais protocolaires et d'organisation de manifestation,net virement = -59% of initial credits
+major_virement,medium,2021.0,1212006000-302-00-10-60,Cotisations aux organismes internationaux,net virement = +130% of initial credits
+major_virement,medium,2023.0,1212006000-302-00-10-60,Cotisations aux organismes internationaux,net virement = +122% of initial credits
+major_virement,medium,2021.0,1212006000-302-00-20-11,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-302-00-20-11,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2024.0,1212006000-302-00-20-12,Taxes postales et frais d'affranchissement,net virement = +600% of initial credits
+major_virement,medium,2025.0,1212006000-302-00-20-12,Taxes postales et frais d'affranchissement,net virement = +150% of initial credits
+major_virement,medium,2024.0,1212006000-302-00-20-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +97% of initial credits
+major_virement,medium,2025.0,1212006000-302-00-20-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +105% of initial credits
+major_virement,medium,2021.0,1212006000-303-00-10-11,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-303-00-10-11,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2021.0,1212006000-303-00-10-12,Redevances d'eau,net virement = +400% of initial credits
+major_virement,medium,2022.0,1212006000-303-00-10-12,Redevances d'eau,net virement = +180% of initial credits
+major_virement,medium,2024.0,1212006000-303-00-10-12,Redevances d'eau,net virement = +200% of initial credits
+major_virement,medium,2021.0,1212006000-303-00-10-13,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2022.0,1212006000-303-00-10-13,Redevances d'électricité,net virement = +90% of initial credits
+major_virement,medium,2023.0,1212006000-303-00-10-13,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2024.0,1212006000-303-00-10-13,Redevances d'électricité,net virement = +400% of initial credits
+major_virement,medium,2025.0,1212006000-303-00-10-13,Redevances d'électricité,net virement = +85% of initial credits
+major_virement,medium,2024.0,1212006000-303-00-10-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +97% of initial credits
+major_virement,medium,2025.0,1212006000-303-00-10-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +105% of initial credits
+major_virement,medium,2021.0,1212006000-303-00-20-11,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2022.0,1212006000-303-00-20-11,Taxes et redevances de télécommunications,net virement = -100% of initial credits
+major_virement,medium,2021.0,1212006000-303-00-20-12,Redevances d'eau,net virement = +400% of initial credits
+major_virement,medium,2022.0,1212006000-303-00-20-12,Redevances d'eau,net virement = +180% of initial credits
+major_virement,medium,2024.0,1212006000-303-00-20-12,Redevances d'eau,net virement = +200% of initial credits
+major_virement,medium,2021.0,1212006000-303-00-20-13,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2022.0,1212006000-303-00-20-13,Redevances d'électricité,net virement = +90% of initial credits
+major_virement,medium,2023.0,1212006000-303-00-20-13,Redevances d'électricité,net virement = +500% of initial credits
+major_virement,medium,2024.0,1212006000-303-00-20-13,Redevances d'électricité,net virement = +400% of initial credits
+major_virement,medium,2025.0,1212006000-303-00-20-13,Redevances d'électricité,net virement = +85% of initial credits
+major_virement,medium,2024.0,1212006000-303-00-20-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +97% of initial credits
+major_virement,medium,2025.0,1212006000-303-00-20-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,net virement = +105% of initial credits
+major_virement,medium,2021.0,1222006000-300-00-11-20,"Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs",net virement = -77% of initial credits
+major_virement,medium,2022.0,1222006000-300-00-11-20,"Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs",net virement = -117% of initial credits
+major_virement,medium,2021.0,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,net virement = -66% of initial credits
+major_virement,medium,2023.0,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,net virement = -95% of initial credits
+major_virement,medium,2024.0,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,net virement = -95% of initial credits
+major_virement,medium,2023.0,1222006000-300-00-11-50,Achat de matériel et mobilier de bureau,net virement = +66% of initial credits
+major_virement,medium,2024.0,1222006000-300-00-11-50,Achat de matériel et mobilier de bureau,net virement = +151% of initial credits
+major_virement,medium,2023.0,1222006000-300-00-11-81,Achat de matériel informatique et de logiciels,net virement = -58% of initial credits
+major_virement,medium,2021.0,1222006000-300-00-15-20,"Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs",net virement = -77% of initial credits
+major_virement,medium,2022.0,1222006000-300-00-15-20,"Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs",net virement = -117% of initial credits
+major_virement,medium,2021.0,1222006000-300-02-11-20,"Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs",net virement = -77% of initial credits
+major_virement,medium,2022.0,1222006000-300-02-11-20,"Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs",net virement = -117% of initial credits
+major_virement,medium,2021.0,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,net virement = -66% of initial credits
+major_virement,medium,2023.0,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,net virement = -95% of initial credits
+major_virement,medium,2024.0,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,net virement = -95% of initial credits
+major_virement,medium,2024.0,1222006000-300-03-11-30,Travaux de construction ou d'extension de bâtiments administratifs,net virement = -100% of initial credits
+major_virement,medium,2025.0,1222006000-300-03-11-30,Travaux de construction ou d'extension de bâtiments administratifs,net virement = -77% of initial credits
+major_virement,medium,2024.0,1222006000-300-04-11-30,Travaux de construction ou d'extension de bâtiments administratifs,net virement = -100% of initial credits
+major_virement,medium,2025.0,1222006000-300-04-11-30,Travaux de construction ou d'extension de bâtiments administratifs,net virement = -77% of initial credits
+major_virement,medium,2021.0,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,net virement = -66% of initial credits
+major_virement,medium,2023.0,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,net virement = -95% of initial credits
+major_virement,medium,2024.0,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,net virement = -95% of initial credits
+major_virement,medium,2021.0,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,net virement = -66% of initial credits
+major_virement,medium,2023.0,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,net virement = -95% of initial credits
+major_virement,medium,2024.0,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,net virement = -95% of initial credits
+major_virement,medium,2024.0,1222006000-300-07-11-30,Travaux de construction ou d'extension de bâtiments administratifs,net virement = -100% of initial credits
+major_virement,medium,2025.0,1222006000-300-07-11-30,Travaux de construction ou d'extension de bâtiments administratifs,net virement = -77% of initial credits
+major_virement,medium,2021.0,1222006000-300-11-11-20,"Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs",net virement = -77% of initial credits
+major_virement,medium,2022.0,1222006000-300-11-11-20,"Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs",net virement = -117% of initial credits
+chronic_under_execution,medium,,1211006000-300-00-10-40,Rémunération des notaires et indemnités aux naïbs à délégation spéciale,"exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+chronic_under_execution,medium,,1211006000-300-00-10-50,Indemnités horaires pour travaux supplémentaires,"exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+chronic_under_execution,medium,,1211006000-300-00-10-62,Aide exceptionnelle au logement,"exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+chronic_under_execution,medium,,1211006000-300-00-10-64,Indemnités aux juges suppléants des juridictions communales et d'arrondissements,"exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+chronic_under_execution,medium,,1211006000-300-00-10-71,"Indemnités de caisse des regisseurs, billeteurs et payeurs délégués","exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+chronic_under_execution,medium,,1211006000-300-00-10-72,Gratifications aux chauffeurs,"exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+chronic_under_execution,medium,,1222006000-301-00-40-10,"Assistance technique, conseils et audit","exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+chronic_under_execution,medium,,1222006000-301-00-40-20,"Frais de formation, stage, conseil et assistance","exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+chronic_under_execution,medium,,1222006000-301-00-40-30,Assistance technique,"exec rate <30% in years [2021, 2022, 2023, 2024, 2025]"
+high_volatility,low,,1212006000-300-00-10-11,Impôts et taxes,coefficient of variation = 0.70
+high_volatility,low,,1212006000-300-00-10-13,Entretien et réparation des bâtiments administratifs,coefficient of variation = 0.76
+high_volatility,low,,1212006000-300-00-10-16,"Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage",coefficient of variation = 1.38
+high_volatility,low,,1212006000-300-00-10-18,Frais d'autorisation de construire,coefficient of variation = 1.56
+high_volatility,low,,1212006000-300-00-10-22,Entretien et réparation du mobilier et du matériel de bureau,coefficient of variation = 1.19
+high_volatility,low,,1212006000-300-00-10-31,Frais de maintenance du matériel informatique et des logiciels,coefficient of variation = 0.63
+high_volatility,low,,1212006000-300-00-10-33,Achat de fournitures pour matériel technique et informatique,coefficient of variation = 0.73
+high_volatility,low,,1212006000-300-00-10-60,Achat de matériaux de construction,coefficient of variation = 0.62
+high_volatility,low,,1212006000-300-00-20-11,Taxes et redevances de télécommunications,coefficient of variation = 0.91
+high_volatility,low,,1212006000-300-00-20-12,Taxes postales et frais d'affranchissement,coefficient of variation = 1.04
+high_volatility,low,,1212006000-300-00-20-15,Redevances d'eau,coefficient of variation = 0.65
+high_volatility,low,,1212006000-300-00-20-16,Redevances d'électricité,coefficient of variation = 1.18
+high_volatility,low,,1212006000-300-00-20-21,Frais d'entretien et de réparation des véhicules,coefficient of variation = 0.78
+high_volatility,low,,1212006000-300-00-20-22,Achat de carburants et lubrifiants,coefficient of variation = 0.72
+high_volatility,low,,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,coefficient of variation = 0.62
+high_volatility,low,,1212006000-300-00-20-35,Indemnités de mission à l'étranger,coefficient of variation = 0.52
+high_volatility,low,,1212006000-300-00-20-37,Frais de transport du mobilier et du matériel,coefficient of variation = 0.51
+high_volatility,low,,1212006000-300-00-20-42,Achat de cadeaux présentés aux délégations,coefficient of variation = 1.06
+high_volatility,low,,1212006000-300-00-20-51,Habillement,coefficient of variation = 1.50
+high_volatility,low,,1212006000-300-00-20-53,Frais d'hébergement et de restauration,coefficient of variation = 1.42
+high_volatility,low,,1212006000-300-00-20-54,"Publicité, impression et insertion",coefficient of variation = 0.70
+high_volatility,low,,1212006000-300-00-20-56,Achat de produits  énergétiques pour chauffage et cuisson,coefficient of variation = 1.08
+high_volatility,low,,1212006000-300-00-20-60,Assistance au titre du pélerinage aux Lieux Saints de l'Islam,coefficient of variation = 0.59
+high_volatility,low,,1212006000-300-00-20-71,"Frais de formation, d'organisation et de participation aux séminaires, stages et congrés",coefficient of variation = 1.11
+high_volatility,low,,1212006000-300-00-40-10,Maintenance et conservation des archives,coefficient of variation = 0.68
+high_volatility,low,,1212006000-301-00-10-21,Taxes postales et frais d'affranchissement,coefficient of variation = 1.04
+high_volatility,low,,1212006000-301-00-10-22,Taxes et redevances de télécommunications,coefficient of variation = 0.91
+high_volatility,low,,1212006000-301-00-10-23,Redevances d'eau,coefficient of variation = 0.65
+high_volatility,low,,1212006000-301-00-10-24,Redevances d'électricité,coefficient of variation = 1.18
+high_volatility,low,,1212006000-301-00-10-51,Règlement et exécution des décisions judiciaires et administratives,coefficient of variation = 0.76
+high_volatility,low,,1212006000-301-00-10-62,Subvention aux associations de droit non gouvernementales,coefficient of variation = 0.63
+high_volatility,low,,1212006000-301-00-20-31,Taxes postales et frais d'affranchissement,coefficient of variation = 1.04
+high_volatility,low,,1212006000-301-00-20-32,Taxes et redevances de télécommunications,coefficient of variation = 0.91
+high_volatility,low,,1212006000-301-00-20-33,Redevances d'eau,coefficient of variation = 0.65
+high_volatility,low,,1212006000-301-00-20-34,Redevances d'électricité,coefficient of variation = 1.18
+high_volatility,low,,1212006000-301-00-20-60,Frais de justice criminelle,coefficient of variation = 0.70
+high_volatility,low,,1212006000-301-00-20-80,Subvention aux associations de droit non gouvernementales,coefficient of variation = 0.63
+high_volatility,low,,1212006000-302-00-10-10,Frais d'édition et d'impression et travaux de tirage,coefficient of variation = 1.09
+high_volatility,low,,1212006000-302-00-10-21,Taxes et redevances de télécommunications,coefficient of variation = 0.91
+high_volatility,low,,1212006000-302-00-10-22,Taxes postales et frais d'affranchissement,coefficient of variation = 1.04
+high_volatility,low,,1212006000-302-00-10-50,Frais protocolaires et d'organisation de manifestation,coefficient of variation = 0.67
+high_volatility,low,,1212006000-302-00-20-11,Taxes et redevances de télécommunications,coefficient of variation = 0.91
+high_volatility,low,,1212006000-302-00-20-12,Taxes postales et frais d'affranchissement,coefficient of variation = 1.04
+high_volatility,low,,1212006000-303-00-10-11,Taxes et redevances de télécommunications,coefficient of variation = 0.91
+high_volatility,low,,1212006000-303-00-10-12,Redevances d'eau,coefficient of variation = 0.65
+high_volatility,low,,1212006000-303-00-10-13,Redevances d'électricité,coefficient of variation = 1.18
+high_volatility,low,,1212006000-303-00-20-11,Taxes et redevances de télécommunications,coefficient of variation = 0.91
+high_volatility,low,,1212006000-303-00-20-12,Redevances d'eau,coefficient of variation = 0.65
+high_volatility,low,,1212006000-303-00-20-13,Redevances d'électricité,coefficient of variation = 1.18
+high_volatility,low,,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,coefficient of variation = 0.83
+high_volatility,low,,1222006000-300-00-11-50,Achat de matériel et mobilier de bureau,coefficient of variation = 0.94
+high_volatility,low,,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,coefficient of variation = 0.83
+high_volatility,low,,1222006000-300-03-11-30,Travaux de construction ou d'extension de bâtiments administratifs,coefficient of variation = 0.99
+high_volatility,low,,1222006000-300-04-11-30,Travaux de construction ou d'extension de bâtiments administratifs,coefficient of variation = 0.99
+high_volatility,low,,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,coefficient of variation = 0.83
+high_volatility,low,,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,coefficient of variation = 0.83
+high_volatility,low,,1222006000-300-07-11-30,Travaux de construction ou d'extension de bâtiments administratifs,coefficient of variation = 0.99
+virement_inflation,high,2023.0,1211006000-300-00-10-67,Indemnités de permanence aux secrétaires greffiers,virements +1.1x initial credits
+virement_inflation,high,2022.0,1212006000-300-00-10-11,Impôts et taxes,virements +1.2x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-10-14,Achat de fournitures et accessoires électriques,virements +1.1x initial credits
+virement_inflation,high,2021.0,1212006000-300-00-10-16,"Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage",virements +1.9x initial credits
+virement_inflation,high,2021.0,1212006000-300-00-10-21,"Fournitures de bureau, produits d'impression, papeterie et imprimés",virements +4.0x initial credits
+virement_inflation,high,2023.0,1212006000-300-00-10-50,Frais de recharge d'extincteurs,virements +2.1x initial credits
+virement_inflation,high,2023.0,1212006000-300-00-10-60,Achat de matériaux de construction,virements +1.4x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-10-80,"Frais de transport et manutention du matériel, de mobilier et de documents",virements +6.0x initial credits
+virement_inflation,high,2024.0,1212006000-300-00-20-12,Taxes postales et frais d'affranchissement,virements +6.0x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-12,Taxes postales et frais d'affranchissement,virements +1.5x initial credits
+virement_inflation,high,2021.0,1212006000-300-00-20-15,Redevances d'eau,virements +4.0x initial credits
+virement_inflation,high,2022.0,1212006000-300-00-20-15,Redevances d'eau,virements +1.8x initial credits
+virement_inflation,high,2024.0,1212006000-300-00-20-15,Redevances d'eau,virements +2.0x initial credits
+virement_inflation,high,2021.0,1212006000-300-00-20-16,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2023.0,1212006000-300-00-20-16,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2024.0,1212006000-300-00-20-16,Redevances d'électricité,virements +4.0x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-21,Frais d'entretien et de réparation des véhicules,virements +4.7x initial credits
+virement_inflation,high,2023.0,1212006000-300-00-20-22,Achat de carburants et lubrifiants,virements +1.8x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-22,Achat de carburants et lubrifiants,virements +7.4x initial credits
+virement_inflation,high,2022.0,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,virements +1.6x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,virements +1.1x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-34,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,virements +1.0x initial credits
+virement_inflation,high,2022.0,1212006000-300-00-20-42,Achat de cadeaux présentés aux délégations,virements +2.2x initial credits
+virement_inflation,high,2024.0,1212006000-300-00-20-51,Habillement,virements +1.6x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-52,Frais de réception et de cérémonies officielles,virements +3.6x initial credits
+virement_inflation,high,2022.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,virements +50.1x initial credits
+virement_inflation,high,2023.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,virements +8.5x initial credits
+virement_inflation,high,2024.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,virements +5.0x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,virements +4.3x initial credits
+virement_inflation,high,2021.0,1212006000-300-00-20-54,"Publicité, impression et insertion",virements +1.8x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-54,"Publicité, impression et insertion",virements +1.6x initial credits
+virement_inflation,high,2021.0,1212006000-300-00-20-55,Abonnement et documentation,virements +2.3x initial credits
+virement_inflation,high,2022.0,1212006000-300-00-20-55,Abonnement et documentation,virements +2.1x initial credits
+virement_inflation,high,2023.0,1212006000-300-00-20-55,Abonnement et documentation,virements +1.8x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-20-73,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,virements +1.0x initial credits
+virement_inflation,high,2022.0,1212006000-300-00-40-10,Maintenance et conservation des archives,virements +1.9x initial credits
+virement_inflation,high,2023.0,1212006000-300-00-40-10,Maintenance et conservation des archives,virements +3.0x initial credits
+virement_inflation,high,2025.0,1212006000-300-00-40-10,Maintenance et conservation des archives,virements +1.0x initial credits
+virement_inflation,high,2024.0,1212006000-301-00-10-21,Taxes postales et frais d'affranchissement,virements +6.0x initial credits
+virement_inflation,high,2025.0,1212006000-301-00-10-21,Taxes postales et frais d'affranchissement,virements +1.5x initial credits
+virement_inflation,high,2021.0,1212006000-301-00-10-23,Redevances d'eau,virements +4.0x initial credits
+virement_inflation,high,2022.0,1212006000-301-00-10-23,Redevances d'eau,virements +1.8x initial credits
+virement_inflation,high,2024.0,1212006000-301-00-10-23,Redevances d'eau,virements +2.0x initial credits
+virement_inflation,high,2021.0,1212006000-301-00-10-24,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2023.0,1212006000-301-00-10-24,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2024.0,1212006000-301-00-10-24,Redevances d'électricité,virements +4.0x initial credits
+virement_inflation,high,2021.0,1212006000-301-00-10-31,"Fournitures de bureau, produits d'impression, papeterie et imprimés",virements +4.0x initial credits
+virement_inflation,high,2025.0,1212006000-301-00-10-41,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,virements +1.0x initial credits
+virement_inflation,high,2022.0,1212006000-301-00-10-51,Règlement et exécution des décisions judiciaires et administratives,virements +3.0x initial credits
+virement_inflation,high,2025.0,1212006000-301-00-10-51,Règlement et exécution des décisions judiciaires et administratives,virements +2.4x initial credits
+virement_inflation,high,2024.0,1212006000-301-00-20-31,Taxes postales et frais d'affranchissement,virements +6.0x initial credits
+virement_inflation,high,2025.0,1212006000-301-00-20-31,Taxes postales et frais d'affranchissement,virements +1.5x initial credits
+virement_inflation,high,2021.0,1212006000-301-00-20-33,Redevances d'eau,virements +4.0x initial credits
+virement_inflation,high,2022.0,1212006000-301-00-20-33,Redevances d'eau,virements +1.8x initial credits
+virement_inflation,high,2024.0,1212006000-301-00-20-33,Redevances d'eau,virements +2.0x initial credits
+virement_inflation,high,2021.0,1212006000-301-00-20-34,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2023.0,1212006000-301-00-20-34,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2024.0,1212006000-301-00-20-34,Redevances d'électricité,virements +4.0x initial credits
+virement_inflation,high,2025.0,1212006000-301-00-20-51,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,virements +1.0x initial credits
+virement_inflation,high,2024.0,1212006000-302-00-10-22,Taxes postales et frais d'affranchissement,virements +6.0x initial credits
+virement_inflation,high,2025.0,1212006000-302-00-10-22,Taxes postales et frais d'affranchissement,virements +1.5x initial credits
+virement_inflation,high,2025.0,1212006000-302-00-10-41,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,virements +1.0x initial credits
+virement_inflation,high,2021.0,1212006000-302-00-10-60,Cotisations aux organismes internationaux,virements +1.3x initial credits
+virement_inflation,high,2023.0,1212006000-302-00-10-60,Cotisations aux organismes internationaux,virements +1.2x initial credits
+virement_inflation,high,2024.0,1212006000-302-00-20-12,Taxes postales et frais d'affranchissement,virements +6.0x initial credits
+virement_inflation,high,2025.0,1212006000-302-00-20-12,Taxes postales et frais d'affranchissement,virements +1.5x initial credits
+virement_inflation,high,2025.0,1212006000-302-00-20-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,virements +1.0x initial credits
+virement_inflation,high,2021.0,1212006000-303-00-10-12,Redevances d'eau,virements +4.0x initial credits
+virement_inflation,high,2022.0,1212006000-303-00-10-12,Redevances d'eau,virements +1.8x initial credits
+virement_inflation,high,2024.0,1212006000-303-00-10-12,Redevances d'eau,virements +2.0x initial credits
+virement_inflation,high,2021.0,1212006000-303-00-10-13,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2023.0,1212006000-303-00-10-13,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2024.0,1212006000-303-00-10-13,Redevances d'électricité,virements +4.0x initial credits
+virement_inflation,high,2025.0,1212006000-303-00-10-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,virements +1.0x initial credits
+virement_inflation,high,2021.0,1212006000-303-00-20-12,Redevances d'eau,virements +4.0x initial credits
+virement_inflation,high,2022.0,1212006000-303-00-20-12,Redevances d'eau,virements +1.8x initial credits
+virement_inflation,high,2024.0,1212006000-303-00-20-12,Redevances d'eau,virements +2.0x initial credits
+virement_inflation,high,2021.0,1212006000-303-00-20-13,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2023.0,1212006000-303-00-20-13,Redevances d'électricité,virements +5.0x initial credits
+virement_inflation,high,2024.0,1212006000-303-00-20-13,Redevances d'électricité,virements +4.0x initial credits
+virement_inflation,high,2025.0,1212006000-303-00-20-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,virements +1.0x initial credits
+virement_inflation,high,2022.0,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,virements +1.5x initial credits
+virement_inflation,high,2023.0,1222006000-300-00-11-50,Achat de matériel et mobilier de bureau,virements +1.3x initial credits
+virement_inflation,high,2024.0,1222006000-300-00-11-50,Achat de matériel et mobilier de bureau,virements +1.5x initial credits
+virement_inflation,high,2022.0,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,virements +1.5x initial credits
+virement_inflation,high,2022.0,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,virements +1.5x initial credits
+virement_inflation,high,2022.0,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,virements +1.5x initial credits
+virement_churn,medium,2023.0,1212006000-300-00-10-11,Impôts et taxes,+56% / -72% of initial credits
+virement_churn,medium,2022.0,1212006000-300-00-10-14,Achat de fournitures et accessoires électriques,+49% / -38% of initial credits
+virement_churn,medium,2021.0,1212006000-300-00-10-16,"Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage",+191% / -100% of initial credits
+virement_churn,medium,2023.0,1212006000-300-00-10-18,Frais d'autorisation de construire,+36% / -100% of initial credits
+virement_churn,medium,2021.0,1212006000-300-00-10-19,"Achat d'articles de plomberie sanitaire, outillage et quincaillerie",+30% / -66% of initial credits
+virement_churn,medium,2022.0,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,+159% / -31% of initial credits
+virement_churn,medium,2021.0,1212006000-300-00-20-51,Habillement,+33% / -100% of initial credits
+virement_churn,medium,2025.0,1212006000-300-00-20-52,Frais de réception et de cérémonies officielles,+364% / -191% of initial credits
+virement_churn,medium,2021.0,1212006000-300-00-20-54,"Publicité, impression et insertion",+182% / -50% of initial credits
+virement_churn,medium,2021.0,1212006000-300-00-20-55,Abonnement et documentation,+228% / -63% of initial credits
+virement_churn,medium,2023.0,1212006000-300-00-20-55,Abonnement et documentation,+185% / -229% of initial credits
+virement_churn,medium,2022.0,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,+152% / -111% of initial credits
+virement_churn,medium,2025.0,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,+61% / -48% of initial credits
+virement_churn,medium,2023.0,1222006000-300-00-11-50,Achat de matériel et mobilier de bureau,+131% / -65% of initial credits
+virement_churn,medium,2022.0,1222006000-300-00-11-81,Achat de matériel informatique et de logiciels,+44% / -92% of initial credits
+virement_churn,medium,2022.0,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,+152% / -111% of initial credits
+virement_churn,medium,2025.0,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,+61% / -48% of initial credits
+virement_churn,medium,2022.0,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,+152% / -111% of initial credits
+virement_churn,medium,2025.0,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,+61% / -48% of initial credits
+virement_churn,medium,2022.0,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,+152% / -111% of initial credits
+virement_churn,medium,2025.0,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,+61% / -48% of initial credits
+unused_top_up,medium,2021.0,1212006000-300-00-20-54,"Publicité, impression et insertion",top-up +182% but exec rate only 75%

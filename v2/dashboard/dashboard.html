@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Prévision Budgétaire — Ministère de la Justice</title>
+<script src="xlsx.full.min.js"></script>
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --primary: #1f4e79;
+    --accent: #c9302c;
+    --text: #1c1c1c;
+    --muted: #6b7280;
+    --border: #e3e7ee;
+    --good: #2f7d32;
+    --bad: #c9302c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+  }
+  header {
+    background: var(--primary); color: white; padding: 20px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  header h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  header .sub { font-size: 13px; opacity: 0.85; }
+  main { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; flex: 1; min-width: 240px;
+  }
+  .card h2 { font-size: 14px; margin: 0 0 6px 0; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+  .card .val { font-size: 24px; font-weight: 600; color: var(--primary); }
+  .card .delta { font-size: 13px; margin-top: 4px; }
+  .delta.up { color: var(--good); } .delta.down { color: var(--bad); }
+  .panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .panel h3 { margin: 0 0 12px 0; color: var(--primary); font-size: 16px; }
+  button {
+    background: var(--primary); color: white; border: 0; padding: 10px 18px;
+    border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 500;
+  }
+  button:hover { background: #163a5d; }
+  button.secondary { background: #6b7280; }
+  button.accent { background: var(--accent); }
+  input[type=file] { padding: 8px; border: 1px dashed var(--border); border-radius: 6px; background: #fafbfc; }
+  input[type=number], input[type=range] { padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: right; }
+  th:first-child, td:first-child, th.left, td.left { text-align: left; }
+  th { background: #f8fafc; font-weight: 600; color: var(--muted); position: sticky; top: 0; }
+  tr:hover { background: #fafbfc; }
+  .scrollbox { max-height: 480px; overflow: auto; border: 1px solid var(--border); border-radius: 6px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .num { font-variant-numeric: tabular-nums; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; background: #eef2f7; color: var(--primary); }
+  .toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .slider-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .pos { color: var(--good); } .neg { color: var(--bad); }
+  details summary { cursor: pointer; color: var(--primary); font-size: 13px; }
+  footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Prévision de l'Engagement Budgétaire</h1>
+    <div class="sub">Ministère de la Justice — Horizon <span id="hdrYear"></span></div>
+  </div>
+  <div class="sub" id="hdrModel"></div>
+</header>
+
+<main>
+  <!-- KPI cards -->
+  <div class="row">
+    <div class="card"><h2>Lignes budgétaires</h2><div class="val" id="kpiLines">—</div><div class="muted">panel stable 2021-2025</div></div>
+    <div class="card"><h2>Crédits scénario</h2><div class="val" id="kpiCredits">—</div><div class="muted">total proposé</div></div>
+    <div class="card"><h2>Engagement prédit</h2><div class="val" id="kpiEngage">—</div><div class="muted" id="kpiEngageNote"></div></div>
+    <div class="card"><h2>Taux d'exécution global</h2><div class="val" id="kpiRate">—</div><div class="muted">prédit pour <span class="targetYear"></span></div></div>
+    <div class="card"><h2>Δ vs Engage 2025</h2><div class="val" id="kpiDelta">—</div><div class="muted" id="kpiDeltaAbs"></div></div>
+  </div>
+
+  <!-- Scenario builder -->
+  <div class="panel">
+    <h3>1. Définir le scénario de Crédits Ouverts <span class="targetYear"></span></h3>
+    <div class="toolbar">
+      <label for="fileInput"><strong>Charger fichier Crédits (xlsx ou csv) :</strong></label>
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+      <button class="secondary" id="btnTemplate">Télécharger modèle vierge</button>
+      <span class="muted">— ou —</span>
+      <div class="slider-wrap">
+        <label>Variation globale vs dernière année :</label>
+        <input type="range" id="globalMult" min="-30" max="30" step="1" value="0">
+        <span id="multLabel" class="num">0%</span>
+        <button class="secondary" id="btnApplyMult">Appliquer</button>
+      </div>
+    </div>
+    <div class="muted" id="scenarioStatus">Aucun fichier chargé — scénario actuel : statu quo (Crédits = dernière année observée).</div>
+  </div>
+
+  <!-- Programme breakdown -->
+  <div class="panel">
+    <h3>2. Synthèse par Programme</h3>
+    <div class="scrollbox">
+      <table id="progTable">
+        <thead><tr>
+          <th class="left">Programme</th>
+          <th>Lignes</th>
+          <th>Crédits 2025</th>
+          <th>Engage 2025</th>
+          <th>Crédits scénario</th>
+          <th>Engage prédit</th>
+          <th>Δ vs 2025</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Line-level table -->
+  <div class="panel">
+    <h3>3. Détail par Ligne budgétaire</h3>
+    <div class="toolbar">
+      <input type="text" id="lineFilter" placeholder="Filtrer (intitulé ou code)..." style="flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:6px;">
+      <button id="btnExport">⬇ Exporter résultats (xlsx)</button>
+    </div>
+    <div class="scrollbox">
+      <table id="lineTable">
+        <thead><tr>
+          <th class="left">Code</th>
+          <th class="left">Intitulé</th>
+          <th>Crédits scén.</th>
+          <th>Taux prédit</th>
+          <th>Engage prédit</th>
+          <th>Engage 2025</th>
+          <th>Δ %</th>
+          <th>Méthode</th>
+          <th>Risque ML</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <details style="margin-top:8px;"><summary>Comment interpréter ces colonnes ?</summary>
+      <p class="muted" style="margin-top:8px;">
+        <b>Taux prédit</b> = taux d'exécution attendu (Engage ÷ Crédits) calculé par la méthode optimale pour chaque ligne, choisie par backtest sur 2024-2025.<br>
+        <b>Méthode</b> : <i>RateLast</i> = dernier taux observé · <i>RateMean</i> = moyenne historique · <i>RateMed</i> = médiane (robuste) · <i>RateTrend</i> = tendance linéaire.<br>
+        <b>Engage prédit</b> = Crédits scénario × Taux prédit.
+      </p>
+    </details>
+  </div>
+</main>
+
+<footer>
+  Données 100% locales. Aucune requête réseau effectuée — confidentialité garantie.
+</footer>
+
+<script>
+// ============================================================
+//  MODEL embedded by 07_build_dashboard.py
+// ============================================================
+const MODEL = {"forecast_year": 2027, "training_years": [2021, 2022, 2023, 2024, 2025], "n_lines": 102, "lines": [{"Line_Key": "1211006000-300-00-10-11", "Intitule": "Traitements, salaires et indemnités permanentes du personnel titulaire et assimilé (*)", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 0.35, "Predicted_Rate_2027": 1.0016, "Last_Credits": 3565430000.0, "Last_Engage_2025": 2946670534.73, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.008, "ML_Risk_Year": 2023}, {"Line_Key": "1211006000-300-00-10-13", "Intitule": "Cotisations de l'Etat au titre de la retraite", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 1.01, "Predicted_Rate_2027": 0.9932, "Last_Credits": 433310000.0, "Last_Engage_2025": 398237461.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.006, "ML_Risk_Year": 2023}, {"Line_Key": "1211006000-300-00-10-12", "Intitule": "Cotisations de l'Etat au titre de la prévoyance sociale", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 1.18, "Predicted_Rate_2027": 0.9318, "Last_Credits": 63410000.0, "Last_Engage_2025": 56541100.81, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.019, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-301-00-20-60", "Intitule": "Frais de justice criminelle", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 67.22, "Predicted_Rate_2027": 1.7372, "Last_Credits": 45000000.0, "Last_Engage_2025": 49999999.81, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.12, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-301-00-30-10", "Intitule": "Frais d'assistance judiciaire", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.9999, "Last_Credits": 40000000.0, "Last_Engage_2025": 29998000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.083, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-300-00-10-80", "Intitule": "Frais de transport et manutention du matériel, de mobilier et de documents", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": NaN, "Predicted_Rate_2027": 6.9585, "Last_Credits": 4000000.0, "Last_Engage_2025": 27834037.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.333, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-300-00-20-34", "Intitule": "Indemnités de déplacement et changement de résidence à l'intérieur du Royaume", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 20.63, "Predicted_Rate_2027": 2.0, "Last_Credits": 12400000.0, "Last_Engage_2025": 25399480.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.25, "ML_Risk_Year": 2025}, {"Line_Key": "1222006000-300-00-11-81", "Intitule": "Achat de matériel informatique et de logiciels", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 10.57, "Predicted_Rate_2027": 0.9017, "Last_Credits": 18252100.0, "Last_Engage_2025": 24278485.95, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.173, "ML_Risk_Year": 2022}, {"Line_Key": "1222006000-300-00-11-40", "Intitule": "Travaux d'aménagement et d'installation", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 102.62, "Predicted_Rate_2027": 1.1179, "Last_Credits": 20400000.0, "Last_Engage_2025": 16544712.84, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.361, "ML_Risk_Year": 2022}, {"Line_Key": "1222006000-300-07-11-30", "Intitule": "Travaux de construction ou d'extension de bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 31.67, "Predicted_Rate_2027": 1.0033, "Last_Credits": 0.0, "Last_Engage_2025": 15049963.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.257, "ML_Risk_Year": 2023}, {"Line_Key": "1211006000-300-00-10-67", "Intitule": "Indemnités de permanence aux secrétaires greffiers", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 10.25, "Predicted_Rate_2027": 1.1221, "Last_Credits": 15000000.0, "Last_Engage_2025": 14994900.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.252, "ML_Risk_Year": 2023}, {"Line_Key": "1222006000-300-04-11-30", "Intitule": "Travaux de construction ou d'extension de bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 50.22, "Predicted_Rate_2027": 0.5958, "Last_Credits": 10000000.0, "Last_Engage_2025": 14894362.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.257, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-301-00-20-34", "Intitule": "Redevances d'électricité", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 2.63, "Predicted_Rate_2027": 2.0, "Last_Credits": 7000000.0, "Last_Engage_2025": 14000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.283, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-301-00-10-22", "Intitule": "Taxes et redevances de télécommunications", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 27.5, "Predicted_Rate_2027": 1.7099, "Last_Credits": 13000000.0, "Last_Engage_2025": 13000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.126, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-300-00-10-13", "Intitule": "Entretien et réparation des bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 116.24, "Predicted_Rate_2027": 0.3049, "Last_Credits": 19000000.0, "Last_Engage_2025": 11599066.74, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.524, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-300-00-20-22", "Intitule": "Achat de carburants et lubrifiants", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 63.36, "Predicted_Rate_2027": 1.8929, "Last_Credits": 1344000.0, "Last_Engage_2025": 11344000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.194, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-300-00-10-15", "Intitule": "Frais de sécurité, gardiennage, nettoyage des bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 2.38, "Predicted_Rate_2027": 0.1846, "Last_Credits": 41324000.0, "Last_Engage_2025": 7458933.08, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.1, "ML_Risk_Year": 2023}, {"Line_Key": "1222006000-300-03-11-30", "Intitule": "Travaux de construction ou d'extension de bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 16.3, "Predicted_Rate_2027": 1.9299, "Last_Credits": 11895100.0, "Last_Engage_2025": 7322098.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.257, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-300-00-10-21", "Intitule": "Fournitures de bureau, produits d'impression, papeterie et imprimés", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 7.71, "Predicted_Rate_2027": 0.8944, "Last_Credits": 7000000.0, "Last_Engage_2025": 7155251.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.168, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-303-00-20-13", "Intitule": "Redevances d'électricité", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 16.67, "Predicted_Rate_2027": 1.4, "Last_Credits": 5000000.0, "Last_Engage_2025": 7000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.283, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-301-00-10-51", "Intitule": "Règlement et exécution des décisions judiciaires et administratives", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 35.9, "Predicted_Rate_2027": 2.1459, "Last_Credits": 2000000.0, "Last_Engage_2025": 6729370.7, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.176, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-301-00-10-24", "Intitule": "Redevances d'électricité", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 21.2, "Predicted_Rate_2027": 1.314, "Last_Credits": 5000000.0, "Last_Engage_2025": 6570000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.283, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-10-33", "Intitule": "Achat de fournitures pour matériel technique et informatique", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 105.66, "Predicted_Rate_2027": 0.3901, "Last_Credits": 3600000.0, "Last_Engage_2025": 6419969.6, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.177, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-20-54", "Intitule": "Publicité, impression et insertion", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 39.21, "Predicted_Rate_2027": 1.2309, "Last_Credits": 3000000.0, "Last_Engage_2025": 5160885.8, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.357, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-303-00-10-13", "Intitule": "Redevances d'électricité", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 5000000.0, "Last_Engage_2025": 5000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.283, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-10-12", "Intitule": "Locations de bâtiments administratifs et charges connexes", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 45.83, "Predicted_Rate_2027": 0.7657, "Last_Credits": 8000000.0, "Last_Engage_2025": 4535310.26, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.091, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-20-83", "Intitule": "Subvention à la Fondation Mohammedia des oeuvres sociales des magistrats et des fonctionnaires de la justice", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 4500000.0, "Last_Engage_2025": 4500000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.06, "ML_Risk_Year": 2026}, {"Line_Key": "1222006000-300-02-11-40", "Intitule": "Travaux d'aménagement et d'installation", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 114.53, "Predicted_Rate_2027": 1.0417, "Last_Credits": 6257800.0, "Last_Engage_2025": 4166650.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.361, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-301-00-20-32", "Intitule": "Taxes et redevances de télécommunications", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 4000000.0, "Last_Engage_2025": 4000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.126, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-303-00-10-11", "Intitule": "Taxes et redevances de télécommunications", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 4000000.0, "Last_Engage_2025": 4000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.126, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-301-00-10-23", "Intitule": "Redevances d'eau", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 4000000.0, "Last_Engage_2025": 4000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.189, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-303-00-20-11", "Intitule": "Taxes et redevances de télécommunications", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 4000000.0, "Last_Engage_2025": 4000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.126, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-302-00-20-11", "Intitule": "Taxes et redevances de télécommunications", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 4000000.0, "Last_Engage_2025": 4000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.126, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-302-00-10-21", "Intitule": "Taxes et redevances de télécommunications", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 4000000.0, "Last_Engage_2025": 4000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.126, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-300-00-20-11", "Intitule": "Taxes et redevances de télécommunications", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 3940000.0, "Last_Engage_2025": 3940000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.126, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-300-00-20-16", "Intitule": "Redevances d'électricité", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 89.08, "Predicted_Rate_2027": 2.0, "Last_Credits": 2000000.0, "Last_Engage_2025": 3700000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.283, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-20-21", "Intitule": "Frais d'entretien et de réparation des véhicules", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 70.09, "Predicted_Rate_2027": 5.6875, "Last_Credits": 640000.0, "Last_Engage_2025": 3640000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.203, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-300-00-20-55", "Intitule": "Abonnement et documentation", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 51.73, "Predicted_Rate_2027": 0.19, "Last_Credits": 19000000.0, "Last_Engage_2025": 3610123.65, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.251, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-301-00-10-31", "Intitule": "Fournitures de bureau, produits d'impression, papeterie et imprimés", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 14.96, "Predicted_Rate_2027": 0.5773, "Last_Credits": 4000000.0, "Last_Engage_2025": 3464091.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.168, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-300-00-20-71", "Intitule": "Frais de formation, d'organisation et de participation aux séminaires, stages et congrés", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 100.06, "Predicted_Rate_2027": 0.2655, "Last_Credits": 15000000.0, "Last_Engage_2025": 3456600.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.14, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-301-00-20-20", "Intitule": "Indemnités allouées aux huissiers de justice en matière pénale", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 13.96, "Predicted_Rate_2027": 1.0058, "Last_Credits": 4000000.0, "Last_Engage_2025": 3236352.5, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.09, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-301-00-20-31", "Intitule": "Taxes postales et frais d'affranchissement", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 3000000.0, "Last_Engage_2025": 2999998.7, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.227, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-301-00-10-41", "Intitule": "Indemnités de déplacement et changement de résidence à l'intérieur du Royaume", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 0.03, "Predicted_Rate_2027": 0.9999, "Last_Credits": 3000000.0, "Last_Engage_2025": 2999940.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.25, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-301-00-20-51", "Intitule": "Indemnités de déplacement et changement de résidence à l'intérieur du Royaume", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 0.01, "Predicted_Rate_2027": 1.0, "Last_Credits": 3000000.0, "Last_Engage_2025": 2999900.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.25, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-300-00-20-73", "Intitule": "Indemnités de déplacement et changement de résidence à l'intérieur du Royaume", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 0.02, "Predicted_Rate_2027": 0.9998, "Last_Credits": 3000000.0, "Last_Engage_2025": 2999880.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.25, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-303-00-20-31", "Intitule": "Indemnités de déplacement et changement de résidence à l'intérieur du Royaume", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 0.13, "Predicted_Rate_2027": 0.9999, "Last_Credits": 3000000.0, "Last_Engage_2025": 2999850.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.25, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-302-00-20-31", "Intitule": "Indemnités de déplacement et changement de résidence à l'intérieur du Royaume", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.01, "Predicted_Rate_2027": 0.9999, "Last_Credits": 3000000.0, "Last_Engage_2025": 2999580.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.25, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-302-00-10-41", "Intitule": "Indemnités de déplacement et changement de résidence à l'intérieur du Royaume", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.9998, "Last_Credits": 3000000.0, "Last_Engage_2025": 2999400.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.25, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-303-00-10-31", "Intitule": "Indemnités de déplacement et changement de résidence à l'intérieur du Royaume", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.9998, "Last_Credits": 3000000.0, "Last_Engage_2025": 2999230.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.25, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-300-00-20-32", "Intitule": "Frais de transport du personnel à l'étranger", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 13.57, "Predicted_Rate_2027": 2.0, "Last_Credits": 1408000.0, "Last_Engage_2025": 2900000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.502, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-300-00-20-31", "Intitule": "Frais de transport du personnel à l'intérieur du Maroc", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 7.38, "Predicted_Rate_2027": 2.0, "Last_Credits": 1500000.0, "Last_Engage_2025": 2600000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.092, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-300-00-20-12", "Intitule": "Taxes postales et frais d'affranchissement", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 75.0, "Predicted_Rate_2027": 2.5, "Last_Credits": 3000000.0, "Last_Engage_2025": 2499995.5, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.227, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-302-00-10-60", "Intitule": "Cotisations aux organismes internationaux", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 78.01, "Predicted_Rate_2027": 0.1663, "Last_Credits": 3000000.0, "Last_Engage_2025": 2405783.76, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.282, "ML_Risk_Year": 2023}, {"Line_Key": "1222006000-300-06-11-40", "Intitule": "Travaux d'aménagement et d'installation", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 56.66, "Predicted_Rate_2027": 2.0, "Last_Credits": 4400000.0, "Last_Engage_2025": 2167131.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.361, "ML_Risk_Year": 2022}, {"Line_Key": "1222006000-300-00-11-50", "Intitule": "Achat de matériel et mobilier de bureau", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 89.97, "Predicted_Rate_2027": 0.3203, "Last_Credits": 8000000.0, "Last_Engage_2025": 2117387.92, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.37, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-303-00-10-12", "Intitule": "Redevances d'eau", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 2000000.0, "Last_Engage_2025": 2000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.189, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-301-00-10-21", "Intitule": "Taxes postales et frais d'affranchissement", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 4000000.0, "Last_Engage_2025": 1999996.4, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.227, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-302-00-20-12", "Intitule": "Taxes postales et frais d'affranchissement", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 2000000.0, "Last_Engage_2025": 1999996.4, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.227, "ML_Risk_Year": 2024}, {"Line_Key": "1222006000-300-00-15-20", "Intitule": "Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": NaN, "Predicted_Rate_2027": 1.681, "Last_Credits": 0.0, "Last_Engage_2025": 1631170.21, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.153, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-20-24", "Intitule": "Frais d'assurance des véhicules", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 2.04, "Predicted_Rate_2027": 0.9835, "Last_Credits": 1600000.0, "Last_Engage_2025": 1509863.77, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.061, "ML_Risk_Year": 2026}, {"Line_Key": "1212006000-300-00-10-31", "Intitule": "Frais de maintenance du matériel informatique et des logiciels", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 4.49, "Predicted_Rate_2027": 0.742, "Last_Credits": 1000000.0, "Last_Engage_2025": 1484020.26, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.379, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-300-00-20-60", "Intitule": "Assistance au titre du pélerinage aux Lieux Saints de l'Islam", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 5.26, "Predicted_Rate_2027": 1.4706, "Last_Credits": 850000.0, "Last_Engage_2025": 1250000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.126, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-300-00-20-35", "Intitule": "Indemnités de mission à l'étranger", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 20.66, "Predicted_Rate_2027": 1.5208, "Last_Credits": 768000.0, "Last_Engage_2025": 1168000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.186, "ML_Risk_Year": 2022}, {"Line_Key": "1211006000-300-00-10-66", "Intitule": "Indemnité forfaitaire pour utilisation dans l'intérêt du service de la voiture automobile personnelle", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 5.09, "Predicted_Rate_2027": 0.7898, "Last_Credits": 1457000.0, "Last_Engage_2025": 1150791.66, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.021, "ML_Risk_Year": 2026}, {"Line_Key": "1212006000-300-00-40-10", "Intitule": "Maintenance et conservation des archives", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 95.01, "Predicted_Rate_2027": 2.126, "Last_Credits": 500000.0, "Last_Engage_2025": 1006201.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.469, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-300-00-20-15", "Intitule": "Redevances d'eau", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 50.49, "Predicted_Rate_2027": 2.56, "Last_Credits": 1000000.0, "Last_Engage_2025": 1000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.189, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-301-00-10-62", "Intitule": "Subvention aux associations de droit non gouvernementales", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 50.7, "Predicted_Rate_2027": 1.0, "Last_Credits": 1000000.0, "Last_Engage_2025": 1000000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.398, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-302-00-10-22", "Intitule": "Taxes postales et frais d'affranchissement", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 2000000.0, "Last_Engage_2025": 999998.2, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.227, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-20-84", "Intitule": "Subvention aux associations et aux amicales professionnelles des magistrats et fonctionnaires du Ministère de la Justice", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 13.48, "Predicted_Rate_2027": 0.6344, "Last_Credits": 1220000.0, "Last_Engage_2025": 900000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.09, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-300-00-20-23", "Intitule": "Taxe spéciale annuelle sur les véhicules automobiles", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 4.01, "Predicted_Rate_2027": 0.9076, "Last_Credits": 900000.0, "Last_Engage_2025": 811049.98, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.001, "ML_Risk_Year": 2026}, {"Line_Key": "1212006000-300-00-10-17", "Intitule": "Entretien des espaces verts", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 16.74, "Predicted_Rate_2027": 0.6077, "Last_Credits": 1200000.0, "Last_Engage_2025": 729197.57, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.086, "ML_Risk_Year": 2021}, {"Line_Key": "1222006000-300-11-11-20", "Intitule": "Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": NaN, "Predicted_Rate_2027": 0.4464, "Last_Credits": 1285000.0, "Last_Engage_2025": 677423.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.153, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-20-59", "Intitule": "Assurance des comptables", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 3.78, "Predicted_Rate_2027": 0.8708, "Last_Credits": 650000.0, "Last_Engage_2025": 598079.05, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.01, "ML_Risk_Year": 2026}, {"Line_Key": "1212006000-300-00-10-50", "Intitule": "Frais de recharge d'extincteurs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 63.96, "Predicted_Rate_2027": 1.2261, "Last_Credits": 1000000.0, "Last_Engage_2025": 573688.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.184, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-300-00-20-53", "Intitule": "Frais d'hébergement et de restauration", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 27.39, "Predicted_Rate_2027": 5.3, "Last_Credits": 100000.0, "Last_Engage_2025": 530000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.485, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-300-00-10-19", "Intitule": "Achat d'articles de plomberie sanitaire, outillage et quincaillerie", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 12.44, "Predicted_Rate_2027": 0.8363, "Last_Credits": 500000.0, "Last_Engage_2025": 504808.8, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.083, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-300-00-10-40", "Intitule": "Achat de détergents et produits de nettoyage", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 10.67, "Predicted_Rate_2027": 0.8289, "Last_Credits": 500000.0, "Last_Engage_2025": 414450.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.093, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-300-00-10-14", "Intitule": "Achat de fournitures et accessoires électriques", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 42.66, "Predicted_Rate_2027": 2.0, "Last_Credits": 500000.0, "Last_Engage_2025": 408890.4, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.167, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-302-00-10-50", "Intitule": "Frais protocolaires et d'organisation de manifestation", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 55.99, "Predicted_Rate_2027": 0.9162, "Last_Credits": 1000000.0, "Last_Engage_2025": 407341.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.215, "ML_Risk_Year": 2022}, {"Line_Key": "1222006000-300-02-11-20", "Intitule": "Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": NaN, "Predicted_Rate_2027": 0.4073, "Last_Credits": 1000000.0, "Last_Engage_2025": 407273.39, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.153, "ML_Risk_Year": 2024}, {"Line_Key": "1222006000-300-00-11-20", "Intitule": "Etudes liées à la construction, restauration, aménagement et extension des bâtiments administratifs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 200.0, "Predicted_Rate_2027": 0.8047, "Last_Credits": 0.0, "Last_Engage_2025": 356757.02, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.153, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-301-00-10-61", "Intitule": "Subvention de fonctionnement au Centre de Publication et de Documentation Judiciaire de la Cour de Cassation", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 1.0, "Last_Credits": 300000.0, "Last_Engage_2025": 300000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.143, "ML_Risk_Year": 2026}, {"Line_Key": "1212006000-300-00-10-60", "Intitule": "Achat de matériaux de construction", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 104.9, "Predicted_Rate_2027": 0.3692, "Last_Credits": 500000.0, "Last_Engage_2025": 184608.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.181, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-300-00-20-52", "Intitule": "Frais de réception et de cérémonies officielles", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 61.57, "Predicted_Rate_2027": 2.0, "Last_Credits": 55000.0, "Last_Engage_2025": 150000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.256, "ML_Risk_Year": 2025}, {"Line_Key": "1212006000-300-00-10-11", "Intitule": "Impôts et taxes", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 76.95, "Predicted_Rate_2027": 1.004, "Last_Credits": 500000.0, "Last_Engage_2025": 139860.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.193, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-302-00-10-10", "Intitule": "Frais d'édition et d'impression et travaux de tirage", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 100.0, "Predicted_Rate_2027": 0.65, "Last_Credits": 200000.0, "Last_Engage_2025": 130000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.159, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-300-00-20-51", "Intitule": "Habillement", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMed", "Backtest_sMAPE": 168.98, "Predicted_Rate_2027": 0.3321, "Last_Credits": 1000000.0, "Last_Engage_2025": 15000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.449, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-20-56", "Intitule": "Achat de produits  énergétiques pour chauffage et cuisson", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 200.0, "Predicted_Rate_2027": 0.1939, "Last_Credits": 0.0, "Last_Engage_2025": 10000.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.099, "ML_Risk_Year": 2022}, {"Line_Key": "1211006000-300-00-10-72", "Intitule": "Gratifications aux chauffeurs", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 26000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.042, "ML_Risk_Year": 2022}, {"Line_Key": "1211006000-300-00-10-71", "Intitule": "Indemnités de caisse des regisseurs, billeteurs et payeurs délégués", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 2000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.042, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-300-00-10-18", "Intitule": "Frais d'autorisation de construire", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 154.66, "Predicted_Rate_2027": 1.2056, "Last_Credits": 200000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.167, "ML_Risk_Year": 2023}, {"Line_Key": "1212006000-300-00-10-22", "Intitule": "Entretien et réparation du mobilier et du matériel de bureau", "Chap": "nan", "Prog": "nan", "Best_Method": "RateTrend", "Backtest_sMAPE": 100.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 500000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.159, "ML_Risk_Year": 2024}, {"Line_Key": "1211006000-300-00-10-50", "Intitule": "Indemnités horaires pour travaux supplémentaires", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 837000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.149, "ML_Risk_Year": 2025}, {"Line_Key": "1211006000-300-00-10-62", "Intitule": "Aide exceptionnelle au logement", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 350000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.147, "ML_Risk_Year": 2025}, {"Line_Key": "1211006000-300-00-10-40", "Intitule": "Rémunération des notaires et indemnités aux naïbs à délégation spéciale", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 10000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.042, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-300-00-10-16", "Intitule": "Achat d'outillage, de matériel, de fournitures et de produits pour le jardinage", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 200000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.251, "ML_Risk_Year": 2021}, {"Line_Key": "1211006000-300-00-10-64", "Intitule": "Indemnités aux juges suppléants des juridictions communales et d'arrondissements", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 80000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.042, "ML_Risk_Year": 2021}, {"Line_Key": "1212006000-300-00-20-42", "Intitule": "Achat de cadeaux présentés aux délégations", "Chap": "nan", "Prog": "nan", "Best_Method": "RateMean", "Backtest_sMAPE": 152.67, "Predicted_Rate_2027": 1.0852, "Last_Credits": 500000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.326, "ML_Risk_Year": 2022}, {"Line_Key": "1212006000-301-00-20-33", "Intitule": "Redevances d'eau", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 175.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 7000000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.189, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-301-00-20-80", "Intitule": "Subvention aux associations de droit non gouvernementales", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 0.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 1000000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.398, "ML_Risk_Year": 2024}, {"Line_Key": "1212006000-303-00-20-12", "Intitule": "Redevances d'eau", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 100.0, "Predicted_Rate_2027": 0.0, "Last_Credits": 2000000.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.189, "ML_Risk_Year": 2024}, {"Line_Key": "1222006000-300-04-11-40", "Intitule": "Travaux d'aménagement et d'installation", "Chap": "nan", "Prog": "nan", "Best_Method": "RateLast", "Backtest_sMAPE": 100.0, "Predicted_Rate_2027": 0.1026, "Last_Credits": 0.0, "Last_Engage_2025": 0.0, "Last_Year_Observed": 2026, "ML_Risk_Score": 0.361, "ML_Risk_Year": 2022}], "programme_labels": {"nan|300": "SOUTIEN ET PILOTAGE", "nan|301": "PERFORMANCE DE L'ADMINISTRATION JUDICIAIRE", "nan|302": "MODERNISATION DU SYSTEME JUDICIAIRE ET JURIDIQUE", "nan|303": "RENFORCEMENT DES DROITS ET DES LIBERTES"}, "chapter_labels": {"1211006000": "Budget de Fonctionnement -Dépenses du Personnel-", "1212006000": "Budget de Fonctionnement -Matériel et Dépenses diverses-", "1222006000": "Budget d'Investissement"}, "backtest_summary": {"median_sMAPE": 13.525335619621288, "mean_sMAPE": 38.27691280310113}};
+
+const FY = MODEL.forecast_year;
+document.querySelectorAll(".targetYear").forEach(e => e.textContent = FY);
+document.getElementById("hdrYear").textContent = FY;
+document.getElementById("hdrModel").textContent =
+  `Modèle entraîné sur ${MODEL.training_years[0]}-${MODEL.training_years.at(-1)} · ` +
+  `sMAPE médian ${MODEL.backtest_summary.median_sMAPE.toFixed(1)}%`;
+
+// State: Map<Line_Key, credits_for_FY>
+let scenarioCredits = new Map();
+MODEL.lines.forEach(l => scenarioCredits.set(l.Line_Key, l.Last_Credits));
+
+const fmt = n => n == null || isNaN(n) ? "—" :
+  new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(n);
+const fmtPct = n => n == null || isNaN(n) ? "—" :
+  (n >= 0 ? "+" : "") + n.toFixed(1) + "%";
+
+function recomputeAndRender() {
+  let totalCred = 0, totalEng = 0, totalLast = 0, totalCred2025 = 0;
+  const enriched = MODEL.lines.map(l => {
+    const credits = scenarioCredits.get(l.Line_Key) ?? l.Last_Credits;
+    const engage = credits * l.Predicted_Rate_2027;
+    totalCred += credits;
+    totalEng += engage;
+    if (l.Last_Engage_2025 != null) totalLast += l.Last_Engage_2025;
+    totalCred2025 += l.Last_Credits;
+    const deltaPct = l.Last_Engage_2025 ? (engage - l.Last_Engage_2025) / l.Last_Engage_2025 * 100 : null;
+    return { ...l, scenario_credits: credits, predicted_engage: engage, delta_pct: deltaPct };
+  });
+
+  // KPIs
+  document.getElementById("kpiLines").textContent  = fmt(MODEL.n_lines);
+  document.getElementById("kpiCredits").textContent = fmt(totalCred);
+  document.getElementById("kpiEngage").textContent  = fmt(totalEng);
+  document.getElementById("kpiEngageNote").textContent = `vs ${fmt(totalLast)} en 2025`;
+  document.getElementById("kpiRate").textContent    = (totalEng / totalCred * 100).toFixed(1) + "%";
+  const dPct = (totalEng - totalLast) / totalLast * 100;
+  const dEl = document.getElementById("kpiDelta");
+  dEl.textContent = fmtPct(dPct);
+  dEl.className = "val " + (dPct >= 0 ? "pos" : "neg");
+  document.getElementById("kpiDeltaAbs").textContent =
+    (dPct >= 0 ? "+" : "") + fmt(totalEng - totalLast) + " MAD";
+
+  renderLineTable(enriched);
+  renderProgTable(enriched);
+  window._enriched = enriched; // for export
+}
+
+function renderLineTable(rows) {
+  const filter = document.getElementById("lineFilter").value.toLowerCase();
+  const filtered = rows.filter(r =>
+    !filter || r.Intitule.toLowerCase().includes(filter) || r.Line_Key.toLowerCase().includes(filter)
+  ).sort((a, b) => b.predicted_engage - a.predicted_engage);
+
+  const tbody = document.querySelector("#lineTable tbody");
+  tbody.innerHTML = filtered.map(r => `
+    <tr>
+      <td class="left"><span class="badge">${r.Line_Key}</span></td>
+      <td class="left">${r.Intitule}</td>
+      <td class="num">${fmt(r.scenario_credits)}</td>
+      <td class="num">${(r.Predicted_Rate_2027 * 100).toFixed(1)}%</td>
+      <td class="num"><b>${fmt(r.predicted_engage)}</b></td>
+      <td class="num">${fmt(r.Last_Engage_2025)}</td>
+      <td class="num ${r.delta_pct == null ? '' : r.delta_pct >= 0 ? 'pos' : 'neg'}">${fmtPct(r.delta_pct)}</td>
+      <td><span class="badge">${r.Best_Method}</span></td>
+      <td class="num"><span class="badge" style="background:${riskColor(r.ML_Risk_Score)};color:#fff">${(r.ML_Risk_Score*100).toFixed(0)}</span></td>
+    </tr>`).join("");
+}
+
+function riskColor(s) {
+  if (s == null) return "#888";
+  if (s >= 0.45) return "#c62828";
+  if (s >= 0.30) return "#ef6c00";
+  if (s >= 0.15) return "#f9a825";
+  return "#2e7d32";
+}
+
+function renderProgTable(rows) {
+  // Aggregate by Chap|Prog
+  const map = new Map();
+  rows.forEach(r => {
+    const k = `${r.Chap}|${r.Prog}`;
+    if (!map.has(k)) map.set(k, {
+      Chap: r.Chap, Prog: r.Prog,
+      label: MODEL.programme_labels[k] || `${r.Chap} / ${r.Prog}`,
+      n: 0, credits_2025: 0, engage_2025: 0, credits_scen: 0, engage_pred: 0,
+    });
+    const o = map.get(k);
+    o.n += 1;
+    o.credits_2025 += r.Last_Credits;
+    o.engage_2025 += r.Last_Engage_2025 || 0;
+    o.credits_scen += r.scenario_credits;
+    o.engage_pred += r.predicted_engage;
+  });
+  const list = [...map.values()].sort((a, b) => b.engage_pred - a.engage_pred);
+  const tbody = document.querySelector("#progTable tbody");
+  tbody.innerHTML = list.map(p => {
+    const d = p.engage_2025 ? (p.engage_pred - p.engage_2025) / p.engage_2025 * 100 : null;
+    return `<tr>
+      <td class="left">${p.label}</td>
+      <td class="num">${p.n}</td>
+      <td class="num">${fmt(p.credits_2025)}</td>
+      <td class="num">${fmt(p.engage_2025)}</td>
+      <td class="num">${fmt(p.credits_scen)}</td>
+      <td class="num"><b>${fmt(p.engage_pred)}</b></td>
+      <td class="num ${d == null ? '' : d >= 0 ? 'pos' : 'neg'}">${fmtPct(d)}</td>
+    </tr>`;
+  }).join("");
+}
+
+// ===== File upload =====
+document.getElementById("fileInput").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const buf = await file.arrayBuffer();
+  const wb = XLSX.read(buf, { type: "array" });
+  const sheet = wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(sheet, { defval: null });
+  // Detect columns
+  const keyCol = Object.keys(rows[0]).find(c => /line[_ ]?key|code/i.test(c));
+  const credCol = Object.keys(rows[0]).find(c => /credit/i.test(c));
+  if (!keyCol || !credCol) {
+    document.getElementById("scenarioStatus").innerHTML =
+      `<span style="color:var(--bad)">Colonnes attendues introuvables (Line_Key + Credits_${FY}).</span>`;
+    return;
+  }
+  let matched = 0;
+  rows.forEach(r => {
+    const k = String(r[keyCol]).trim();
+    const v = Number(r[credCol]);
+    if (scenarioCredits.has(k) && !isNaN(v)) {
+      scenarioCredits.set(k, v);
+      matched++;
+    }
+  });
+  document.getElementById("scenarioStatus").innerHTML =
+    `Fichier <b>${file.name}</b> chargé : ${matched} lignes mises à jour sur ${MODEL.n_lines}.`;
+  recomputeAndRender();
+});
+
+// ===== Global multiplier =====
+document.getElementById("globalMult").addEventListener("input", e => {
+  document.getElementById("multLabel").textContent = e.target.value + "%";
+});
+document.getElementById("btnApplyMult").addEventListener("click", () => {
+  const m = 1 + parseFloat(document.getElementById("globalMult").value) / 100;
+  MODEL.lines.forEach(l => scenarioCredits.set(l.Line_Key, l.Last_Credits * m));
+  document.getElementById("scenarioStatus").textContent =
+    `Scénario uniforme appliqué : ${document.getElementById("globalMult").value}% sur toutes les lignes.`;
+  recomputeAndRender();
+});
+
+// ===== Filter =====
+document.getElementById("lineFilter").addEventListener("input",
+  () => renderLineTable(window._enriched));
+
+// ===== Export =====
+document.getElementById("btnExport").addEventListener("click", () => {
+  const rows = window._enriched.map(r => ({
+    Line_Key: r.Line_Key,
+    Intitule: r.Intitule,
+    Chap: r.Chap,
+    Prog: r.Prog,
+    Credits_Scenario: Math.round(r.scenario_credits),
+    Predicted_Rate: r.Predicted_Rate_2027,
+    [`Predicted_Engage_${FY}`]: Math.round(r.predicted_engage),
+    Last_Engage_2025: r.Last_Engage_2025,
+    Delta_vs_2025_pct: r.delta_pct == null ? null : Number(r.delta_pct.toFixed(2)),
+    Method: r.Best_Method,
+    Backtest_sMAPE: r.Backtest_sMAPE,
+    ML_Risk_Score: r.ML_Risk_Score,
+    ML_Risk_Year: r.ML_Risk_Year,
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Forecast");
+  XLSX.writeFile(wb, `forecast_engage_${FY}.xlsx`);
+});
+
+// ===== Template download =====
+document.getElementById("btnTemplate").addEventListener("click", () => {
+  const rows = MODEL.lines.map(l => ({
+    Line_Key: l.Line_Key,
+    Intitule: l.Intitule,
+    [`Credits_${FY}`]: Math.round(l.Last_Credits),
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Scenario");
+  XLSX.writeFile(wb, `scenario_template_${FY}.xlsx`);
+});
+
+// Initial render
+recomputeAndRender();
+</script>
+</body>
+</html>

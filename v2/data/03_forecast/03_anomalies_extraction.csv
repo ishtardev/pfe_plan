@@ -1,0 +1,45 @@
+rule,severity,Year,Line_Key,Intitule,detail,Engage,Credits
+identity_drift,medium,,1211006000-300-00-10-67,Indemnités de permanence aux juges et aux secrétaires greffiers | Indemnités de permanence aux secrétaires greffiers,2 different normalized labels across years,,
+identity_drift,medium,,1212006000-301-00-10-61,Subvention de fonctionnement au Centre de Publication et de Documentation Judiciaire de la Cour de Cassation | Subvention de fonctionnement au Centre de Publication de l’Information Juridique,2 different normalized labels across years,,
+huge_swing,low,2024.0,1212006000-300-00-10-13,Entretien et réparation des bâtiments administratifs,x0.1 vs previous year (vir_net=-18861860),839488.52,20000000.0
+huge_swing,low,2025.0,1212006000-300-00-10-13,Entretien et réparation des bâtiments administratifs,x13.8 vs previous year (vir_net=-10270000),11599066.74,22000000.0
+huge_swing,low,2026.0,1212006000-300-00-10-13,Entretien et réparation des bâtiments administratifs,x0.1 vs previous year (vir_net=-1768000),908000.1,19000000.0
+huge_swing,low,2022.0,1212006000-300-00-10-31,Frais de maintenance du matériel informatique et des logiciels,x0.0 vs previous year (vir_net=-2455000),41800.0,2500000.0
+huge_swing,low,2023.0,1212006000-300-00-10-31,Frais de maintenance du matériel informatique et des logiciels,x36.8 vs previous year (vir_net=-660730),1539264.79,2200000.0
+huge_swing,low,2026.0,1212006000-300-00-10-33,Achat de fournitures pour matériel technique et informatique,x0.0 vs previous year (vir_net=0),181436.4,3600000.0
+huge_swing,low,2025.0,1212006000-300-00-20-16,Redevances d'électricité,x0.1 vs previous year (vir_net=1700000),3700000.0,2000000.0
+huge_swing,low,2022.0,1212006000-300-00-20-32,Frais de transport du personnel à l'étranger,x21.1 vs previous year (vir_net=2259700),3989800.0,1760000.0
+huge_swing,low,2026.0,1212006000-300-00-20-34,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,x0.0 vs previous year (vir_net=0),600000.0,12400000.0
+huge_swing,low,2022.0,1212006000-300-00-20-35,Indemnités de mission à l'étranger,x12.0 vs previous year (vir_net=0),960000.0,960000.0
+huge_swing,low,2024.0,1212006000-300-00-20-51,Habillement,x13.3 vs previous year (vir_net=1580000),2546244.0,1000000.0
+huge_swing,low,2025.0,1212006000-300-00-20-51,Habillement,x0.0 vs previous year (vir_net=-985000),15000.0,1000000.0
+huge_swing,low,2022.0,1212006000-300-00-20-53,Frais d'hébergement et de restauration,x46.4 vs previous year (vir_net=5011000),5097228.0,100000.0
+huge_swing,low,2026.0,1212006000-300-00-20-73,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,x0.0 vs previous year (vir_net=0),600000.0,12400000.0
+huge_swing,low,2024.0,1212006000-300-00-40-10,Maintenance et conservation des archives,x0.1 vs previous year (vir_net=-437000),62055.0,500000.0
+huge_swing,low,2025.0,1212006000-300-00-40-10,Maintenance et conservation des archives,x16.2 vs previous year (vir_net=507000),1006201.0,500000.0
+huge_swing,low,2025.0,1212006000-301-00-10-24,Redevances d'électricité,x0.1 vs previous year (vir_net=1700000),3700000.0,2000000.0
+huge_swing,low,2026.0,1212006000-301-00-10-41,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,x0.0 vs previous year (vir_net=0),600000.0,12400000.0
+huge_swing,low,2023.0,1212006000-301-00-10-62,Subvention aux associations de droit non gouvernementales,x0.1 vs previous year (vir_net=-975000),25000.0,1000000.0
+huge_swing,low,2024.0,1212006000-301-00-10-62,Subvention aux associations de droit non gouvernementales,x40.0 vs previous year (vir_net=0),1000000.0,1000000.0
+huge_swing,low,2025.0,1212006000-301-00-20-34,Redevances d'électricité,x0.1 vs previous year (vir_net=1700000),3700000.0,2000000.0
+huge_swing,low,2026.0,1212006000-301-00-20-51,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,x0.0 vs previous year (vir_net=0),600000.0,12400000.0
+huge_swing,low,2023.0,1212006000-301-00-20-80,Subvention aux associations de droit non gouvernementales,x0.1 vs previous year (vir_net=-975000),25000.0,1000000.0
+huge_swing,low,2024.0,1212006000-301-00-20-80,Subvention aux associations de droit non gouvernementales,x40.0 vs previous year (vir_net=0),1000000.0,1000000.0
+huge_swing,low,2026.0,1212006000-302-00-10-41,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,x0.0 vs previous year (vir_net=0),600000.0,12400000.0
+huge_swing,low,2022.0,1212006000-302-00-10-50,Frais protocolaires et d'organisation de manifestation,x14.8 vs previous year (vir_net=-50000),929171.85,1000000.0
+huge_swing,low,2026.0,1212006000-302-00-10-60,Cotisations aux organismes internationaux,x0.1 vs previous year (vir_net=0),232339.76,3000000.0
+huge_swing,low,2026.0,1212006000-302-00-20-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,x0.0 vs previous year (vir_net=0),600000.0,12400000.0
+huge_swing,low,2025.0,1212006000-303-00-10-13,Redevances d'électricité,x0.1 vs previous year (vir_net=1700000),3700000.0,2000000.0
+huge_swing,low,2026.0,1212006000-303-00-10-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,x0.0 vs previous year (vir_net=0),600000.0,12400000.0
+huge_swing,low,2025.0,1212006000-303-00-20-13,Redevances d'électricité,x0.1 vs previous year (vir_net=1700000),3700000.0,2000000.0
+huge_swing,low,2026.0,1212006000-303-00-20-31,Indemnités de déplacement et changement de résidence à l'intérieur du Royaume,x0.0 vs previous year (vir_net=0),600000.0,12400000.0
+huge_swing,low,2025.0,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,x12.1 vs previous year (vir_net=1908306),16544712.84,14800000.0
+huge_swing,low,2026.0,1222006000-300-00-11-40,Travaux d'aménagement et d'installation,x0.1 vs previous year (vir_net=-94161),1404290.12,20400000.0
+huge_swing,low,2022.0,1222006000-300-00-11-50,Achat de matériel et mobilier de bureau,x18.7 vs previous year (vir_net=3649160),3614160.0,0.0
+huge_swing,low,2026.0,1222006000-300-00-11-81,Achat de matériel informatique et de logiciels,x0.0 vs previous year (vir_net=-7534580),574966.39,18252100.0
+huge_swing,low,2025.0,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,x12.1 vs previous year (vir_net=1908306),16544712.84,14800000.0
+huge_swing,low,2026.0,1222006000-300-02-11-40,Travaux d'aménagement et d'installation,x0.1 vs previous year (vir_net=-94161),1404290.12,20400000.0
+huge_swing,low,2025.0,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,x12.1 vs previous year (vir_net=1908306),16544712.84,14800000.0
+huge_swing,low,2026.0,1222006000-300-04-11-40,Travaux d'aménagement et d'installation,x0.1 vs previous year (vir_net=-94161),1404290.12,20400000.0
+huge_swing,low,2025.0,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,x12.1 vs previous year (vir_net=1908306),16544712.84,14800000.0
+huge_swing,low,2026.0,1222006000-300-06-11-40,Travaux d'aménagement et d'installation,x0.1 vs previous year (vir_net=-94161),1404290.12,20400000.0

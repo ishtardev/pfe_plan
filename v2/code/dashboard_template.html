@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Prévision Budgétaire — Ministère de la Justice</title>
+<script src="xlsx.full.min.js"></script>
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --primary: #1f4e79;
+    --accent: #c9302c;
+    --text: #1c1c1c;
+    --muted: #6b7280;
+    --border: #e3e7ee;
+    --good: #2f7d32;
+    --bad: #c9302c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+  }
+  header {
+    background: var(--primary); color: white; padding: 20px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  header h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  header .sub { font-size: 13px; opacity: 0.85; }
+  main { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px 20px; flex: 1; min-width: 240px;
+  }
+  .card h2 { font-size: 14px; margin: 0 0 6px 0; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+  .card .val { font-size: 24px; font-weight: 600; color: var(--primary); }
+  .card .delta { font-size: 13px; margin-top: 4px; }
+  .delta.up { color: var(--good); } .delta.down { color: var(--bad); }
+  .panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px; margin-bottom: 20px;
+  }
+  .panel h3 { margin: 0 0 12px 0; color: var(--primary); font-size: 16px; }
+  button {
+    background: var(--primary); color: white; border: 0; padding: 10px 18px;
+    border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 500;
+  }
+  button:hover { background: #163a5d; }
+  button.secondary { background: #6b7280; }
+  button.accent { background: var(--accent); }
+  input[type=file] { padding: 8px; border: 1px dashed var(--border); border-radius: 6px; background: #fafbfc; }
+  input[type=number], input[type=range] { padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: right; }
+  th:first-child, td:first-child, th.left, td.left { text-align: left; }
+  th { background: #f8fafc; font-weight: 600; color: var(--muted); position: sticky; top: 0; }
+  tr:hover { background: #fafbfc; }
+  .scrollbox { max-height: 480px; overflow: auto; border: 1px solid var(--border); border-radius: 6px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .num { font-variant-numeric: tabular-nums; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; background: #eef2f7; color: var(--primary); }
+  .toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .slider-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .pos { color: var(--good); } .neg { color: var(--bad); }
+  details summary { cursor: pointer; color: var(--primary); font-size: 13px; }
+  footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Prévision de l'Engagement Budgétaire</h1>
+    <div class="sub">Ministère de la Justice — Horizon <span id="hdrYear"></span></div>
+  </div>
+  <div class="sub" id="hdrModel"></div>
+</header>
+
+<main>
+  <!-- KPI cards -->
+  <div class="row">
+    <div class="card"><h2>Lignes budgétaires</h2><div class="val" id="kpiLines">—</div><div class="muted">panel stable 2021-2025</div></div>
+    <div class="card"><h2>Crédits scénario</h2><div class="val" id="kpiCredits">—</div><div class="muted">total proposé</div></div>
+    <div class="card"><h2>Engagement prédit</h2><div class="val" id="kpiEngage">—</div><div class="muted" id="kpiEngageNote"></div></div>
+    <div class="card"><h2>Taux d'exécution global</h2><div class="val" id="kpiRate">—</div><div class="muted">prédit pour <span class="targetYear"></span></div></div>
+    <div class="card"><h2>Δ vs Engage 2025</h2><div class="val" id="kpiDelta">—</div><div class="muted" id="kpiDeltaAbs"></div></div>
+  </div>
+
+  <!-- Scenario builder -->
+  <div class="panel">
+    <h3>1. Définir le scénario de Crédits Ouverts <span class="targetYear"></span></h3>
+    <div class="toolbar">
+      <label for="fileInput"><strong>Charger fichier Crédits (xlsx ou csv) :</strong></label>
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+      <button class="secondary" id="btnTemplate">Télécharger modèle vierge</button>
+      <span class="muted">— ou —</span>
+      <div class="slider-wrap">
+        <label>Variation globale vs dernière année :</label>
+        <input type="range" id="globalMult" min="-30" max="30" step="1" value="0">
+        <span id="multLabel" class="num">0%</span>
+        <button class="secondary" id="btnApplyMult">Appliquer</button>
+      </div>
+    </div>
+    <div class="muted" id="scenarioStatus">Aucun fichier chargé — scénario actuel : statu quo (Crédits = dernière année observée).</div>
+  </div>
+
+  <!-- Programme breakdown -->
+  <div class="panel">
+    <h3>2. Synthèse par Programme</h3>
+    <div class="scrollbox">
+      <table id="progTable">
+        <thead><tr>
+          <th class="left">Programme</th>
+          <th>Lignes</th>
+          <th>Crédits 2025</th>
+          <th>Engage 2025</th>
+          <th>Crédits scénario</th>
+          <th>Engage prédit</th>
+          <th>Δ vs 2025</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Line-level table -->
+  <div class="panel">
+    <h3>3. Détail par Ligne budgétaire</h3>
+    <div class="toolbar">
+      <input type="text" id="lineFilter" placeholder="Filtrer (intitulé ou code)..." style="flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:6px;">
+      <button id="btnExport">⬇ Exporter résultats (xlsx)</button>
+    </div>
+    <div class="scrollbox">
+      <table id="lineTable">
+        <thead><tr>
+          <th class="left">Code</th>
+          <th class="left">Intitulé</th>
+          <th>Crédits scén.</th>
+          <th>Taux prédit</th>
+          <th>Engage prédit</th>
+          <th>Engage 2025</th>
+          <th>Δ %</th>
+          <th>Méthode</th>
+          <th>Risque ML</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <details style="margin-top:8px;"><summary>Comment interpréter ces colonnes ?</summary>
+      <p class="muted" style="margin-top:8px;">
+        <b>Taux prédit</b> = taux d'exécution attendu (Engage ÷ Crédits) calculé par la méthode optimale pour chaque ligne, choisie par backtest sur 2024-2025.<br>
+        <b>Méthode</b> : <i>RateLast</i> = dernier taux observé · <i>RateMean</i> = moyenne historique · <i>RateMed</i> = médiane (robuste) · <i>RateTrend</i> = tendance linéaire.<br>
+        <b>Engage prédit</b> = Crédits scénario × Taux prédit.
+      </p>
+    </details>
+  </div>
+</main>
+
+<footer>
+  Données 100% locales. Aucune requête réseau effectuée — confidentialité garantie.
+</footer>
+
+<script>
+// ============================================================
+//  MODEL embedded by 07_build_dashboard.py
+// ============================================================
+const MODEL = /*__MODEL_JSON__*/;
+
+const FY = MODEL.forecast_year;
+document.querySelectorAll(".targetYear").forEach(e => e.textContent = FY);
+document.getElementById("hdrYear").textContent = FY;
+document.getElementById("hdrModel").textContent =
+  `Modèle entraîné sur ${MODEL.training_years[0]}-${MODEL.training_years.at(-1)} · ` +
+  `sMAPE médian ${MODEL.backtest_summary.median_sMAPE.toFixed(1)}%`;
+
+// State: Map<Line_Key, credits_for_FY>
+let scenarioCredits = new Map();
+MODEL.lines.forEach(l => scenarioCredits.set(l.Line_Key, l.Last_Credits));
+
+const fmt = n => n == null || isNaN(n) ? "—" :
+  new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(n);
+const fmtPct = n => n == null || isNaN(n) ? "—" :
+  (n >= 0 ? "+" : "") + n.toFixed(1) + "%";
+
+function recomputeAndRender() {
+  let totalCred = 0, totalEng = 0, totalLast = 0, totalCred2025 = 0;
+  const enriched = MODEL.lines.map(l => {
+    const credits = scenarioCredits.get(l.Line_Key) ?? l.Last_Credits;
+    const engage = credits * l.Predicted_Rate_2027;
+    totalCred += credits;
+    totalEng += engage;
+    if (l.Last_Engage_2025 != null) totalLast += l.Last_Engage_2025;
+    totalCred2025 += l.Last_Credits;
+    const deltaPct = l.Last_Engage_2025 ? (engage - l.Last_Engage_2025) / l.Last_Engage_2025 * 100 : null;
+    return { ...l, scenario_credits: credits, predicted_engage: engage, delta_pct: deltaPct };
+  });
+
+  // KPIs
+  document.getElementById("kpiLines").textContent  = fmt(MODEL.n_lines);
+  document.getElementById("kpiCredits").textContent = fmt(totalCred);
+  document.getElementById("kpiEngage").textContent  = fmt(totalEng);
+  document.getElementById("kpiEngageNote").textContent = `vs ${fmt(totalLast)} en 2025`;
+  document.getElementById("kpiRate").textContent    = (totalEng / totalCred * 100).toFixed(1) + "%";
+  const dPct = (totalEng - totalLast) / totalLast * 100;
+  const dEl = document.getElementById("kpiDelta");
+  dEl.textContent = fmtPct(dPct);
+  dEl.className = "val " + (dPct >= 0 ? "pos" : "neg");
+  document.getElementById("kpiDeltaAbs").textContent =
+    (dPct >= 0 ? "+" : "") + fmt(totalEng - totalLast) + " MAD";
+
+  renderLineTable(enriched);
+  renderProgTable(enriched);
+  window._enriched = enriched; // for export
+}
+
+function renderLineTable(rows) {
+  const filter = document.getElementById("lineFilter").value.toLowerCase();
+  const filtered = rows.filter(r =>
+    !filter || r.Intitule.toLowerCase().includes(filter) || r.Line_Key.toLowerCase().includes(filter)
+  ).sort((a, b) => b.predicted_engage - a.predicted_engage);
+
+  const tbody = document.querySelector("#lineTable tbody");
+  tbody.innerHTML = filtered.map(r => `
+    <tr>
+      <td class="left"><span class="badge">${r.Line_Key}</span></td>
+      <td class="left">${r.Intitule}</td>
+      <td class="num">${fmt(r.scenario_credits)}</td>
+      <td class="num">${(r.Predicted_Rate_2027 * 100).toFixed(1)}%</td>
+      <td class="num"><b>${fmt(r.predicted_engage)}</b></td>
+      <td class="num">${fmt(r.Last_Engage_2025)}</td>
+      <td class="num ${r.delta_pct == null ? '' : r.delta_pct >= 0 ? 'pos' : 'neg'}">${fmtPct(r.delta_pct)}</td>
+      <td><span class="badge">${r.Best_Method}</span></td>
+      <td class="num"><span class="badge" style="background:${riskColor(r.ML_Risk_Score)};color:#fff">${(r.ML_Risk_Score*100).toFixed(0)}</span></td>
+    </tr>`).join("");
+}
+
+function riskColor(s) {
+  if (s == null) return "#888";
+  if (s >= 0.45) return "#c62828";
+  if (s >= 0.30) return "#ef6c00";
+  if (s >= 0.15) return "#f9a825";
+  return "#2e7d32";
+}
+
+function renderProgTable(rows) {
+  // Aggregate by Chap|Prog
+  const map = new Map();
+  rows.forEach(r => {
+    const k = `${r.Chap}|${r.Prog}`;
+    if (!map.has(k)) map.set(k, {
+      Chap: r.Chap, Prog: r.Prog,
+      label: MODEL.programme_labels[k] || `${r.Chap} / ${r.Prog}`,
+      n: 0, credits_2025: 0, engage_2025: 0, credits_scen: 0, engage_pred: 0,
+    });
+    const o = map.get(k);
+    o.n += 1;
+    o.credits_2025 += r.Last_Credits;
+    o.engage_2025 += r.Last_Engage_2025 || 0;
+    o.credits_scen += r.scenario_credits;
+    o.engage_pred += r.predicted_engage;
+  });
+  const list = [...map.values()].sort((a, b) => b.engage_pred - a.engage_pred);
+  const tbody = document.querySelector("#progTable tbody");
+  tbody.innerHTML = list.map(p => {
+    const d = p.engage_2025 ? (p.engage_pred - p.engage_2025) / p.engage_2025 * 100 : null;
+    return `<tr>
+      <td class="left">${p.label}</td>
+      <td class="num">${p.n}</td>
+      <td class="num">${fmt(p.credits_2025)}</td>
+      <td class="num">${fmt(p.engage_2025)}</td>
+      <td class="num">${fmt(p.credits_scen)}</td>
+      <td class="num"><b>${fmt(p.engage_pred)}</b></td>
+      <td class="num ${d == null ? '' : d >= 0 ? 'pos' : 'neg'}">${fmtPct(d)}</td>
+    </tr>`;
+  }).join("");
+}
+
+// ===== File upload =====
+document.getElementById("fileInput").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const buf = await file.arrayBuffer();
+  const wb = XLSX.read(buf, { type: "array" });
+  const sheet = wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(sheet, { defval: null });
+  // Detect columns
+  const keyCol = Object.keys(rows[0]).find(c => /line[_ ]?key|code/i.test(c));
+  const credCol = Object.keys(rows[0]).find(c => /credit/i.test(c));
+  if (!keyCol || !credCol) {
+    document.getElementById("scenarioStatus").innerHTML =
+      `<span style="color:var(--bad)">Colonnes attendues introuvables (Line_Key + Credits_${FY}).</span>`;
+    return;
+  }
+  let matched = 0;
+  rows.forEach(r => {
+    const k = String(r[keyCol]).trim();
+    const v = Number(r[credCol]);
+    if (scenarioCredits.has(k) && !isNaN(v)) {
+      scenarioCredits.set(k, v);
+      matched++;
+    }
+  });
+  document.getElementById("scenarioStatus").innerHTML =
+    `Fichier <b>${file.name}</b> chargé : ${matched} lignes mises à jour sur ${MODEL.n_lines}.`;
+  recomputeAndRender();
+});
+
+// ===== Global multiplier =====
+document.getElementById("globalMult").addEventListener("input", e => {
+  document.getElementById("multLabel").textContent = e.target.value + "%";
+});
+document.getElementById("btnApplyMult").addEventListener("click", () => {
+  const m = 1 + parseFloat(document.getElementById("globalMult").value) / 100;
+  MODEL.lines.forEach(l => scenarioCredits.set(l.Line_Key, l.Last_Credits * m));
+  document.getElementById("scenarioStatus").textContent =
+    `Scénario uniforme appliqué : ${document.getElementById("globalMult").value}% sur toutes les lignes.`;
+  recomputeAndRender();
+});
+
+// ===== Filter =====
+document.getElementById("lineFilter").addEventListener("input",
+  () => renderLineTable(window._enriched));
+
+// ===== Export =====
+document.getElementById("btnExport").addEventListener("click", () => {
+  const rows = window._enriched.map(r => ({
+    Line_Key: r.Line_Key,
+    Intitule: r.Intitule,
+    Chap: r.Chap,
+    Prog: r.Prog,
+    Credits_Scenario: Math.round(r.scenario_credits),
+    Predicted_Rate: r.Predicted_Rate_2027,
+    [`Predicted_Engage_${FY}`]: Math.round(r.predicted_engage),
+    Last_Engage_2025: r.Last_Engage_2025,
+    Delta_vs_2025_pct: r.delta_pct == null ? null : Number(r.delta_pct.toFixed(2)),
+    Method: r.Best_Method,
+    Backtest_sMAPE: r.Backtest_sMAPE,
+    ML_Risk_Score: r.ML_Risk_Score,
+    ML_Risk_Year: r.ML_Risk_Year,
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Forecast");
+  XLSX.writeFile(wb, `forecast_engage_${FY}.xlsx`);
+});
+
+// ===== Template download =====
+document.getElementById("btnTemplate").addEventListener("click", () => {
+  const rows = MODEL.lines.map(l => ({
+    Line_Key: l.Line_Key,
+    Intitule: l.Intitule,
+    [`Credits_${FY}`]: Math.round(l.Last_Credits),
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Scenario");
+  XLSX.writeFile(wb, `scenario_template_${FY}.xlsx`);
+});
+
+// Initial render
+recomputeAndRender();
+</script>
+</body>
+</html>
