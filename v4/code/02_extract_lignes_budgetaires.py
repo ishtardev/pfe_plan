@@ -161,13 +161,7 @@ def main():
             "Total_Engage_Vises"]
     df = df[cols]
 
-    out_path = OUT_DIR / "SituationChap_LIGNES_BUDGETAIRES_TOTAL.xlsx"
-    df_total = df.copy()
-    df_total["Year"] = df_total["Year"].astype(str)  # text so Power BI treats it as category
-    df_total.to_excel(out_path, index=False)
-    print(f"\n{len(df)} rows -> {out_path}")
-
-    # Keep only lines whose full path appears in EVERY year
+    # Stable identifier for each leaf line across years
     df["Line_Key"] = (
         df["Chap"].astype(str) + "-" +
         df["Prog"].astype(str) + "-" +
@@ -175,6 +169,14 @@ def main():
         df["Proj"].astype(str) + "-" +
         df["Lb"].astype(str)
     )
+
+    out_path = OUT_DIR / "SituationChap_LIGNES_BUDGETAIRES_TOTAL.xlsx"
+    df_total = df.copy()
+    df_total["Year"] = df_total["Year"].astype(str)  # text so Power BI treats it as category
+    df_total.to_excel(out_path, index=False)
+    print(f"\n{len(df)} rows -> {out_path}")
+
+    # Keep only lines whose full path appears in EVERY year
     n_years = df["Year"].nunique()
     years_per_key = df.groupby("Line_Key")["Year"].nunique()
     common_keys = years_per_key[years_per_key == n_years].index
