@@ -69,6 +69,10 @@ def build_rows(df: pd.DataFrame, train_years: np.ndarray, target_year: int) -> l
         vm_vals   = np.array([_get("Virements_En_Moins_Vises", y) for y in train_years])
 
         co_pred,  co_lo,  co_hi  = linear_predict(train_years, co_vals,  target_year)
+        # CO ne peut pas être négatif
+        if not np.isnan(co_pred): co_pred = max(0.0, co_pred)
+        if not np.isnan(co_lo):   co_lo   = max(0.0, co_lo)
+        if not np.isnan(co_hi):   co_hi   = max(0.0, co_hi)
         vp_pred,  _,      _      = linear_predict(train_years, vp_vals,  target_year)
         vm_pred,  _,      _      = linear_predict(train_years, vm_vals,  target_year)
 

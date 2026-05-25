@@ -110,7 +110,7 @@ def predict_co(years: np.ndarray, co_vals: np.ndarray, target: int) -> float:
     if mask.sum() < 2:
         return np.nan
     a, b = np.polyfit(years[mask].astype(float), co_vals[mask].astype(float), 1)
-    return float(a * target + b)
+    return float(max(0.0, a * target + b))
 
 
 def fiabilite_label(mape: float) -> str:
@@ -185,7 +185,11 @@ def main():
 
     meta = df.drop_duplicates("Line_Key").set_index("Line_Key")[ID_COLS]
     keys = df["Line_Key"].unique()
-    all_available_years = sorted(df["Year"].unique())
+    all_years_raw = sorted(df["Year"].unique())
+
+    # Exclure l'année en cours (2026 partielle) des données complètes
+    CURRENT_PARTIAL_YEAR = 2026
+    all_available_years = [y for y in all_years_raw if y != CURRENT_PARTIAL_YEAR]
 
     # Validate on every year except the first two (need at least 2 training points)
     validation_years = all_available_years[2:]   # e.g. [2023, 2024, 2025]
@@ -299,6 +303,7 @@ def main():
 
         best_model = best_model_for_pred.get(key, "average")
         t_pred     = predict_taux(best_model, all_years, taux_all, next_year)
+        if not np.isnan(t_pred): t_pred = max(0.0, t_pred)
         engage_pred = co_pred * t_pred if not (np.isnan(co_pred) or np.isnan(t_pred)) else np.nan
 
         lo_m, hi_m = taux_interval(taux_all, co_pred)

@@ -155,10 +155,59 @@ def main():
 
     # -- Export --
     out_path = OUT_DIR / "SituationChap_ANOMALIES.xlsx"
+    # -- Table combinée risque --
+    # Z-score max par ligne
+    zscore_max = (zscore_df.groupby("Line_Key")
+                           .agg(Z_Score_Max=("Z_Score", "max"),
+                                Nb_Anomalies_ZScore=("Anomalie_Annee", lambda x: (x=="Oui").sum()),
+                                Taux_Moyen=("Taux_Moyen", "first"),
+                                Taux_Engagement_Dernier=("Taux_Engagement", "last"))
+                           .reset_index())
+
+    # IF scores
+    if_sub = if_df[["Line_Key"] + ID_COLS + ["Score_Anomalie", "Est_Anomalie_IF", "Rang_Anomalie"]].copy()
+
+    # Merge
+    risque = if_sub.merge(zscore_max, on="Line_Key", how="left")
+
+    # Catégorie (Fonctionnement vs Investissement) basée sur Chap_Intitule
+    risque["Categorie"] = risque["Chap_Intitule"].apply(
+        lambda x: "Investissement" if "Investissement" in str(x) else "Fonctionnement"
+    )
+
+    # Niveau de risque combiné
+    def niveau_risque(row):
+        if row["Est_Anomalie_IF"] == "Oui" and row["Z_Score_Max"] > 2:
+            return "Critique"
+        elif row["Est_Anomalie_IF"] == "Oui" or row["Z_Score_Max"] > 2:
+            return "Haut"
+        elif row["Nb_Anomalies_ZScore"] > 0 or row["Z_Score_Max"] > 1.5:
+            return "Moyen"
+        else:
+            return "Faible"
+
+    risque["Niveau_Risque"] = risque.apply(niveau_risque, axis=1)
+
+    # Arrondir les colonnes numériques
+    for col in ["Taux_Moyen", "Taux_Engagement_Dernier", "Z_Score_Max", "Score_Anomalie"]:
+        if col in risque.columns:
+            risque[col] = risque[col].round(2)
+
+    # Colonnes finales
+    cols_out = (["Chap_Intitule", "Intitule", "Categorie",
+                 "Taux_Moyen", "Taux_Engagement_Dernier",
+                 "Z_Score_Max", "Nb_Anomalies_ZScore",
+                 "Score_Anomalie", "Est_Anomalie_IF", "Rang_Anomalie",
+                 "Niveau_Risque", "Line_Key"])
+    risque_out = risque[[c for c in cols_out if c in risque.columns]]
+    risque_out = risque_out.sort_values("Rang_Anomalie")
+
     with pd.ExcelWriter(out_path, engine="openpyxl") as writer:
         zscore_df.to_excel(writer, sheet_name="Anomalies_Annuelles", index=False)
         if_df.to_excel(writer, sheet_name="Lignes_Anormales",        index=False)
+        risque_out.to_excel(writer, sheet_name="Risque_Combine",     index=False)
     print(f"\nRésultats -> {out_path}")
+    print(f"  Risque_Combine : {len(risque_out)} lignes")
 
 
 if __name__ == "__main__":
