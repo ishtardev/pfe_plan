@@ -1,0 +1,154 @@
+% ======================================================
+% ANNEXES
+% ======================================================
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{Annexes}
+
+\begin{center}
+{\Huge\bfseries Annexes}
+\end{center}
+
+\vspace{1cm}
+
+%================================================================
+\phantomsection
+\section*{Annexe A \quad Glossaire budg\'etaire}
+\addcontentsline{toc}{section}{Annexe A \quad Glossaire budg\'etaire}
+%================================================================
+
+Cette annexe regroupe les principales notions budg\'etaires utilis\'ees
+tout au long du m\'emoire. Les d\'efinitions retenues sont conformes au
+cadre de la loi organique relative \`a la loi de finances (LOF~130-13)
+et aux usages de la Direction du Budget.
+
+\begin{description}
+\item[Cr\'edits ouverts.] Montants autoris\'es par la loi de finances
+pour une ligne budg\'etaire donn\'ee au titre d'un exercice. Ils
+constituent le plafond th\'eorique de la d\'epense.
+
+\item[Cr\'edits ouverts vis\'es.] Cr\'edits ouverts apr\`es prise en
+compte des virements (en plus et en moins) et des r\'egulations
+intervenus en cours d'exercice. C'est l'enveloppe r\'eellement
+disponible pour engager la d\'epense.
+
+\item[Engagement.] Acte par lequel l'administration cr\'ee ou constate
+\`a son encontre une obligation de laquelle r\'esultera une d\'epense.
+Il pr\'ec\`ede la liquidation et le paiement effectif.
+
+\item[Total engag\'e vis\'e.] Cumul des engagements valid\'es au titre
+de la ligne budg\'etaire \`a la date d'extraction du fichier source.
+
+\item[Ordonnancement.] Acte par lequel l'ordonnateur donne l'ordre au
+comptable de payer la d\'epense ayant fait l'objet d'un engagement
+liquid\'e.
+
+\item[Taux d'engagement.] Rapport, exprim\'e en pourcentage, entre le
+total engag\'e et les cr\'edits ouverts vis\'es. Il mesure le degr\'e
+de consommation des cr\'edits sur l'exercice. C'est l'indicateur
+central exploit\'e par le dispositif propos\'e.
+
+\item[Virement de cr\'edits.] Mouvement de cr\'edits d'une ligne
+budg\'etaire vers une autre, op\'er\'e en cours d'exercice dans les
+limites pr\'evues par la r\'eglementation. Les virements en plus
+(\og Virements~+~\fg{}) augmentent les cr\'edits ouverts vis\'es de la
+ligne b\'en\'eficiaire~; les virements en moins
+(\og Virements~$-$~\fg{}) les diminuent.
+
+\item[R\'egulation budg\'etaire.] Mesure prise en cours d'exercice par
+le Ministre charg\'e des finances pour ajuster le rythme de la d\'epense
+aux contraintes de tr\'esorerie ou \`a l'\'evolution des recettes.
+
+\item[Chapitre.] Premier niveau de la nomenclature budg\'etaire.
+Identifie une grande cat\'egorie de d\'epenses (personnel,
+fonctionnement, investissement) au sein d'un d\'epartement minist\'eriel.
+
+\item[Programme.] Second niveau de la nomenclature, regroupant un
+ensemble coh\'erent d'actions concourant \`a une politique publique
+identifi\'ee, conform\'ement \`a la d\'emarche introduite par la
+LOF~130-13.
+
+\item[R\'egion.] Niveau de la nomenclature traduisant la
+d\'econcentration territoriale des cr\'edits, dans le cadre de la
+r\'egionalisation avanc\'ee.
+
+\item[Projet ou action.] Niveau interm\'ediaire de la nomenclature,
+correspondant \`a une op\'eration ou \`a une activit\'e d\'eclin\'ee
+au sein d'un programme.
+
+\item[Ligne budg\'etaire.] Niveau le plus fin de la nomenclature,
+identifi\'e par la combinaison Chapitre--Programme--R\'egion--Projet
+--Ligne. Constitue l'unit\'e d'analyse du dispositif (107 lignes
+retenues sur le p\'erim\`etre du Minist\`ere de la Justice).
+
+\item[Cl\^oture de l'exercice.] Op\'eration comptable de fin d'ann\'ee
+qui arr\^ete d\'efinitivement les engagements et les paiements de
+l'exercice consid\'er\'e. Les donn\'ees relatives aux exercices
+cl\^otur\'es sont consid\'er\'ees comme stables et exploitables \`a
+des fins d'analyse historique.
+\end{description}
+
+\newpage
+
+%================================================================
+\phantomsection
+\section*{Annexe B \quad Format des fichiers sources TGR}
+\addcontentsline{toc}{section}{Annexe B \quad Format des fichiers sources TGR}
+%================================================================
+
+Le dispositif s'appuie sur les fichiers \texttt{SituationChap-AAAA.xls}
+produits annuellement par la Tr\'esorerie G\'en\'erale du Royaume \`a
+partir du syst\`eme d'information budg\'etaire. Chaque fichier d\'ecrit
+la situation des chapitres pour l'exercice consid\'er\'e (\texttt{AAAA}
+d\'esignant l'ann\'ee).
+
+Le tableau~\ref{tab:annexe-format-tgr} pr\'ecise les colonnes
+effectivement exploit\'ees par le module d'importation, leur position
+dans le classeur (lettre de colonne au sens Excel), leur intitul\'e et
+leur usage dans les traitements en aval. Les donn\'ees commencent
+\`a la ligne~6 du classeur (\texttt{DATA\_START\_ROW = 6})~; les lignes
+ant\'erieures contiennent les en-t\^etes et les libell\'es g\'en\'eraux.
+
+\begin{table}[H]
+\centering
+\caption{Colonnes exploit\'ees du fichier \texttt{SituationChap-AAAA.xls}.}
+\label{tab:annexe-format-tgr}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabular}{@{}cllp{6.4cm}@{}}
+\hline
+\textbf{Col.} & \textbf{Intitul\'e source} & \textbf{Type} & \textbf{Usage dans le dispositif} \\
+\hline
+B  & Chapitre                        & Code num\'erique & Identifiant du niveau~1 (cl\'e ligne) \\
+C  & Programme                       & Code num\'erique & Identifiant du niveau~2 (cl\'e ligne) \\
+D  & R\'egion                        & Code num\'erique & Identifiant du niveau~3 (cl\'e ligne) \\
+E  & Projet/Action                   & Code num\'erique & Identifiant du niveau~4 (cl\'e ligne) \\
+G  & Ligne budg\'etaire              & Code num\'erique & Identifiant du niveau~5 (cl\'e finale) \\
+H  & Intitul\'e                      & Texte           & Libell\'e associ\'e au niveau courant \\
+K  & Cr\'edits ouverts vis\'es       & Mon\'etaire (MAD) & Enveloppe disponible (d\'enominateur du taux d'engagement) \\
+M  & Virements en plus               & Mon\'etaire (MAD) & Mouvement positif sur les cr\'edits \\
+O  & Virements en moins              & Mon\'etaire (MAD) & Mouvement n\'egatif sur les cr\'edits \\
+AH & Total engag\'e vis\'e           & Mon\'etaire (MAD) & Consommation effective (num\'erateur du taux d'engagement) \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Hypoth\`eses de structure.}
+Le module d'importation suppose~: (i)~la stabilit\'e des positions de
+colonnes \`a travers les exercices~; (ii)~le d\'ebut effectif des
+donn\'ees \`a la ligne~6~; (iii)~une organisation hi\'erarchique des
+codes (un code de niveau~$k$ devient nul lorsqu'un code de niveau
+$k' < k$ est rencontr\'e). Ces hypoth\`eses sont v\'erifi\'ees sur
+l'ensemble des exercices~2020--2025 utilis\'es. Une \'evolution du
+format des fichiers sources n\'ecessiterait une adaptation du module
+d'importation, comme rappel\'e en~\S\,5.6.1.
+
+\paragraph{Lignes exclues du p\'erim\`etre.}
+Deux chapitres sont syst\'ematiquement exclus du p\'erim\`etre
+analys\'e car ils correspondent \`a des cr\'edits g\'er\'es selon des
+r\`egles sp\'ecifiques (r\'egulations centrales, charges communes)
+qui ne se pr\^etent pas \`a la mod\'elisation propos\'ee~:
+\texttt{3200106001} et \texttt{3200106002}. Le p\'erim\`etre final
+retenu apr\`es exclusion et apr\`es application du crit\`ere de
+continuit\'e (pr\'esence sur l'ensemble des exercices) s'\'el\`eve \`a
+\textbf{107~lignes budg\'etaires}.

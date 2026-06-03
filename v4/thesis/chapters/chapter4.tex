@@ -1,0 +1,885 @@
+\phantomsection
+\section*{Chapitre 4 : Mise en \oe{}uvre empirique et r\'esultats}
+\addcontentsline{toc}{section}{Chapitre 4 : Mise en \oe{}uvre empirique et r\'esultats}
+
+\bigskip
+
+Le chapitre~3 a pos\'e le cadre m\'ethodologique~: cinq mod\`eles parcimonieux
+en concurrence sur chaque ligne budg\'etaire, deux d\'etecteurs d'anomalies
+(score~Z univari\'e et Isolation Forest multivari\'e), articulation finale
+dans une matrice de priorit\'e P0--P4. Ce chapitre passe \`a la mise en
+\oe{}uvre. Il d\'ecrit les donn\'ees effectivement disponibles au Minist\`ere
+de la Justice, le protocole exp\'erimental retenu pour discriminer les
+mod\`eles, puis pr\'esente les r\'esultats num\'eriques obtenus sur les
+107~lignes budg\'etaires communes aux exercices 2021--2026.
+
+Le fil conducteur est double~: chaque chiffre report\'e ici doit \^etre
+\emph{reproductible} \`a partir des fichiers \texttt{SituationChap-AAAA.xls}
+livr\'es chaque ann\'ee par le minist\`ere, et chaque indicateur agr\'eg\'e
+doit pouvoir \^etre \emph{remont\'e \`a la ligne} pour justifier une d\'ecision
+op\'erationnelle. La section~4.1 d\'ecrit la cha\^ine d'extraction~; la~4.2
+pr\'esente le jeu de donn\'ees consolid\'e et ses caract\'eristiques
+statistiques~; la~4.3 d\'etaille le protocole de backtest~; la~4.4 expose
+les r\'esultats de s\'election des mod\`eles ligne par ligne~; la~4.5
+pr\'esente la pr\'evision triennale 2026--2028~; la~4.6 documente la
+d\'etection d'anomalies et la matrice P0--P4~; la~4.7 conclut par une
+synth\`ese critique avant le passage au d\'eploiement op\'erationnel
+(chapitre~5).
+
+\bigskip
+
+\noindent\textbf{D\'emarche m\'ethodologique en cinq \'etapes.} Avant de
+d\'etailler les r\'esultats, il est utile de rappeler l'enchainement logique
+qui a structur\'e le travail empirique~:
+
+\medskip
+
+\noindent\textbf{1. D\'efinition du probl\`eme.} La probl\'ematique \'etudi\'ee
+consiste \`a pr\'evoir l'\'evolution des lignes budg\'etaires \`a partir d'un
+nombre limit\'e d'observations annuelles. Dans le contexte du Minist\`ere de la
+Justice, l'objectif est de produire des pr\'evisions \`a trois ans, conform\'ement
+\`a la logique de la programmation budg\'etaire triennale instaur\'ee par la
+LOF~130-13. En compl\'ement de cette pr\'evision, l'\'etude vise \'egalement \`a
+d\'etecter les anomalies susceptibles de signaler des comportements
+budg\'etaires atypiques n\'ecessitant une attention particuli\`ere du
+gestionnaire.
+
+\medskip
+
+\noindent\textbf{2. Collecte des informations.} Les donn\'ees utilis\'ees
+proviennent de deux sources compl\'ementaires. D'une part, des
+\textbf{donn\'ees budg\'etaires} fournies par les responsables de la Direction du
+Budget ont \'et\'e mobilis\'ees~: bien qu'elles ne correspondent pas exactement
+aux donn\'ees r\'eelles d'ex\'ecution -- pour des raisons de confidentialit\'e
+institutionnelle -- elles reproduisent fid\`element les caract\'eristiques
+structurelles du syst\`eme budg\'etaire \'etudi\'e (nomenclature, ordres de
+grandeur, dynamique pluriannuelle). L'objectif principal n'\'etant pas de
+reproduire une situation sp\'ecifique mais de concevoir un syst\`eme d'aide \`a
+la d\'ecision \emph{g\'en\'eralisable}, ces donn\'ees sont parfaitement
+adapt\'ees \`a la construction et \`a l'\'evaluation du pipeline propos\'e.
+D'autre part, l'\textbf{expertise m\'etier} des gestionnaires budg\'etaires a
+constitu\'e une source d'information essentielle~: les responsables
+interrog\'es ont notamment soulign\'e que les donn\'ees trop anciennes peuvent
+perdre de leur pertinence en raison de changements structurels affectant
+l'environnement budg\'etaire (r\'eformes administratives, inflation,
+\'ev\'enements exceptionnels comme la pand\'emie de COVID-19). Cette
+observation a conduit \`a privil\'egier les donn\'ees les plus r\'ecentes lors
+de la phase de mod\'elisation.
+
+\medskip
+
+\noindent\textbf{3. Analyse exploratoire des donn\'ees.} Avant toute
+mod\'elisation, une analyse exploratoire a \'et\'e r\'ealis\'ee afin de mieux
+comprendre les caract\'eristiques du ph\'enom\`ene \'etudi\'e. Cette \'etape,
+synth\'etis\'ee dans la page de vue d'ensemble du tableau de bord Power~BI
+(chapitre~5, section~5.4.1), vise \`a fournir une lecture globale du portefeuille
+avant d'aborder la pr\'evision ou la d\'etection d'anomalies. L'analyse a
+notamment port\'e sur l'identification de tendances g\'en\'erales, de
+comportements r\'ecurrents, de ruptures \'eventuelles ainsi que de valeurs
+atypiques. Elle permet \'egalement de confronter les observations statistiques
+\`a l'expertise m\'etier afin d'interpr\'eter correctement les anomalies
+d\'etect\'ees et d'\'eviter les conclusions erron\'ees~-- principe rappel\'e en
+section~3.5.3 (\og un mod\`ele n'est pas un substitut au jugement professionnel \fg{}).
+
+\medskip
+
+\noindent\textbf{4. Choix et ajustement des mod\`eles.} Le choix des mod\`eles
+d\'epend de plusieurs facteurs~: la quantit\'e de donn\'ees historiques
+disponibles, les caract\'eristiques des s\'eries budg\'etaires \'etudi\'ees et
+les objectifs op\'erationnels du syst\`eme de pilotage. Dans le cadre de cette
+\'etude, cinq approches de pr\'evision parcimonieuses (justifi\'ees au
+chapitre~3) ont \'et\'e mises en concurrence afin d'identifier les mod\`eles
+les plus adapt\'es \`a des s\'eries annuelles courtes. Parall\`element, deux
+m\'ethodes de d\'etection d'anomalies ont \'et\'e s\'electionn\'ees -- score~Z
+univari\'e et Isolation Forest multivari\'e -- afin de rep\'erer les lignes
+budg\'etaires au comportement inhabituel. Chaque mod\`ele repose sur un
+ensemble d'hypoth\`eses explicites et n\'ecessite une phase d'ajustement \`a
+partir des donn\'ees historiques disponibles.
+
+\medskip
+
+\noindent\textbf{5. Utilisation et \'evaluation des mod\`eles.} Une fois les
+mod\`eles calibr\'es, ils sont utilis\'es pour g\'en\'erer des pr\'evisions
+budg\'etaires et identifier les anomalies potentielles. La qualit\'e des
+pr\'evisions est \'evalu\'ee par le MAPE de validation, m\'etrique adapt\'ee \`a
+la mesure de l'\'ecart relatif entre valeurs observ\'ees et valeurs pr\'edites
+(section~3.5.1). La d\'etection d'anomalies, quant \`a elle, est \'evalu\'ee
+sur la capacit\'e des m\'ethodes retenues \`a mettre en \'evidence des
+comportements atypiques \emph{coh\'erents avec l'expertise m\'etier}. Les
+r\'esultats obtenus sont enfin int\'egr\'es dans un syst\`eme d'aide \`a la
+d\'ecision (matrice P0--P4) permettant aux gestionnaires d'identifier
+rapidement les lignes \`a surveiller en priorit\'e et de soutenir le pilotage
+budg\'etaire op\'erationnel.
+
+\medskip
+
+Les sections suivantes pr\'esentent ces cinq \'etapes sur les donn\'ees du
+Minist\`ere de la Justice.
+
+%================================================================
+\phantomsection
+\subsection*{4.1 \quad Construction du jeu de donn\'ees}
+\addcontentsline{toc}{subsection}{4.1 Construction du jeu de donn\'ees}
+%================================================================
+
+\subsubsection*{4.1.1 \quad Sources et p\'erim\`etre}
+\addcontentsline{toc}{subsubsection}{4.1.1 \quad Sources et p\'erim\`etre}
+
+La source primaire est constitu\'ee des fichiers \texttt{SituationChap-AAAA.xls}
+produits annuellement par la Direction des Affaires Budg\'etaires du Minist\`ere
+de la Justice, pour les exercices \textbf{2021 \`a 2026}. Chaque fichier
+correspond \`a une situation arr\^et\'ee~: ex\'ecution close pour 2021--2025,
+ex\'ecution partielle pour 2026 (donn\'ee provisoire \`a la date du travail).
+
+Chaque fichier comporte plusieurs centaines de lignes correspondant aux
+articles budg\'etaires du minist\`ere selon la nomenclature LOF~130-13~:
+\textbf{Chapitre} (1211 fonctionnement personnel, 1212 fonctionnement
+mat\'eriel, 1213 investissement), \textbf{Programme}, \textbf{R\'egion},
+\textbf{Projet} et \textbf{Ligne budg\'etaire} (\textit{Lb}). La cl\'e
+compos\'ee \texttt{Chap-Prog-Reg-Proj-Lb}, not\'ee dans la suite
+\texttt{Line\_Key}, identifie de mani\`ere unique une rubrique de d\'epense.
+
+Pour chaque ligne et chaque ann\'ee, les colonnes utilis\'ees sont~:
+
+\begin{itemize}
+    \item \textbf{CO} : cr\'edits ouverts (montant initial + virements re\c{c}us).
+    \item \textbf{Engage\_Reel} : total engag\'e en fin d'exercice (ou \`a date pour 2026).
+    \item \textbf{Taux\_Reel} = \texttt{Engage\_Reel}\,/\,\texttt{CO} : taux d'engagement annuel.
+\end{itemize}
+
+\subsubsection*{4.1.2 \quad Cha\^ine de pr\'eparation}
+\addcontentsline{toc}{subsubsection}{4.1.2 \quad Cha\^ine de pr\'eparation}
+
+L'extraction est r\'ealis\'ee par l'outil HTML autonome d\'ecrit au
+chapitre~5. Elle se d\'eroule en cinq \'etapes~:
+
+\begin{enumerate}
+    \item \textbf{Lecture des six fichiers \texttt{.xls}} via la biblioth\`eque
+    SheetJS, directement dans le navigateur du gestionnaire~;
+    \item \textbf{Normalisation des intitul\'es} (suppression des doubles
+    espaces, harmonisation des accents et des codes num\'eriques) afin que les
+    cl\'es \texttt{Line\_Key} soient strictement comparables d'une ann\'ee \`a
+    l'autre~;
+    \item \textbf{Calcul des montants nets} (engagements bruts moins
+    annulations \'eventuelles)~;
+    \item \textbf{Pivot annuel} pour reconstituer, ligne par ligne, la
+    s\'erie temporelle des taux d'engagement sur 2021--2026~;
+    \item \textbf{Filtrage} des lignes pr\'esentes sur l'ensemble de la p\'eriode
+    et dont les cr\'edits ouverts ne sont jamais nuls (un \texttt{CO} nul rend
+    le taux d'engagement non d\'efini).
+\end{enumerate}
+
+\subsubsection*{4.1.3 \quad P\'erim\`etre final}
+\addcontentsline{toc}{subsubsection}{4.1.3 \quad P\'erim\`etre final}
+
+Au terme de la cha\^ine, le jeu de donn\'ees consolid\'e couvre~:
+
+\begin{itemize}
+    \item \textbf{107~lignes budg\'etaires communes} \`a tous les exercices 2021--2026~;
+    \item r\'eparties sur les trois chapitres principaux du budget du minist\`ere
+    (1211 personnel, 1212 mat\'eriel et d\'epenses diverses, 1213
+    investissement)~;
+    \item soit \textbf{642 observations annuelles} (107 lignes $\times$ 6
+    ann\'ees) sur la profondeur historique brute.
+\end{itemize}
+
+Apr\`es application du protocole de backtest (section~4.3) qui n\'ecessite
+plusieurs ann\'ees ant\'erieures pour entra\^iner les mod\`eles, le jeu
+exploit\'e pour la s\'election compte \textbf{321~pr\'evisions \'evalu\'ees}~--
+chacune correspondant \`a une ligne donn\'ee test\'ee sur une ann\'ee
+donn\'ee (107~lignes $\times$ 3~ann\'ees de backtest 2023--2025).
+
+%================================================================
+\phantomsection
+\subsection*{4.2 \quad Statistiques descriptives}
+\addcontentsline{toc}{subsection}{4.2 Statistiques descriptives}
+%================================================================
+
+\subsubsection*{4.2.1 \quad Structure du portefeuille budg\'etaire}
+\addcontentsline{toc}{subsubsection}{4.2.1 \quad Structure du portefeuille budg\'etaire}
+
+Sur la p\'eriode 2021--2025 (ann\'ees pleinement cl\^otur\'ees), le
+portefeuille consolid\'e des 107~lignes repr\'esente un volume cumul\'e
+de plusieurs milliards de dirhams de cr\'edits ouverts, pour un volume
+engag\'e l\'eg\`erement inf\'erieur. Le \textbf{taux d'ex\'ecution moyen}
+sur la p\'eriode s'\'etablit aux environs de \textbf{70\,\%}, en ligne
+avec la moyenne observ\'ee dans les rapports d'ex\'ecution publi\'es par
+la Tr\'esorerie G\'en\'erale du Royaume.
+
+Ce taux global masque toutefois une h\'et\'erog\'en\'eit\'e marqu\'ee~: certaines
+lignes ex\'ecutent moins de~20\,\% de leur dotation (typiquement, des projets
+d'investissement dont les march\'es publics ont \'echou\'e), tandis que d'autres
+d\'epassent largement 100\,\% par recours \`a des virements de cr\'edits en
+cours d'ann\'ee.
+
+\subsubsection*{4.2.2 \quad Diversit\'e des comportements budg\'etaires}
+\addcontentsline{toc}{subsubsection}{4.2.2 \quad Diversit\'e des comportements budg\'etaires}
+
+L'analyse de la \emph{stabilit\'e} (\'ecart-type du taux d'engagement par ligne
+sur l'historique 2021--2025) r\'ev\`ele trois r\'egimes structurellement
+diff\'erents~:
+
+\begin{itemize}
+    \item \textbf{Lignes stables}~: \'ecart-type inf\'erieur \`a 5~points de
+    pourcentage. Typiquement, les d\'epenses de personnel (traitements,
+    indemnit\'es), o\`u la rigidit\'e statutaire impose une ex\'ecution proche
+    du budget~;
+    \item \textbf{Lignes mod\'er\'ement volatiles}~: \'ecart-type entre 5 et
+    15~points. Souvent~: certaines d\'epenses de fonctionnement courantes
+    (fournitures, entretien)~;
+    \item \textbf{Lignes volatiles}~: \'ecart-type sup\'erieur \`a 15~points.
+    Concentre les d\'epenses d'investissement, les redevances (\'electricit\'e,
+    carburants), et les march\'es ponctuels. Pour ces lignes, le taux
+    d'engagement peut osciller entre 30\,\% et 200\,\% d'une ann\'ee sur
+    l'autre.
+\end{itemize}
+
+Cette tripartition justifie a posteriori le choix de la section~3.3 de ne pas
+imposer un mod\`ele unique \`a toutes les lignes~: aucun pr\'edicteur ne peut,
+de mani\`ere uniforme, traiter aussi bien une masse salariale rigide qu'une
+ligne de redevances soumise \`a des pics impr\'evisibles. Le protocole de
+s\'election ligne par ligne (section~4.3) est la r\'eponse op\'erationnelle
+\`a cette h\'et\'erog\'en\'eit\'e.
+
+%================================================================
+\phantomsection
+\subsection*{4.3 \quad Protocole exp\'erimental}
+\addcontentsline{toc}{subsection}{4.3 Protocole exp\'erimental}
+%================================================================
+
+\subsubsection*{4.3.1 \quad Backtests historiques glissants}
+\addcontentsline{toc}{subsubsection}{4.3.1 \quad Backtests historiques glissants}
+
+Conform\'ement au cadre m\'ethodologique pos\'e en~3.3.4, la s\'election du
+meilleur mod\`ele s'appuie sur un \textbf{backtest \`a horizon glissant} sur
+trois ann\'ees de validation, $y \in \{2023, 2024, 2025\}$. Pour chaque ann\'ee
+de validation~:
+
+\begin{enumerate}
+    \item les cinq mod\`eles (tendance lin\'eaire, moyenne, moyenne pond\'er\'ee,
+    persistance, lissage exponentiel simple) sont entra\^in\'es sur les ann\'ees
+    strictement ant\'erieures \`a~$y$~;
+    \item chaque mod\`ele produit une pr\'ediction $\widehat{\tau}_y$ du taux
+    d'engagement~;
+    \item l'erreur en valeur absolue relative est calcul\'ee~:
+    $\text{MAPE}_y = |\widehat{\tau}_y - \tau_y|\,/\,|\tau_y| \times 100$~;
+    \item pour chaque ligne, le mod\`ele retenu est celui dont la moyenne du
+    MAPE sur les trois ann\'ees de validation est la plus faible.
+\end{enumerate}
+
+Ce protocole pr\'esente deux propri\'et\'es importantes. D'une part, il
+n'\'evalue jamais un mod\`ele sur les m\^emes ann\'ees que celles ayant servi
+\`a l'entra\^iner~-- contrainte fondamentale pour pr\'evenir le sur-apprentissage.
+D'autre part, il accepte de juger chaque mod\`ele sur \emph{trois r\'ealisations
+ind\'ependantes}, ce qui att\'enue le bruit d'une mauvaise ann\'ee isol\'ee.
+
+\subsubsection*{4.3.2 \quad G\'en\'eration des projections 2026--2028}
+\addcontentsline{toc}{subsubsection}{4.3.2 \quad G\'en\'eration des projections 2026--2028}
+
+Une fois le meilleur mod\`ele identifi\'e pour chaque ligne, il est r\'eentra\^in\'e
+sur \emph{l'ensemble} des ann\'ees disponibles (2021--2025, voire 2026 pour les
+lignes dont l'ex\'ecution est d\'ej\`a renseign\'ee), puis utilis\'e pour
+produire la pr\'evision officielle des ann\'ees 2026, 2027 et 2028. Les
+intervalles de confiance \`a $\pm 2\sigma$ sont calcul\'es \`a partir des
+r\'esidus du mod\`ele sur l'historique de la ligne.
+
+%================================================================
+\phantomsection
+\subsection*{4.4 \quad Performance des mod\`eles de pr\'evision}
+\addcontentsline{toc}{subsection}{4.4 Performance des mod\`eles de pr\'evision}
+%================================================================
+
+\subsubsection*{4.4.1 \quad Comparaison des familles de mod\`eles}
+\addcontentsline{toc}{subsubsection}{4.4.1 \quad Comparaison des familles de mod\`eles}
+
+Le tableau~\ref{tab:model-counts} pr\'esente le nombre de pr\'evisions
+(une ligne $\times$ une ann\'ee de test) o\`u chaque mod\`ele a \'et\'e s\'electionn\'e comme meilleur sur
+les 321~observations du portefeuille triennal.
+
+\begin{table}[h]
+\centering
+\caption{R\'epartition des mod\`eles s\'electionn\'es sur le portefeuille des 107~lignes (321 pr\'evisions \'evalu\'ees, soit 107~lignes $\times$ 3~ann\'ees de backtest).}
+\label{tab:model-counts}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Mod\`ele s\'electionn\'e} & \textbf{Nombre} & \textbf{Part} \\
+\midrule
+Tendance lin\'eaire (\textit{linear\_trend})        & 132 & 41{,}1\,\% \\
+Moyenne historique (\textit{average})               & 93  & 29{,}0\,\% \\
+Persistance (\textit{naive})                        & 57  & 17{,}8\,\% \\
+Lissage exponentiel simple (\textit{exp\_smoothing})& 30  & 9{,}3\,\%  \\
+Moyenne pond\'er\'ee (\textit{weighted\_avg})       & 9   & 2{,}8\,\%  \\
+\midrule
+\textbf{Total} & \textbf{321} & \textbf{100\,\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Trois constats m\'eritent d'\^etre soulign\'es. \textbf{Premier constat~:} aucun
+mod\`ele ne capte plus de 41\,\% des situations. L'h\'et\'erog\'en\'eit\'e
+empirique du portefeuille~-- d\'ej\`a anticip\'ee par la triple stabilit\'e
+de~4.2.2~-- est donc confirm\'ee par les r\'esultats du backtest. Tout choix
+d'un mod\`ele unique \og pour tout le minist\`ere \fg{} aurait laiss\'e
+inexploit\'e plus de la moiti\'e des configurations possibles.
+
+\textbf{Deuxi\`eme constat~:} la tendance lin\'eaire et la moyenne historique,
+les deux mod\`eles les plus parcimonieux du jeu (un et z\'ero param\`etre
+respectivement, hors estimation de l'intercept), \emph{ensemble} captent
+\textbf{70\,\%} des situations. Le compromis biais-variance favorise donc bien,
+empiriquement, les mod\`eles les plus simples~-- conform\'ement \`a l'argument
+th\'eorique de la section~3.3.2.
+
+\textbf{Troisi\`eme constat~:} le lissage exponentiel simple, dont la
+litt\'erature acad\'emique souligne r\'eguli\`erement la robustesse, ne capte
+ici que 9\,\% des situations. Son param\`etre de lissage~$\alpha$,
+m\^eme cal\'e par optimisation, est p\'enalis\'e par l'\'echantillon
+court~: cinq points ne permettent pas de distinguer de mani\`ere fiable une
+dynamique exponentielle d'un simple bruit autour d'une moyenne.
+
+\subsubsection*{4.4.2 \quad Analyse des erreurs de pr\'evision}
+\addcontentsline{toc}{subsubsection}{4.4.2 \quad Analyse des erreurs de pr\'evision}
+
+La distribution du MAPE de validation sur les 258~pr\'evisions \'evalu\'ees (lignes test\'ees sur 2023--2025)
+disposant d'une valeur calcul\'ee est tr\`es asym\'etrique~:
+
+\begin{itemize}
+    \item m\'ediane = \textbf{28{,}3\,\%}~;
+    \item premier quartile = 0\,\% (lignes parfaitement pr\'edites par
+    persistance ou moyenne historique constante)~;
+    \item troisi\`eme quartile = 51{,}2\,\%~;
+    \item maximum = 2825\,\% (lignes \og pathologiques \fg{} dont le taux
+    d'engagement varie de plusieurs ordres de grandeur).
+\end{itemize}
+
+Appliqu\'es \`a ces MAPE, les seuils de fiabilit\'e d\'efinis en~3.5.1
+($\leq$\,20\,\% \og Fiable \fg{}, 20--50\,\% \og Acceptable \fg{}, 50--100\,\%
+\og \`A valider manuellement \fg{}, $>$\,100\,\% \og Incertain \fg{}) produisent
+la r\'epartition pr\'esent\'ee au tableau~\ref{tab:reliability}.
+
+\begin{table}[h]
+\centering
+\caption{R\'epartition du portefeuille par niveau de fiabilit\'e du mod\`ele s\'electionn\'e (321 pr\'evisions \'evalu\'ees).}
+\label{tab:reliability}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Niveau de fiabilit\'e} & \textbf{Nombre} & \textbf{Part} \\
+\midrule
+Fiable                       & 111 & 34{,}6\,\% \\
+\`A valider manuellement     & 99  & 30{,}8\,\% \\
+Acceptable                   & 75  & 23{,}4\,\% \\
+Incertain                    & 36  & 11{,}2\,\% \\
+\midrule
+\textbf{Total} & \textbf{321} & \textbf{100\,\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En lecture op\'erationnelle~: \textbf{58\,\%} des situations
+(Fiable + Acceptable) peuvent \^etre utilis\'ees directement par le
+gestionnaire pour alimenter la phase de cadrage~; \textbf{31\,\%} m\'eritent
+une v\'erification au cas par cas avant int\'egration~; \textbf{11\,\%}
+restent en zone d'incertitude et doivent \^etre trait\'ees par dire d'expert.
+Cette gradation~-- explicitement transmise au gestionnaire dans les
+livrables du chapitre~5~-- est l'apport principal du dispositif par rapport
+\`a une projection \og brute \fg{} sans qualification.
+
+\paragraph{MAPE pond\'er\'e par les montants.}
+La m\'ediane par ligne masque l'impact financier des erreurs. Le
+\emph{MAPE pond\'er\'e}, d\'efini comme $\sum_i |\widehat{y}_i - y_i|
+\,/\, \sum_i |y_i|$, mesure l'\'ecart en montant agr\'eg\'e plut\^ot
+qu'en pourcentage par ligne. Sur le m\^eme backtest 2023--2025, il
+s'\'el\`eve \`a \textbf{38{,}1\,\%}, valeur sup\'erieure \`a la m\'ediane.
+Cette diff\'erence traduit le fait que les erreurs absolues les plus
+\'elev\'ees se concentrent sur quelques grandes lignes (notamment les
+r\'emun\'erations) dont l'\'ecart relatif, bien que mod\'er\'e, p\`ese
+fortement en valeur. Cette information est restitu\'ee telle quelle au
+gestionnaire~: la pr\'ecision varie selon la ligne, et le tableau de
+bord n'incite pas \`a un usage m\'ecanique de la pr\'evision globale.
+
+\paragraph{R\'ef\'erence \`a la litt\'erature.}
+Cette performance se situe dans la fourchette typique observ\'ee
+en pr\'evision sur s\'eries annuelles courtes. Les comp\'etitions de
+r\'ef\'erence~\citep{Makridakis2018} rapportent des MAPE m\'edians
+de l'ordre de 25 \`a 40\,\% sur des r\'egimes \`a faible profondeur
+historique, ce qui place le dispositif dans une plage attendue
+plut\^ot que dans une situation d'\'echec.
+
+\paragraph{Distribution bimodale et performance conditionnelle.}
+La m\'ediane globale agr\`ege en r\'ealit\'e deux r\'egimes distincts
+qu'il convient de dissocier. En appliquant un filtre de volatilit\'e
+sur l'historique~2020--2024 (coefficient de variation $\sigma/|\mu|<5\,\%$),
+\textbf{30 lignes sur 107} apparaissent structurellement constantes~--
+typiquement des subventions reconduites \`a l'identique ou des dotations
+fixes~-- pour lesquelles la \og pr\'evision \fg{} se r\'eduit \`a une
+reproduction de la valeur ant\'erieure et atteint m\'ecaniquement un
+MAPE proche de z\'ero (m\'ediane $0{,}0\,\%$ sur les 59 pr\'evisions
+correspondantes du backtest). Sur les \textbf{77 lignes volatiles}
+restantes~-- celles o\`u la pr\'evision constitue un v\'eritable
+exercice~-- la m\'ediane conditionnelle s'\'el\`eve \`a \textbf{38{,}6\,\%},
+contre \textbf{48{,}7\,\%} pour la persistance na\"ive sur le m\^eme
+sous-ensemble. C'est sur ce sous-portefeuille, et non sur l'ensemble,
+que le dispositif d\'emontre une valeur ajout\'ee~: il r\'eduit l'erreur
+m\'ediane d'environ dix points de pourcentage l\`a o\`u la r\'eponse
+n'est pas triviale. Cette d\'ecomposition est explicitement assum\'ee~:
+la performance globale annonc\'ee ne doit pas \^etre interpr\'et\'ee
+comme un succ\`es uniforme.
+
+\subsubsection*{4.4.3 \quad Limites et port\'ee de la pr\'evision budg\'etaire}
+\addcontentsline{toc}{subsubsection}{4.4.3 \quad Limites et port\'ee de la pr\'evision budg\'etaire}
+
+Avant de retenir les cinq m\'ethodes int\'egr\'ees au dispositif, plusieurs
+approches plus complexes ont \'et\'e \'evalu\'ees lors de la phase
+exploratoire (section~3.3.1). Toutefois, dans un contexte caract\'eris\'e
+par des historiques tr\`es courts, ces mod\`eles n'ont pas apport\'e
+d'am\'elioration significative par rapport aux m\'ethodes plus simples
+et ont donc \'et\'e \'ecart\'es.
+
+Au-del\`a de cette consid\'eration m\'ethodologique, la pr\'evision
+budg\'etaire pr\'esente une limite inh\'erente \`a son domaine
+d'application. Une partie de l'\'evolution des d\'epenses d\'epend de
+d\'ecisions futures qui ne sont pas observables dans les donn\'ees
+historiques~: arbitrages politiques, nouvelles priorit\'es strat\'egiques,
+cr\'edits exceptionnels inscrits en loi de finances ou encore
+r\'eallocations d\'ecid\'ees en cours d'exercice. Ces \'ev\'enements
+rel\`event de choix de gestion et ne peuvent \^etre anticip\'es de
+mani\`ere fiable par un mod\`ele statistique ou algorithmique.
+
+Cette limite ne remet pas en cause l'int\'er\^et du dispositif~; elle
+permet au contraire d'en pr\'eciser le r\^ole. L'objectif n'est pas de
+remplacer le jugement du gestionnaire, mais de le compl\'eter. Le
+syst\`eme automatise l'analyse des lignes dont le comportement historique
+pr\'esente une certaine r\'egularit\'e et fournit des estimations
+accompagn\'ees d'un niveau de confiance. En parall\`ele, il identifie
+les lignes atypiques ou instables n\'ecessitant une analyse approfondie
+par les responsables budg\'etaires.
+
+Ainsi, la principale valeur ajout\'ee du dispositif ne r\'eside pas
+uniquement dans la production d'une pr\'evision, mais \'egalement dans
+sa capacit\'e \`a distinguer les situations pouvant \^etre trait\'ees
+de mani\`ere automatis\'ee de celles qui requi\`erent une expertise
+humaine. Les indicateurs de fiabilit\'e, de stabilit\'e et les m\'ecanismes
+de d\'etection d'anomalies constituent \`a cet \'egard des outils
+essentiels d'aide \`a la d\'ecision.
+
+%================================================================
+\phantomsection
+\subsection*{4.5 \quad Pr\'evision triennale 2026--2028}
+\addcontentsline{toc}{subsection}{4.5 Pr\'evision triennale 2026--2028}
+%================================================================
+
+\subsubsection*{4.5.1 \quad Vue d'ensemble}
+\addcontentsline{toc}{subsubsection}{4.5.1 \quad Vue d'ensemble}
+
+L'application du protocole conduit \`a une programmation triennale agr\'eg\'ee dont le total s'\'etablit \`a quelques milliards de dirhams par exercice, avec une l\'eg\`ere d\'ecroissance apparente sur l'horizon 2026--2028.
+
+Cette d\'ecroissance refl\`ete avant tout la
+prudence statistique des mod\`eles parcimonieux~: en l'absence d'un signal
+clair de hausse ou de baisse, ils s'alignent sur la moyenne pond\'er\'ee de
+l'historique et tendent \`a propager des taux d'engagement inf\'erieurs \`a
+100\,\% sur les lignes volatiles. La pr\'evision finale doit donc \^etre lue
+comme une \textbf{borne basse statistiquement consistante}, qui sera
+n\'ecessairement r\'evis\'ee \`a la hausse par les services lorsque sont
+ajout\'es les projets nouveaux et les besoins ponctuels (qui, par construction,
+ne figurent pas dans l'historique des cinq ann\'ees pass\'ees).
+
+\subsubsection*{4.5.2 \quad Intervalles de confiance}
+\addcontentsline{toc}{subsubsection}{4.5.2 \quad Intervalles de confiance}
+
+Chaque pr\'evision est syst\'ematiquement accompagn\'ee de ses bornes \`a
+$\pm 2\sigma$ propres au mod\`ele s\'electionn\'e. Pour les lignes stables,
+les intervalles sont \'etroits~: pour la ligne \og Traitements, salaires et
+indemnit\'es permanentes du personnel \fg{} (la plus volumineuse du budget),
+la largeur relative de l'intervalle de confiance \`a $\pm 2\sigma$ reste
+de l'ordre de quelques pourcents autour de la pr\'evision centrale.
+
+Pour les lignes volatiles, les intervalles sont au contraire tr\`es larges et
+\emph{informatifs en eux-m\^emes}~: ils signalent au gestionnaire qu'aucune
+pr\'ediction ponctuelle ne peut \^etre prise au s\'erieux sans hypoth\`eses
+suppl\'ementaires sur la programmation de l'exercice.
+
+%================================================================
+\phantomsection
+\subsection*{4.6 \quad D\'etection d'anomalies et priorisation des risques}
+\addcontentsline{toc}{subsection}{4.6 D\'etection d'anomalies et priorisation des risques}
+%================================================================
+
+\subsubsection*{4.6.1 \quad Score Z annuel}
+\addcontentsline{toc}{subsubsection}{4.6.1 \quad Score Z annuel}
+
+L'application du score~Z (seuil $|z| > 1{,}5$, voir~3.4.1) sur les 606~observations
+(une ligne $\times$ une ann\'ee, sur 2021--2026) fait ressortir \textbf{58 anomalies annuelles}, soit
+9{,}6\,\% des observations. Leur r\'epartition annuelle, pr\'esent\'ee au
+tableau~\ref{tab:z-per-year}, est relativement uniforme~: aucune ann\'ee ne
+concentre plus du quart des signaux, ce qui sugg\`ere que le dispositif capte
+bien des \og anomalies de ligne \fg{} et non un effet temporel global (par
+exemple, un \'eventuel choc COVID-19 en 2021).
+
+\begin{table}[h]
+\centering
+\caption{Anomalies annuelles d\'etect\'ees par le score~Z par ann\'ee d'observation.}
+\label{tab:z-per-year}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Ann\'ee} & 2021 & 2022 & 2023 & 2024 & 2025 & 2026 \\
+\midrule
+\textbf{Nb anomalies}     & 13   & 6    & 12   & 8    & 7    & 12   \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Port\'ee et limites du seuil retenu.}
+Le score~Z appliqu\'e \`a un historique de cinq \`a six observations par
+ligne ne constitue pas un test statistique au sens strict~: l'\'ecart-type
+est estim\'e sur un nombre d'observations trop r\'eduit pour qu'un seuil
+ponctuel (1{,}5 ou 2) ait une port\'ee probabiliste rigoureuse, et la
+m\'ediane attendue d'un d\'etecteur \`a $\pm 1{,}5\sigma$ se situe
+m\'ecaniquement autour de 10 \`a 13\,\% des observations sous une
+hypoth\`ese de bruit gaussien. Le taux observ\'e de 9{,}6\,\% doit donc
+\^etre lu non comme une mesure d'\og anomalit\'e absolue \fg{}, mais comme
+le volume de signaux qu'un seuil mod\'er\'ement s\'electif fait remonter
+sur ce portefeuille~: il s'agit d'une \emph{heuristique de pr\'e-filtrage},
+destin\'ee \`a identifier les \'ecarts notables par rapport \`a la
+trajectoire propre de chaque ligne. La pertinence op\'erationnelle du
+dispositif ne repose pas sur le score~Z pris isol\'ement, mais sur son
+crois\^ement avec l'Isolation Forest (\S\,4.6.2) et sur la matrice de
+priorit\'e P0--P4 (\S\,4.6.3), qui filtre les signaux de~Z par leur
+coh\'erence avec un profil structurellement atypique. Une ligne signal\'ee
+par le seul score~Z reste class\'ee en P1 ou P2, jamais en P0~: le statut
+qui lui est attribu\'e est explicitement celui d'une alerte pr\'eventive,
+non d'un constat av\'er\'e.
+
+Cette approche ne vise donc pas \`a remplacer l'analyse du gestionnaire
+ni \`a r\'ev\'eler des anomalies totalement inconnues. Sa contribution
+principale consiste \`a automatiser le pr\'e-filtrage du portefeuille
+budg\'etaire, \`a objectiver les crit\`eres d'alerte et \`a hi\'erarchiser
+les lignes n\'ecessitant une analyse approfondie. Le dispositif permet
+ainsi de concentrer l'attention du gestionnaire sur les situations les
+plus pertinentes plut\^ot que sur l'examen manuel de l'ensemble des lignes.
+
+\subsubsection*{4.6.2 \quad Isolation Forest}
+\addcontentsline{toc}{subsubsection}{4.6.2 \quad Isolation Forest}
+
+L'Isolation Forest est entra\^in\'e sur les 107~lignes en utilisant comme
+vecteur de caract\'eristiques les six taux d'engagement annuels 2021--2026.
+Avec un taux de contamination cible de~10\,\% (param\'etrage justifi\'e
+en~3.4.2), l'algorithme identifie \textbf{11~lignes au profil structurellement
+atypique} (score d'anomalie n\'egatif), parmi lesquelles~:
+
+\begin{itemize}
+    \item \og Frais d'h\'ebergement et de restauration \fg{} -- pic
+    isol\'e \`a 5097\,\% du cr\'edit ouvert en 2022, contre des taux
+    inf\'erieurs \`a 1000\,\% les autres ann\'ees~;
+    \item \og Redevances d'\'electricit\'e \fg{} -- taux d'engagement
+    syst\'ematiquement sup\'erieur \`a 100\,\% des cr\'edits ouverts (jusqu'\`a
+    2500\,\% en 2024), refl\'etant des dotations initiales structurellement
+    insuffisantes compens\'ees par virements~;
+    \item \og Achat de carburants et lubrifiants \fg{} -- taux moyen
+    sup\'erieur \`a 280\,\%~;
+    \item \og Maintenance et conservation des archives \fg{} -- taux moyen
+    autour de 240\,\%~;
+    \item plusieurs lignes de travaux d'am\'enagement, de mat\'eriel
+    informatique et de transport ponctuel pr\'esentant des trajectoires
+    discontinues sur 2021--2026.
+\end{itemize}
+
+Le caract\`ere multivari\'e de l'IF est ici d\'eterminant~: aucune de ces
+lignes n'aurait \'et\'e signal\'ee par un simple seuil sur le taux d'une
+ann\'ee isol\'ee~; ce sont leurs trajectoires compl\`etes qui les distinguent
+du reste du portefeuille.
+
+\paragraph{Stabilit\'e du r\'esultat sous variation du tirage al\'eatoire.}
+L'algorithme Isolation Forest reposant sur un \'echantillonnage al\'eatoire
+des arbres, on peut l\'egitimement s'interroger sur la sensibilit\'e des
+lignes flaggu\'ees au choix de la graine pseudo-al\'eatoire, en particulier
+sur un portefeuille de taille mod\'er\'ee ($n=107$). Pour le v\'erifier,
+l'algorithme a \'et\'e r\'e-entra\^in\'e \textbf{100~fois} avec des graines
+diff\'erentes (param\'etrage par ailleurs identique~: 200~arbres,
+contamination~10\,\%). La distribution des fr\'equences de signalement par
+ligne est tr\`es asym\'etrique~: \textbf{8~lignes sont flaggu\'ees dans
+100\,\% des tirages}, \textbf{9 dans au moins 90\,\%}, \textbf{11~dans au
+moins 70\,\%}~--~soit exactement le noyau publi\'e ci-dessus~--~tandis que
+\textbf{89~lignes ne sont jamais flaggu\'ees} et que seules 2~lignes se
+situent dans une zone \og borderline \fg{} (fr\'equences de 13 et 34\,\%).
+Le c\oe ur du diagnostic est donc essentiellement d\'eterministe sur ce
+portefeuille, et la d\'ependance r\'esiduelle \`a la graine n'affecte qu'un
+nombre marginal de lignes au caract\`ere atypique d\'ej\`a peu marqu\'e.
+Cette robustesse, conjointe \`a la r\`egle de croisement avec le score~Z
+discut\'ee en~\S\,4.6.3, garantit que la matrice de priorit\'e P0--P4 ne
+d\'epend pas d'un al\'ea informatique.
+
+\subsubsection*{4.6.3 \quad Articulation Z $\times$ IF et matrice de priorit\'e}
+\addcontentsline{toc}{subsubsection}{4.6.3 \quad Articulation Z $\times$ IF et matrice de priorit\'e}
+
+Le croisement des deux signaux (Z r\'ecent~: anomalie d\'etect\'ee sur les
+deux derni\`eres ann\'ees~; IF~: profil structurellement atypique) produit la
+matrice de contingence du tableau~\ref{tab:z-if-cross}, sur les
+103~lignes\footnote{Le score Risque\_Combine n'est calcul\'e que pour les
+lignes dont les six ann\'ees 2021--2026 sont effectivement renseign\'ees~;
+4~lignes au profil partiellement renseign\'e en sont exclues, ce qui ram\`ene
+le p\'erim\`etre de la matrice P0--P4 \`a 103~lignes sur les 107 du
+portefeuille.} pour lesquelles les deux d\'etecteurs produisent un signal
+exploitable.
+
+\begin{table}[h]
+\centering
+\caption{Croisement des deux d\'etecteurs sur les 103~lignes pour lesquelles les deux signaux sont disponibles.}
+\label{tab:z-if-cross}
+\begin{tabular}{lcc}
+\toprule
+ & \textbf{IF atypique = Non} & \textbf{IF atypique = Oui} \\
+\midrule
+\textbf{Z r\'ecent = Non} & 70 & 6 \\
+\textbf{Z r\'ecent = Oui} & 22 & 5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+L'application de la matrice de priorit\'e P0--P4 d\'efinie en~3.4.3 conduit
+\`a la r\'epartition pr\'esent\'ee au tableau~\ref{tab:p0-p4}.
+
+\begin{table}[h]
+\centering
+\caption{R\'epartition des 103~lignes selon la priorit\'e d'attention recommand\'ee.}
+\label{tab:p0-p4}
+\begin{tabular}{llrr}
+\toprule
+\textbf{Code} & \textbf{Label} & \textbf{Nombre} & \textbf{Part} \\
+\midrule
+P0 & Critique & 5   & 4{,}9\,\%  \\
+P1 & \'Elev\'e & 22 & 21{,}4\,\% \\
+P2 & Mod\'er\'e & 6 & 5{,}8\,\%  \\
+P4 & Normal & 70   & 68{,}0\,\% \\
+\midrule
+\textbf{Total} & & \textbf{103} & \textbf{100\,\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Les \textbf{5~lignes P0} (Critique) cumulent les deux signaux~: anomalie Z
+r\'ecente \emph{et} profil IF atypique. Elles re\c{c}oivent la recommandation
+\og Revue manag\'eriale imm\'ediate \fg{}~: il s'agit notamment des
+redevances d'\'electricit\'e, de la ligne \og Achat de carburants et
+lubrifiants \fg{} et de quelques lignes de travaux ponctuels.
+
+Les \textbf{22~lignes P1} (\'Elev\'e) pr\'esentent une alerte Z r\'ecente
+sans profil structurellement atypique~: ce sont typiquement des lignes qui
+ont connu un d\'epassement ponctuel en 2025 ou 2026 mais qui restent dans
+le r\'egime g\'en\'eral du portefeuille (par exemple~: \og Frais de
+maintenance du mat\'eriel informatique \fg{} avec un taux 2026 sup\'erieur
+\`a 110\,\%, ou \og Indemnit\'es de d\'eplacement \fg{} en d\'epassement
+mod\'er\'e). La recommandation associ\'ee est \og Renforcer le suivi
+mensuel \fg{}.
+
+Les \textbf{6~lignes P2} (Mod\'er\'e) pr\'esentent un profil IF atypique mais
+sans alerte Z r\'ecente~: elles d\'erogent au portefeuille moyen, mais leur
+trajectoire ne d\'evie pas anormalement par rapport \`a leur propre
+historique. La recommandation est \og Surveillance trimestrielle \fg{}.
+
+Les \textbf{70~lignes P4} (Normal, environ 68\,\% du p\'erim\`etre scor\'e)
+ne d\'eclenchent aucune alerte et b\'en\'eficient du suivi p\'eriodique
+standard. C'est sur ces lignes que les m\'ecanismes habituels de la
+circulaire annuelle du Premier ministre suffisent.
+
+\textbf{Lecture op\'erationnelle.} Sur les 103~lignes scor\'ees,
+\textbf{33~lignes} (P0 + P1 + P2) requi\`erent une attention soutenue --
+chiffre report\'e au tableau de bord sous l'intitul\'e \og Lignes \`a
+risque \fg{}. Cette concentration -- environ un tiers du portefeuille --
+d\'efinit le \textbf{rayon d'action prioritaire} du contr\^oleur de
+gestion~: c'est une fraction du portefeuille suffisamment ramass\'ee pour
+qu'un suivi mensuel manuel soit envisageable, mais suffisamment riche pour
+couvrir l'essentiel du risque d'ex\'ecution budg\'etaire.
+
+\paragraph{Interpr\'etation op\'erationnelle de la matrice de priorit\'e.}
+La matrice P0--P4 doit \^etre interpr\'et\'ee comme un m\'ecanisme de
+priorisation des comportements atypiques et non comme un classement des
+lignes selon leur poids budg\'etaire. Les niveaux de priorit\'e r\'esultent
+du croisement entre des signaux statistiques (score~Z) et structurels
+(Isolation Forest), dont l'objectif est d'identifier les lignes dont le
+comportement s'\'ecarte de leur trajectoire habituelle ou de celui du
+reste du portefeuille.
+
+Par cons\'equent, une ligne repr\'esentant un faible montant budg\'etaire
+peut \^etre class\'ee prioritaire si elle pr\'esente une anomalie marqu\'ee,
+tandis qu'une ligne de poids financier important peut ne g\'en\'erer aucune
+alerte lorsque son ex\'ecution demeure r\'eguli\`ere et pr\'evisible. Cette
+logique est coh\'erente avec l'objectif du dispositif, qui consiste \`a
+attirer l'attention du gestionnaire sur les situations inhabituelles
+n\'ecessitant une analyse compl\'ementaire.
+
+L'\'evaluation de l'impact financier potentiel d'une anomalie rel\`eve
+ensuite du jugement du gestionnaire et peut \^etre appr\'eci\'ee \`a
+l'aide des informations budg\'etaires disponibles dans le tableau de
+bord Power~BI.
+
+\paragraph{Valeur ajout\'ee du dispositif de d\'etection.}
+Il convient de souligner que les anomalies identifi\'ees par le dispositif
+ne sont pas n\'ecessairement inconnues des gestionnaires budg\'etaires.
+Dans la pratique, le suivi r\'egulier des taux d'engagement et des cr\'edits
+consomm\'es permet d\'ej\`a de rep\'erer certaines situations atypiques.
+La contribution du syst\`eme r\'eside toutefois moins dans la d\'ecouverte
+d'anomalies in\'edites que dans l'\textbf{automatisation, l'objectivation
+et la priorisation} de leur analyse. D'une part, l'ensemble du portefeuille
+budg\'etaire est examin\'e de mani\`ere syst\'ematique selon des crit\`eres
+homog\`enes, sans d\'ependre exclusivement de l'exp\'erience individuelle
+du gestionnaire. D'autre part, les anomalies d\'etect\'ees sont
+hi\'erarchis\'ees selon leur niveau de priorit\'e, ce qui facilite
+l'identification rapide des lignes n\'ecessitant une attention particuli\`ere.
+
+L'int\'er\^et op\'erationnel du dispositif est donc de transformer un
+processus d'analyse essentiellement manuel en un m\'ecanisme d'aide \`a
+la d\'ecision capable de signaler automatiquement les situations \`a
+examiner. Dans cette perspective, la valeur ajout\'ee ne r\'eside pas
+uniquement dans la d\'etection des anomalies, mais \'egalement dans la
+r\'eduction du temps d'analyse et dans la standardisation du processus
+de suivi budg\'etaire.
+
+%================================================================
+\phantomsection
+\subsection*{4.7 \quad Synth\`ese et limites}
+\addcontentsline{toc}{subsection}{4.7 Synth\`ese et limites}
+%================================================================
+
+\subsubsection*{4.7.1 \quad Synth\`ese}
+\addcontentsline{toc}{subsubsection}{4.7.1 \quad Synth\`ese}
+
+Les r\'esultats empiriques de ce chapitre confirment, sur le cas concret des
+107~lignes du Minist\`ere de la Justice, la validit\'e du dispositif
+m\'ethodologique pos\'e au chapitre~3~:
+
+\begin{itemize}
+    \item l'h\'et\'erog\'en\'eit\'e des lignes interdit tout choix d'un mod\`ele
+    unique~; la s\'election ligne par ligne est statistiquement justifi\'ee~;
+    \item les mod\`eles les plus parcimonieux (tendance lin\'eaire + moyenne)
+    captent 70\,\% des situations, validant a posteriori le rejet des
+    approches riches en param\`etres~;
+    \item la d\'etection d'anomalies focalise l'attention du gestionnaire sur
+    33~lignes prioritaires sur 107, dont 5~lignes critiques~;
+    \item chaque pr\'evision est qualifi\'ee par un niveau de Confiance Globale
+    transmis avec le chiffre, conform\'ement \`a l'exigence de transparence pos\'ee
+    en~3.5.
+\end{itemize}
+
+\subsubsection*{4.7.2 \quad Limites}
+\addcontentsline{toc}{subsubsection}{4.7.2 \quad Limites}
+
+\paragraph{Temporalit\'e d'utilisation du dispositif:}
+Les r\'esultats pr\'esent\'es dans ce chapitre reposent sur des
+exercices cl\^otur\'es afin de permettre la validation du dispositif.
+Cette d\'emarche est conforme aux pratiques usuelles en pr\'evision, qui
+n\'ecessitent de comparer les sorties du mod\`ele \`a des observations
+connues avant toute utilisation op\'erationnelle.
+
+En situation r\'eelle, le syst\`eme est destin\'e \`a \^etre ex\'ecut\'e
+au d\'ebut de chaque nouvel exercice budg\'etaire. Les donn\'ees
+historiques disponibles sont alors utilis\'ees pour produire des
+pr\'evisions et identifier les lignes n\'ecessitant une attention
+particuli\`ere pour l'ann\'ee \`a venir. Les alertes g\'en\'er\'ees n'ont
+donc pas vocation \`a r\'einterpr\'eter un exercice d\'ej\`a cl\^otur\'e,
+mais \`a orienter le suivi budg\'etaire futur.
+
+Le dispositif doit ainsi \^etre compris comme un outil de pr\'eparation
+et de priorisation destin\'e \`a accompagner le gestionnaire dans le
+pilotage des exercices \`a venir, et non comme un m\'ecanisme d'analyse
+r\'etrospective uniquement.
+
+\paragraph{Cadence annuelle et alignement m\'etier:}
+Le choix d'une ex\'ecution annuelle du dispositif ne r\'esulte pas d'une
+contrainte technique, mais de la nature des donn\'ees disponibles et du
+processus de pr\'evision budg\'etaire observ\'e au sein de la Direction
+du Budget. Les exercices de programmation et de pr\'eparation
+budg\'etaire s'appuient principalement sur des historiques annuels
+consolid\'es, structur\'es selon le calendrier de la loi de finances.
+
+Dans ce contexte, le dispositif a \'et\'e con\c{c}u pour produire des
+pr\'evisions et des alertes destin\'ees \`a accompagner les travaux de
+planification et de pr\'eparation des exercices futurs. Son horizon
+d'analyse est donc coh\'erent avec la temporalit\'e des d\'ecisions
+auxquelles il est destin\'e \`a contribuer. Le syst\`eme est ainsi
+align\'e sur les pratiques de pr\'evision et de programmation
+budg\'etaire observ\'ees au sein de la Direction du Budget.
+
+\medskip
+
+Cinq limites doivent \^etre signal\'ees \`a l'utilisateur~:
+
+\textbf{Premi\`erement}, le caract\`ere descriptif des mod\`eles. Les cinq
+mod\`eles retenus prolongent les r\'egularit\'es pass\'ees~; ils
+n'int\`egrent ni les d\'ecisions de programmation discr\'etionnaires des
+services (nouveau projet de construction d'un palais de justice, par
+exemple), ni les chocs exog\`enes (r\'eforme l\'egislative, restructuration
+de la carte judiciaire). Pour ces \'ev\'enements, la pr\'evision statistique
+doit \^etre compl\'et\'ee par un ajustement manuel document\'e.
+
+\textbf{Deuxi\`emement}, la profondeur historique reste structurellement
+courte. Avec cinq exercices clos, les statistiques de fiabilit\'e et de
+stabilit\'e ont une marge d'erreur intrins\`eque non n\'egligeable. Le
+dispositif est con\c{c}u pour \^etre r\'eentra\^in\'e chaque ann\'ee, et
+sa qualit\'e s'am\'eliorera m\'ecaniquement avec l'allongement de la
+profondeur.
+
+\textbf{Troisi\`emement}, la d\'etection d'anomalies signale des
+\emph{r\'egularit\'es atypiques}, non des fraudes ou des erreurs comptables.
+Une ligne signal\'ee P0 m\'erite une revue manag\'eriale, mais celle-ci peut
+parfaitement conclure que l'atypicit\'e refl\`ete une r\'ealit\'e
+op\'erationnelle l\'egitime (par exemple, des redevances syst\'ematiquement
+sous-budg\'etis\'ees par convention administrative). Le dispositif est un
+outil d'aide \`a la d\'ecision, jamais un substitut au jugement professionnel.
+
+\textbf{Quatri\`emement}, l'\textit{absence de variables exog\`enes}.
+Le dispositif de pr\'evision propos\'e repose exclusivement sur l'historique
+propre \`a chaque ligne budg\'etaire. Il n'int\`egre pas explicitement de
+variables exog\`enes susceptibles d'influencer l'\'evolution future des
+d\'epenses, telles que l'inflation, les prix de l'\'energie, les d\'ecisions
+salariales nationales ou les indices sectoriels. Ce choix r\'esulte
+principalement de la nature du portefeuille \'etudi\'e~: les 107~lignes
+budg\'etaires analys\'ees couvrent des cat\'egories de d\'epenses tr\`es
+h\'et\'erog\`enes, dont les d\'eterminants externes diff\`erent fortement.
+\`A titre d'exemple, les d\'epenses de carburant peuvent \^etre influenc\'ees
+par les cours internationaux du p\'etrole, les d\'epenses de personnel par
+les d\'ecisions relatives aux r\'emun\'erations publiques, tandis que
+certaines d\'epenses d'investissement peuvent d\'ependre de l'\'evolution
+des co\^uts du secteur du b\^atiment et des travaux publics.
+
+L'int\'egration de variables explicatives adapt\'ees \`a chacune des
+lignes aurait n\'ecessit\'e la construction et la maintenance d'un grand
+nombre de mod\`eles sp\'ecifiques, r\'eduisant significativement la
+simplicit\'e, la robustesse et l'op\'erationnalit\'e du dispositif. Le
+choix retenu a donc \'et\'e de privil\'egier une approche g\'en\'erique,
+homog\`ene et directement applicable \`a l'ensemble du portefeuille
+budg\'etaire. Cette limite implique que le syst\`eme ne peut pas anticiper
+les ruptures li\'ees \`a des d\'ecisions futures ou \`a des chocs exog\`enes
+qui ne figurent pas encore dans les donn\'ees historiques. Les pr\'evisions
+produites doivent ainsi \^etre interpr\'et\'ees comme une projection
+fond\'ee sur les comportements observ\'es, destin\'ee \`a assister le
+gestionnaire dans son analyse, et non comme une anticipation exhaustive
+de l'ensemble des facteurs susceptibles d'affecter l'ex\'ecution
+budg\'etaire.
+
+\textbf{Cinqui\`emement}, la \textit{validit\'e de la continuit\'e des
+lignes budg\'etaires}. L'analyse repose sur l'hypoth\`ese que les lignes
+budg\'etaires retenues conservent une signification suffisamment stable
+sur l'ensemble de la p\'eriode \'etudi\'ee. Afin de limiter les risques
+de rupture historique, seules les lignes pr\'esentant une correspondance
+coh\'erente selon la cl\'e composite
+Chapitre--Programme--R\'egion--Projet--Libell\'e ont \'et\'e conserv\'ees
+dans le p\'erim\`etre final. Cette approche r\'eduit le risque de
+confondre des lignes distinctes au cours du temps. Toutefois, comme dans
+tout syst\`eme budg\'etaire, certaines \'evolutions organisationnelles
+ou modifications de nomenclature peuvent affecter la comparabilit\'e
+parfaite des observations historiques. Cette limite doit \^etre prise
+en compte dans l'interpr\'etation des r\'esultats et constitue une piste
+d'am\'elioration pour de futurs travaux, notamment par l'int\'egration
+de tables de correspondance historiques valid\'ees par les gestionnaires
+m\'etiers.
+
+\subsubsection*{4.7.3 \quad Transition vers le chapitre 5}
+\addcontentsline{toc}{subsubsection}{4.7.3 \quad Transition vers le chapitre 5}
+
+Les r\'esultats num\'eriques pr\'esent\'es dans ce chapitre n'ont d'int\'er\^et
+op\'erationnel que s'ils sont accessibles, lisibles et r\'eutilisables par les
+gestionnaires du minist\`ere. Le chapitre~5 d\'ecrit l'architecture du
+double livrable qui mat\'erialise cet acc\`es~: un outil HTML autonome
+ex\'ecut\'e dans le navigateur du gestionnaire, qui produit les rapports
+\`a partir des fichiers \texttt{.xls} bruts~; et un tableau de bord Power~BI
+qui consomme ces rapports pour offrir une vue de pilotage \`a la Direction
+du Budget.

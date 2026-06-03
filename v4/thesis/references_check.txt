@@ -1,0 +1,145 @@
+================================================================
+REFERENCES CHECK — version trimmée (22 entrées)
+================================================================
+
+Stratégie de tri : on ne garde QUE les références faciles à
+vérifier en ligne (documents officiels marocains, articles
+DOI-indexés, manuels canoniques universellement disponibles).
+
+Les anciennes références issues de revues marocaines à diffusion
+restreinte (Abdelali2019, Hmioui2021, Amirou2016, Lazrak2017,
+Benabdallah2001, Taoufik2022, ElMoussali2023, LeSiteinfo2025) ont
+été supprimées. Les techniques jamais utilisées dans le mémoire
+(LSTM, GRU, ADF/KPSS, Prophet, SHAP, DM test, ensembles, deep
+learning, Random Forest) ont aussi vu leurs références retirées
+(Hochreiter1997, Cho2014, Dickey1979, Kwiatkowski1992, Taylor2018,
+Lundberg2017, DieboldMariano1995, Dietterich2000, LeCun2015,
+Breiman2001).
+
+================================================================
+A. RÉFÉRENCES INSTITUTIONNELLES MAROCAINES (8)
+================================================================
+
+1) RGCP1967 — Décret royal n°330-66 du 21 avril 1967 (RGCP)
+   ✓ Bulletin Officiel n°2843, 26 avril 1967, p. 452
+   → Cité chap. 2 (définitions engagement / liquidation /
+     ordonnancement)
+
+2) DecretCDG2023 — Décret n°2-22-580 du 3 mars 2023
+   (contrôle de gestion ministériel)
+   ✓ Bulletin Officiel n°7200
+   → Cité chap. 1 (cadrage normatif), chap. 2 (article 7)
+
+3) MEF2015 — Guide pratique LOF 130-13
+   ✓ Site MEF / Direction du Budget
+   → Cité chap. 2 (cadre LOF)
+
+4) MEF2015b — Guide de construction des programmes budgétaires
+   ✓ Site MEF / Direction du Budget
+   → Cité chap. 2 (nomenclature, dimensions du programme,
+     fongibilité asymétrique)
+
+5) MEF2020 — Stratégie nationale de développement des données
+   publiques
+   ✓ Site MEF
+   → Cité chap. 1 (justification managériale data/IA)
+
+6) MJMaroc2023 — Rapport annuel de performance budgétaire MJ
+   ✓ Site Ministère de la Justice
+   → Cité chap. 1 (volumétrie / contexte MJ)
+
+7) MJNumerique2026 — PLF 2026 — Projet de performance MJ
+   ✓ Site MEF (annexes PLF 2026)
+   → Cité chap. 1 (vision numérique, IA partenariat PNUD)
+
+8) CourDesComptes2016 — Rapport sur les programmes
+   d'investissement du MJ
+   ✓ Site Cour des Comptes
+   → Cité chap. 2 (taux d'exécution 23–32 %, 28–58 %,
+     reports 42–68 %)
+
+================================================================
+B. ARTICLES SCIENTIFIQUES MAROCAINS DOI-INDEXÉS (2)
+================================================================
+
+9) Khallouk2019 — Préparation du budget de l'État au Maroc
+   ✓ DOI : 10.3166/gfp.2019.00037 (Gestion & Finances Publiques)
+   → Cité chap. 2 (gestion axée sur les résultats / RAP)
+
+10) Ouajdouni2020 — Transformation digitale de l'administration
+    publique au Maroc
+   ✓ DOI : 10.19044/esj.2020.v16n19p406 (European Scientific
+     Journal)
+   → Cité chap. 1 (contexte numérique MJ + PNUD)
+
+================================================================
+C. RÉFÉRENCES INTERNATIONALES — FINANCES PUBLIQUES (3)
+================================================================
+
+11) Roussey2011 — Thèse, Analyse économique des moyens et de
+    l'organisation de la justice
+   ✓ Theses.fr / HAL
+   → Cité chap. 1 (lacune littérature contexte marocain)
+
+12) Bouvier2020 — Finances Publiques (LGDJ, 19e éd.)
+   ✓ Manuel universitaire de référence
+   → Cité chap. 2 (introduction, restes à payer)
+
+13) Frankel2011 — Over-optimism in Forecasts by Official Budget
+    Agencies (Oxford Rev. Econ. Policy)
+   ✓ DOI Oxford Academic
+   → Cité chap. 1 (littérature internationale prévision
+     budgétaire)
+
+14) Leal2008 — Fiscal Forecasting: Lessons from the Literature
+    and Challenges (Fiscal Studies)
+   ✓ DOI Wiley
+   → Cité chap. 1 (idem)
+
+================================================================
+D. MANUELS / ARTICLES CANONIQUES — ML & PRÉVISION (8)
+================================================================
+
+15) Hastie2009 — The Elements of Statistical Learning (Springer)
+   ✓ Manuel canonique, libre-accès auteurs
+   → Cité chap. 3 (Ridge, Lasso, gradient boosting)
+
+16) Hyndman2021 — Forecasting: Principles and Practice (3e éd.)
+   ✓ OTexts.com (libre-accès)
+   → Cité chap. 2 (méthodes statistiques classiques),
+     chap. 3 (validation roulante)
+
+17) Makridakis2018 — The M4 Competition
+   ✓ DOI Elsevier (International Journal of Forecasting)
+   → Cité chap. 3 (benchmark méthodes simples)
+
+18) Liu2008 — Isolation Forest (IEEE ICDM 2008)
+   ✓ IEEE Xplore
+   → Cité chap. 3 (détection d'anomalies)
+
+19) Chen2016 — XGBoost (KDD)
+   ✓ ACM Digital Library / arXiv:1603.02754
+   → Cité chap. 3 (gradient boosting évalué en exploratoire)
+
+20) Pedregosa2011 — Scikit-learn (JMLR)
+   ✓ JMLR libre-accès
+   → Cité chap. 3 (outillage logiciel)
+
+21) Botchkarev2019 — Performance Metrics in ML Regression
+   ✓ DOI Informing Science Institute
+   → Cité chap. 3 (typologie MAE / RMSE / MAPE)
+
+22) Russell2020 — Artificial Intelligence: A Modern Approach
+    (4e éd., Pearson)
+   ✓ Manuel canonique
+   → Cité chap. 2 (cadre apprentissage automatique)
+
+================================================================
+RÉCAPITULATIF
+================================================================
+
+Total : 22 références, toutes vérifiables en quelques minutes
+en ligne (DOI, sites institutionnels, ou éditeurs majeurs).
+
+Build LaTeX : 75 pages, bibtex sans warning, zéro citation
+indéfinie.

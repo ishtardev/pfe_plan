@@ -1,0 +1,468 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{csquotes}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{parskip}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, fit}
+
+% --- Professional Color Palette ---
+\definecolor{primary}{RGB}{33, 150, 243}
+\definecolor{secondary}{RGB}{75, 75, 75}
+\definecolor{accent}{RGB}{0, 150, 136}
+\geometry{margin=2.5cm, top=2.5cm, bottom=2.5cm}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% --- Section title formatting ---
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{}{0em}{}
+
+% --- Hyperref setup ---
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=black, urlcolor=blue}
+
+% --- Bibliography style ---
+\bibliographystyle{apalike}
+
+\begin{document}
+
+% ======================================================
+% TITLE PAGE
+% ======================================================
+\begin{titlepage}
+\begin{center}
+
+% ---- Header ----
+\begin{minipage}{0.18\textwidth}
+\raggedright
+\includegraphics[height=2.7cm]{logos/logofsjeste.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.78\textwidth}
+\raggedleft
+{\small Royaume du Maroc}\\[2pt]
+{\large Universit\'e Abdelmalek Essa\^adi}\\[2pt]
+{\normalsize Facult\'e des Sciences Juridiques, \'Economiques et Sociales}\\
+{\normalsize T\'etouan}
+\end{minipage}
+
+\vspace{0.5cm}
+
+% ---- Memoire ----
+{\normalsize \textsc{M\'emoire de Fin d'\'Etudes}}\\[3pt]
+{\small Pour l'obtention du Master en}\\[2pt]
+{\normalsize \textbf{Finance, Actuariat et Data Science}}
+
+\vspace{0.2cm}
+\rule{\textwidth}{0.5pt}
+\vspace{0.25cm}
+
+% ---- TITLE ----
+{\large \textbf{PR\'EVISION ET D\'ETECTION D'ANOMALIES}}\\[4pt]
+{\large \textbf{BUDG\'ETAIRES}}\\[10pt]
+{\small \textit{Application au Minist\`ere de la Justice du Maroc}}
+
+\vspace{0.25cm}
+\rule{\textwidth}{0.5pt}
+
+\vspace{0.4cm}
+
+% ---- Author ----
+\begin{flushleft}
+\textbf{R\'ealis\'e par :}\\[2pt]
+\hspace{0.4cm} ABBARI Fatima Ezzahraa
+\end{flushleft}
+
+\vspace{0.18cm}
+
+% ---- Supervisors ----
+\begin{flushleft}
+\textbf{Encadr\'e par :}\\[2pt]
+\hspace{0.4cm} Pr. DAKKON Mohamed, Professeur \`a la FSJES de T\'etouan\\
+\hspace{0.4cm} M. ZABARATOU Iliass, Encadrant professionnel\\
+\hspace{0.4cm} M. KHANFOUD Bilal, Encadrant professionnel
+\end{flushleft}
+
+\vspace{0.18cm}
+
+% ---- Jury ----
+\begin{flushleft}
+\textbf{M\'emoire soutenu devant le jury compos\'e de :}\\[2pt]
+\hspace{0.4cm} Pr. OUAIL EL IMRANI, Pr\'esident\\
+\hspace{0.4cm} Pr. DAKKON Mohamed, Encadrant\\
+\hspace{0.4cm} Pr. MOAD EL KHARRIM, Membre\\
+\hspace{0.4cm} Pr. OULAD YAKLEF Houssain, Membre
+\end{flushleft}
+
+\vfill
+
+% ---- Bottom: logo + academic year ----
+\begin{center}
+\includegraphics[height=1.7cm]{logos/ministry.png}\\[6pt]
+\rule{0.35\textwidth}{0.4pt}\\[4pt]
+{\footnotesize Ann\'ee universitaire : 2025--2026}
+\end{center}
+
+\end{center}
+\end{titlepage}
+
+% ---- TABLE OF CONTENTS ----
+\pagenumbering{arabic}
+\newpage
+\tableofcontents
+\newpage
+
+% ======================================================
+% REMERCIEMENTS
+% ======================================================
+\phantomsection
+\section*{Remerciements}
+\addcontentsline{toc}{section}{Remerciements}
+
+\begin{center}
+
+Au terme de ce travail, je tiens à exprimer ma sincère gratitude envers toutes les personnes qui ont contribué, de près ou de loin, à sa réalisation.
+
+\vspace{0.4cm}
+
+Je remercie en premier lieu mes encadrants professionnels, \textbf{Monsieur Iliass Zabaratou} et \textbf{Monsieur Bilal Khanfoud}, pour m'avoir guidée dans la définition du sujet de ce mémoire, pour leur accompagnement constant et pour la confiance qu'ils m'ont accordée tout au long du stage. Leur disponibilité et leurs conseils avisés ont été déterminants à chaque étape de ce travail.
+
+\vspace{0.4cm}
+
+Mes remerciements s'adressent également au \textbf{Professeur Mohamed Dakkon}, coordinateur du Master Finance, Actuariat et Data Science et encadrant académique de ce travail, pour son soutien, ses orientations et sa disponibilité.
+
+ \vspace{0.4cm}
+
+J'adresse mes sincères remerciements à l'ensemble des cadres et professionnels du bureau, et en particulier à \textbf{M. Zakaria} et \textbf{Mme Kaoutar}, qui m'ont guidée dès le premier jour et ont veillé à ce que mon intégration se déroule dans les meilleures conditions. Mes remerciements vont également à toute l'équipe du bureau pour leur accueil chaleureux et leurs conseils tout au long du stage.
+
+\vspace{0.4cm}
+
+Enfin, je remercie l'ensemble du corps enseignant du Master Finance, Actuariat et Data Science de la FSJES de Tétouan pour la qualité de la formation dispensée, ainsi que ma famille pour son soutien indéfectible.
+
+\end{center}
+
+\newpage
+
+% ======================================================
+% DÉDICACE
+% ======================================================
+\phantomsection
+\section*{D\'edicace}
+\addcontentsline{toc}{section}{D\'edicace}
+
+\begin{center}
+\vspace*{3cm}
+
+\textit{\`A mes parents, \`a mon fr\`ere et \`a mes amis,}\\[6pt]
+\textit{pour leur soutien sans faille tout au long de ce parcours.}
+
+\vspace{1.2cm}
+
+\textit{Je d\'edie ce travail.}
+
+\end{center}
+
+\newpage
+
+% ======================================================
+% RÉSUMÉ
+% ======================================================
+\phantomsection
+\section*{R\'esum\'e}
+\addcontentsline{toc}{section}{R\'esum\'e}
+
+Ce m\'emoire porte sur l'am\'elioration du pilotage budg\'etaire au sein du Minist\`ere de la Justice \`a travers la mise en place d'un dispositif de pr\'evision et de d\'etection d'anomalies. Dans un contexte marqu\'e par les exigences de la Loi Organique relative \`a la Loi de Finances (LOF~130-13), qui impose une budg\'etisation par la performance et une programmation triennale, la capacit\'e \`a anticiper l'ex\'ecution budg\'etaire et \`a d\'etecter pr\'ecocement les d\'erives constitue un enjeu institutionnel majeur pour la programmation et la prise de d\'ecision.
+
+L'\'etude s'appuie sur les fichiers \textit{SituationChap-AAAA.xls} produits annuellement par le minist\`ere et couvrant les exercices 2021--2026, soit 107~lignes budg\'etaires communes. L'analyse est conduite au niveau de la ligne budg\'etaire, unit\'e \'el\'ementaire de gestion dont les comportements d'ex\'ecution sont tr\`es h\'et\'erog\`enes. Pour tenir compte de cette diversit\'e et du r\'egime de donn\'ees courtes, cinq mod\`eles parcimonieux sont compar\'es ligne par ligne -- tendance lin\'eaire, moyenne historique, moyenne pond\'er\'ee, persistance (mod\`ele na\"if) et lissage exponentiel simple -- et le meilleur est s\'electionn\'e selon le MAPE sur l'ann\'ee de validation~2025, puis appliqu\'e \`a la pr\'evision triennale 2026--2028 avec intervalles de confiance.
+
+Au-del\`a de la pr\'evision, le travail int\`egre un dispositif de d\'etection d'anomalies combinant un score~$Z$ sur le taux d'engagement annuel et un algorithme \textit{Isolation Forest} appliqu\'e aux caract\'eristiques structurelles des lignes. Cette approche permet d'identifier les lignes pr\'esentant des comportements atypiques, qu'il s'agisse d'\'ecarts r\'ecents par rapport \`a leur historique ou de profils structurellement diff\'erents du reste du portefeuille budg\'etaire. Les r\'esultats sont hi\'erarchis\'es selon une matrice de priorit\'e P0--P4 afin de faciliter leur analyse par les gestionnaires.
+
+Les pr\'evisions produites sont accompagn\'ees d'indicateurs de fiabilit\'e et de stabilit\'e permettant d'appr\'ecier le degr\'e de confiance associ\'e \`a chaque estimation. L'ensemble est restitu\'e par un double livrable~: un outil HTML autonome ex\'ecut\'e dans le navigateur du gestionnaire, qui ing\`ere les fichiers \textit{.xls} bruts sans installation ni transfert de donn\'ees vers un serveur tiers, et un tableau de bord Power BI qui consomme ces sorties pour offrir une vue de pilotage \`a la Direction du Budget. Ce choix r\'epond aux contraintes de s\'ecurit\'e informatique du minist\`ere, qui interdit l'ex\'ecution d'applications compil\'ees non valid\'ees.
+
+Ce travail propose ainsi une d\'emarche simple, transparente et directement exploitable par les gestionnaires, conciliant les contraintes du contexte public avec les apports des m\'ethodes de pr\'evision et d'analyse des donn\'ees.
+
+\bigskip
+\noindent\textbf{Mots-cl\'es~:} pr\'evision budg\'etaire, d\'etection d'anomalies, pilotage budg\'etaire, s\'eries temporelles courtes, parcimonie, score~$Z$, Isolation Forest, matrice de priorit\'e P0--P4, aide \`a la d\'ecision, Minist\`ere de la Justice, LOF~130-13, Power BI.
+
+\newpage
+
+% ======================================================
+% ABSTRACT
+% ======================================================
+\phantomsection
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+This thesis addresses the improvement of budget management at the Moroccan Ministry of Justice through the implementation of a forecasting and anomaly-detection framework. Within the context of the Organic Finance Law (LOF~130-13), which mandates performance-based budgeting and a three-year programming framework, the ability to anticipate budget execution and to detect drifts early is a major institutional challenge for programming and decision-making.
+
+The study draws on the \textit{SituationChap-YYYY.xls} files produced annually by the Ministry, covering fiscal years 2021--2026 and 107 common budget lines. Analysis is conducted at the budget-line level -- the elementary management unit, whose execution behaviours are highly heterogeneous. To accommodate this diversity and the short-data regime, five parsimonious models are compared line-by-line -- linear trend, historical mean, weighted mean, persistence (naive), and simple exponential smoothing -- and the best is selected on the 2025 validation year according to MAPE, then used to produce a three-year forecast (2026--2028) with confidence intervals.
+
+Beyond forecasting, the work integrates an anomaly-detection module combining a Z-score on the annual engagement rate with an Isolation Forest applied to structural line features. This approach identifies lines exhibiting atypical behaviour, whether recent deviations from their own history or profiles structurally different from the rest of the budget portfolio. Results are ranked through a P0--P4 priority matrix to facilitate analysis by budget officers.
+
+Forecasts are accompanied by reliability and stability indicators that convey the degree of confidence attached to each estimate. The full output is delivered through two artefacts: a standalone HTML tool executed in the officer's browser, which ingests raw \textit{.xls} files without installation or data transfer to any third-party server, and a Power BI dashboard that consumes these outputs to offer a steering view for the Budget Directorate. This design directly addresses the Ministry's information-security constraints, which forbid the execution of unvetted compiled applications.
+
+This work thus proposes a simple, transparent approach, directly usable by budget officers, that reconciles the constraints of the public-sector context with the contributions of forecasting and data-analysis methods.
+
+\bigskip
+\noindent\textbf{Keywords:} budget forecasting, anomaly detection, budget management, short time series, parsimony, Z-score, Isolation Forest, P0--P4 priority matrix, decision support, Ministry of Justice, LOF~130-13, Power BI.
+
+\newpage
+
+% ======================================================
+% TABLE DES FIGURES
+% ======================================================
+\phantomsection
+\addcontentsline{toc}{section}{Table des figures}
+\listoffigures
+
+\newpage
+
+% ======================================================
+% LISTE DES TABLEAUX
+% ======================================================
+\phantomsection
+\addcontentsline{toc}{section}{Liste des tableaux}
+\listoftables
+
+\newpage
+
+% ======================================================
+% LISTE DES ACRONYMES
+% ======================================================
+\phantomsection
+\section*{Liste des acronymes}
+\addcontentsline{toc}{section}{Liste des acronymes}
+
+\begin{tabular}{@{}ll@{}}
+\textbf{IA}   & Intelligence Artificielle \\
+\textbf{ML}   & Machine Learning \\
+\textbf{LOF}  & Loi Organique relative \`a la Loi de Finances \\
+\textbf{MJ}   & Minist\`ere de la Justice \\
+\textbf{TGR}  & Tr\'esorerie G\'en\'erale du Royaume \\
+\textbf{GID}  & Gestion Int\'egr\'ee de la D\'epense \\
+\textbf{PLF}  & Projet de Loi de Finances \\
+\textbf{RMSE} & Root Mean Squared Error \\
+\textbf{MAE}  & Mean Absolute Error \\
+\textbf{MAPE} & Mean Absolute Percentage Error \\
+\end{tabular}
+
+\newpage
+
+% ======================================================
+% INTRODUCTION GÉNÉRALE
+% ======================================================
+\phantomsection
+\section*{Introduction g\'en\'erale}
+\addcontentsline{toc}{section}{Introduction g\'en\'erale}
+
+La pr\'evision budg\'etaire est au c\oe{}ur de la gouvernance financi\`ere publique. Pour un minist\`ere comme celui de la Justice du Maroc, anticiper avec justesse l'ex\'ecution des cr\'edits n'est pas un exercice formel~: c'est une condition de coh\'erence entre les ambitions programmatiques et les capacit\'es r\'eelles de d\'epense. Pourtant, malgr\'e les progr\`es introduits par la r\'eforme de la Loi Organique relative \`a la Loi de Finances (LOF~130-13), les \'ecarts entre pr\'evisions et r\'ealisations demeurent significatifs, et la d\'etection des d\'erives en cours d'exercice reste largement manuelle.
+
+Face \`a ce constat, le r\'eflexe spontan\'e consisterait \`a mobiliser les mod\`eles d'apprentissage automatique les plus visibles de la litt\'erature -- r\'egressions p\'enalis\'ees, gradient boosting, r\'eseaux de neurones. Ce m\'emoire d\'efend une autre voie. La structure r\'eelle des donn\'ees disponibles au minist\`ere -- des historiques annuels de cinq exercices exploitables, fortement h\'et\'erog\`enes d'une ligne \`a l'autre -- rend ces mod\`eles th\'eoriquement inadapt\'es. La parcimonie devient alors une exigence m\'ethodologique, et non un repli par d\'efaut. Le travail propose, en cons\'equence, un dispositif construit sur cinq mod\`eles simples, assorti d'un module de d\'etection d'anomalies hybride et d'un outillage op\'erationnel pens\'e pour les contraintes de s\'ecurit\'e informatique du minist\`ere.
+
+\phantomsection
+\subsection*{Contexte et Probl\'ematique}
+\addcontentsline{toc}{subsection}{Contexte et Probl\'ematique}
+
+Depuis l'entr\'ee en vigueur de la LOF~130-13 en 2015 et sa mise en \oe{}uvre progressive jusqu'en 2020, le cadre budg\'etaire marocain a profond\'ement \'evolu\'e. La budg\'etisation par la performance, la programmation triennale et l'obligation de sinc\'erit\'e budg\'etaire (article~10) ont renforc\'e les exigences en mati\`ere de fiabilit\'e des pr\'evisions. Dans ce contexte, un \'ecart important entre pr\'evision et ex\'ecution expose le minist\`ere \`a des critiques parlementaires et \`a des observations de la Cour des Comptes.
+
+Le Minist\`ere de la Justice pr\'esente par ailleurs des caract\'eristiques sp\'ecifiques qui compliquent la pr\'evision~: une masse salariale rigide repr\'esentant plus de 70\,\% des d\'epenses de fonctionnement, des d\'epenses d'investissement fortement concentr\'ees sur le dernier trimestre, et une nomenclature budg\'etaire d\'ecompos\'ee en plus d'une centaine de lignes h\'et\'erog\`enes. Surtout, l'historique annuel exploitable est court~: cinq exercices clos (2021--2025) au moment du travail, ce qui place tout exercice de mod\'elisation en situation de \textit{small data}.
+
+C'est dans ce contexte que s'inscrit la probl\'ematique de ce m\'emoire~:
+
+\begin{center}
+\textit{Comment d\'evelopper un syst\`eme de pr\'evision budg\'etaire et de d\'etection d'anomalies permettant d'am\'eliorer le suivi de l'ex\'ecution des cr\'edits et d'appuyer la prise de d\'ecision au sein du Minist\`ere de la Justice~?}
+\end{center}
+
+\phantomsection
+\subsection*{Objectifs de la Recherche}
+\addcontentsline{toc}{subsection}{Objectifs de la Recherche}
+
+Ce travail poursuit cinq objectifs compl\'ementaires~:
+
+\begin{enumerate}
+    \item \textbf{Analyser} le cadre institutionnel et budg\'etaire du Minist\`ere de la Justice, afin d'identifier les facteurs qui commandent l'ex\'ecution des cr\'edits.
+    \item \textbf{Construire} un jeu de donn\'ees annuelles fiable \`a partir des fichiers \textit{SituationChap-AAAA.xls} (exercices 2021--2026, 107~lignes budg\'etaires communes).
+    \item \textbf{Justifier} le choix d'une famille de mod\`eles parcimonieux \`a partir du compromis biais-variance, et expliciter pourquoi les approches riches en param\`etres (Lasso, Ridge, gradient boosting) sont structurellement inadapt\'ees au r\'egime $n=5$.
+    \item \textbf{\'Evaluer} cinq mod\`eles parcimonieux -- tendance lin\'eaire, moyenne historique, moyenne pond\'er\'ee, persistance, lissage exponentiel simple -- avec s\'election ligne par ligne sur l'ann\'ee de validation, et compl\'eter le dispositif par une d\'etection d'anomalies combinant score~$Z$ et Isolation Forest dans une matrice de priorit\'e P0--P4.
+    \item \textbf{D\'eployer} le tout sous la forme d'un double livrable~: un outil HTML autonome utilis\'e par le gestionnaire pour produire les rapports, et un tableau de bord Power BI \`a destination de la Direction du Budget.
+\end{enumerate}
+
+\phantomsection
+\subsection*{M\'ethodologie}
+\addcontentsline{toc}{subsection}{M\'ethodologie}
+
+La d\'emarche adopt\'ee articule quatre composantes~:
+
+\textbf{Une phase de contextualisation} (chapitres~1 et~2)~: description de l'institution, de son budget et du cadre juridique de la gestion budg\'etaire. Cette \'etape permet d'identifier les contraintes propres aux donn\'ees disponibles et aux processus de pilotage.
+
+\textbf{Une phase th\'eorique} (chapitre~3)~: fondements de la pr\'evision et de la d\'etection d'anomalies en r\'egime de donn\'ees rares. Le chapitre justifie l'abandon des mod\`eles riches en param\`etres, pr\'esente les cinq mod\`eles parcimonieux retenus, expose les deux m\'ethodes de d\'etection (score~$Z$ et Isolation Forest), leur articulation dans la matrice P0--P4, et les m\'etriques d'\'evaluation utilis\'ees (MAPE par ligne, fiabilit\'e du mod\`ele, stabilit\'e de la ligne).
+
+\textbf{Une phase empirique} (chapitre~4)~: construction du jeu de donn\'ees \`a partir des fichiers \textit{SituationChap-AAAA.xls}, validation des mod\`eles sur l'ann\'ee 2025, pr\'evision triennale 2026--2028, application du module de d\'etection d'anomalies, analyse des r\'esultats.
+
+\textbf{Une phase applicative} (chapitre~5)~: conception et \'evaluation du double livrable -- outil HTML autonome ex\'ecut\'e dans le navigateur du gestionnaire, et tableau de bord Power BI \`a destination de la Direction du Budget. Les choix de conception sont mis en regard des contraintes de s\'ecurit\'e informatique du minist\`ere.
+
+\medskip
+
+\textbf{Structure du m\'emoire~:} Le chapitre~1 pr\'esente le Minist\`ere de la Justice. Le chapitre~2 d\'ecrit la gestion budg\'etaire et ses contraintes. Le chapitre~3 pose les fondements th\'eoriques de la pr\'evision et de la d\'etection d'anomalies adapt\'es au r\'egime de donn\'ees rares. Le chapitre~4 expose la mise en \oe{}uvre empirique et les r\'esultats obtenus. Le chapitre~5 d\'etaille la conception et l'\'evaluation du double livrable op\'erationnel.
+
+\newpage
+
+\include{chapters/chapter1}
+
+\newpage
+\include{chapters/chapter2}
+
+\newpage
+\include{chapters/chapter3}
+
+\newpage
+\include{chapters/chapter4}
+
+\newpage
+\include{chapters/chapter5}
+
+\newpage
+
+% ======================================================
+% CONCLUSION GÉNÉRALE
+% ======================================================
+\phantomsection
+\section*{Conclusion g\'en\'erale}
+\addcontentsline{toc}{section}{Conclusion g\'en\'erale}
+
+Ce m\'emoire avait pour objectif de concevoir, au profit du Minist\`ere de
+la Justice, un dispositif d'aide \`a la d\'ecision destin\'e \`a appuyer la
+pr\'evision et le suivi de l'ex\'ecution budg\'etaire. L'ambition
+g\'en\'erale \'etait de fournir aux gestionnaires un outil simple, fiable et
+directement exploitable, capable de produire des pr\'evisions ligne par
+ligne, d'\'evaluer leur degr\'e de fiabilit\'e et d'identifier les
+situations qui m\'eritent une attention particuli\`ere.
+
+Pour atteindre cet objectif, le travail a articul\'e quatre \'etapes~:
+l'analyse du cadre institutionnel et des m\'ecanismes de gestion
+budg\'etaire au sein du minist\`ere~; la consolidation des donn\'ees
+historiques d'ex\'ecution~; la construction d'un dispositif combinant
+pr\'evision et d\'etection d'anomalies~; et la restitution des r\'esultats
+sous une forme accessible aux utilisateurs finaux. L'ensemble forme un
+syst\`eme coh\'erent dont les principaux \'el\'ements sont rappel\'es
+ci-apr\`es.
+
+\phantomsection
+\subsection*{Principaux r\'esultats}
+\addcontentsline{toc}{subsection}{Principaux r\'esultats}
+
+Le dispositif retenu repose sur deux branches compl\'ementaires construites
+sur la m\^eme base de donn\'ees~: une branche de \textbf{pr\'evision} et une
+branche de \textbf{d\'etection d'anomalies}.
+
+La branche de pr\'evision applique au taux d'engagement annuel cinq mod\`eles
+adapt\'es aux s\'eries budg\'etaires courtes -- tendance lin\'eaire, moyenne
+historique, moyenne pond\'er\'ee, persistance et lissage exponentiel simple --
+puis s\'electionne, pour chaque ligne, le mod\`ele pr\'esentant le MAPE de
+validation le plus faible. Cette s\'election ligne par ligne tient compte de
+l'h\'et\'erog\'en\'eit\'e des comportements du portefeuille~: aucun mod\`ele
+unique ne s'impose sur l'ensemble des lignes, et chaque approche trouve sa
+pertinence sur un sous-ensemble sp\'ecifique. \`A chaque pr\'evision sont
+associ\'es deux indicateurs~: la \textbf{fiabilit\'e} du mod\`ele, fond\'ee
+sur le MAPE, et la \textbf{stabilit\'e} de la ligne, mesur\'ee par le
+coefficient de variation. Leur croisement produit un label de
+\textbf{Confiance Globale} qui accompagne chaque chiffre restitu\'e.
+
+La branche de d\'etection d'anomalies combine deux d\'etecteurs
+compl\'ementaires~: le \textbf{score~Z}, qui rep\`ere les ann\'ees dont le
+comportement s'\'ecarte sensiblement de l'historique propre d'une ligne, et
+l'\textbf{Isolation Forest}, qui identifie les lignes dont le profil global
+appara\^it atypique au regard de l'ensemble du portefeuille. Le croisement
+des deux signaux permet de hi\'erarchiser les lignes \`a examiner et
+d'orienter l'attention des gestionnaires vers les situations les plus
+pertinentes.
+
+Sur le plan op\'erationnel, l'ensemble de ces r\'esultats est int\'egr\'e
+dans un \textbf{tableau de bord Power~BI} con\c{c}u pour \^etre exploit\'e
+directement par les responsables de la pr\'eparation et du suivi
+budg\'etaires, sans pr\'erequis technique particulier.
+
+\phantomsection
+\subsection*{Apports du travail}
+\addcontentsline{toc}{subsection}{Apports du travail}
+
+Ce m\'emoire pr\'esente trois apports principaux. Le \textbf{premier} est
+m\'ethodologique~: il propose une d\'emarche adapt\'ee aux s\'eries
+budg\'etaires courtes, fond\'ee sur des mod\`eles parcimonieux et sur une
+s\'election par ligne, plut\^ot que sur l'application uniforme d'une
+m\'ethode unique au portefeuille. Le \textbf{deuxi\`eme} est appliqu\'e~: il
+illustre, sur des donn\'ees budg\'etaires publiques marocaines, l'apport
+d'un dispositif combinant pr\'evision et d\'etection d'anomalies pour le
+pilotage des cr\'edits, dans un domaine encore peu document\'e dans la
+litt\'erature acad\'emique. Le \textbf{troisi\`eme} concerne la lisibilit\'e
+du dispositif~: chaque pr\'evision est accompagn\'ee d'indicateurs explicites
+de fiabilit\'e et de stabilit\'e, et chaque alerte peut \^etre justifi\'ee
+aupr\`es du gestionnaire \`a partir de r\`egles transparentes.
+
+\phantomsection
+\subsection*{Limites}
+\addcontentsline{toc}{subsection}{Limites}
+
+Le travail comporte plusieurs limites qu'il convient d'assumer. La
+\textbf{profondeur historique} reste mod\'er\'ee, ce qui restreint la
+capacit\'e des mod\`eles \`a apprendre des r\'egimes budg\'etaires rares ou
+structurellement nouveaux. Certaines \textbf{lignes nouvellement ouvertes}
+ne disposent pas encore d'un historique suffisant pour qu'une m\'ethode
+statistique soit pertinente~; le dispositif les identifie explicitement
+plut\^ot que de produire un chiffre peu robuste. Plus fondamentalement,
+une \textbf{part irr\'eductible} de la d\'epense publique rel\`eve de
+d\'ecisions discr\'etionnaires (arbitrages politiques, priorit\'es
+minist\'erielles, allocations exceptionnelles) qui ne sont pas inscrites
+dans l'historique~: aucun mod\`ele ne peut les anticiper, et le dispositif
+ne pr\'etend pas s'y substituer. Enfin, le \textbf{p\'erim\`etre}
+se concentre sur le Minist\`ere de la Justice~; la transposition \`a
+d'autres minist\`eres demanderait une adaptation des hypoth\`eses aux
+sp\'ecificit\'es sectorielles.
+
+\phantomsection
+\subsection*{Perspectives}
+\addcontentsline{toc}{subsection}{Perspectives}
+
+Plusieurs prolongements paraissent naturels. \`A court terme, l'\textbf{actualisation
+automatis\'ee} du tableau de bord, connect\'ee aux extractions issues du syst\`eme
+de gestion int\'egr\'ee de la d\'epense (GID), permettrait de passer d'un outil
+de pilotage ponctuel \`a un v\'eritable observatoire en continu. \`A moyen terme,
+l'extension du dispositif \`a d'autres minist\`eres pilotes, dans un cadre
+coordonn\'e par la Direction du Budget, fournirait un \'echantillon plus large
+et permettrait de tester la robustesse de l'approche dans des contextes
+diff\'erents. Enfin, l'enrichissement progressif de l'historique disponible
+ouvrirait la voie \`a l'\'evaluation de mod\`eles plus riches lorsqu'ils
+deviendront statistiquement pertinents, en lien avec les ambitions de
+modernisation port\'ees par la LOF~130-13.
+
+\medskip
+
+En d\'efinitive, ce m\'emoire montre qu'un dispositif statistique simple,
+fond\'e sur des mod\`eles adapt\'es \`a la nature des donn\'ees disponibles
+et accompagn\'e d'indicateurs explicites de fiabilit\'e, peut constituer un
+instrument concret au service de la qualit\'e de la d\'epense publique.
+
+\newpage
+\bibliography{references}
+
+\input{chapters/annexes}
+
+\end{document}

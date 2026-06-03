@@ -1,0 +1,268 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body, div { font-family: var(--font-sans); }
+  .header { background: #1a2e4a; color: #fff; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border-radius: var(--border-radius-md) var(--border-radius-md) 0 0; }
+  .header-title { font-size: 13px; font-weight: 500; }
+  .header-sub { font-size: 11px; opacity: 0.65; margin-top: 1px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; }
+  .kpi { padding: 10px 14px; text-align: center; border-right: 1px solid rgba(255,255,255,0.08); }
+  .kpi:last-child { border-right: none; }
+  .kpi-val { font-size: 22px; font-weight: 500; color: #fff; line-height: 1.1; }
+  .kpi-lbl { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 3px; }
+  .kpi.ok { background: #1b6b3a; }
+  .kpi.attn { background: #b04a00; }
+  .kpi.crit { background: #8b1a1a; }
+  .kpi.risk { background: #5b4200; }
+  .kpi.anom { background: #3a2a6a; }
+  .kpi.base { background: #1a2e4a; }
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); padding: 0 12px; }
+  .tab { padding: 8px 14px; font-size: 12px; cursor: pointer; color: var(--color-text-secondary); border-bottom: 2px solid transparent; white-space: nowrap; }
+  .tab.active { color: var(--color-text-primary); border-bottom-color: #1a2e4a; font-weight: 500; }
+  .toolbar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); flex-wrap: wrap; }
+  .toolbar select { font-size: 11px; padding: 4px 8px; border: 0.5px solid var(--color-border-secondary); border-radius: 4px; background: var(--color-background-primary); color: var(--color-text-primary); }
+  .toolbar label { font-size: 11px; color: var(--color-text-secondary); }
+  .btn-filter { font-size: 11px; padding: 4px 12px; background: #1a2e4a; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-left: 4px; }
+  .count { margin-left: auto; font-size: 11px; color: var(--color-text-secondary); }
+  .table-wrap { overflow: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  th { background: var(--color-background-secondary); color: var(--color-text-secondary); padding: 6px 8px; text-align: left; font-weight: 500; border-bottom: 0.5px solid var(--color-border-tertiary); white-space: nowrap; cursor: pointer; }
+  th:hover { color: var(--color-text-primary); }
+  td { padding: 5px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); white-space: nowrap; }
+  tr:hover td { background: var(--color-background-secondary); cursor: pointer; }
+  tr.selected td { background: #eaf3fb; }
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 500; }
+  .badge-ok { background: #d4edda; color: #1b5e30; }
+  .badge-attn { background: #ffe5cc; color: #7a3000; }
+  .badge-crit { background: #fde0e0; color: #7a0000; }
+  .trend-up { color: #1b6b3a; font-size: 11px; }
+  .trend-dn { color: #8b1a1a; font-size: 11px; }
+  .trend-eq { color: var(--color-text-secondary); font-size: 11px; }
+  .sparkline { width: 52px; height: 18px; }
+  .detail-panel { background: var(--color-background-secondary); border-top: 0.5px solid var(--color-border-tertiary); padding: 12px 14px; display: none; font-size: 11px; }
+  .detail-panel.show { display: block; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .detail-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 6px; padding: 8px 10px; }
+  .detail-card-lbl { font-size: 10px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .detail-card-val { font-size: 16px; font-weight: 500; }
+  .confidence-bar { height: 6px; background: var(--color-border-tertiary); border-radius: 3px; margin-top: 6px; }
+  .confidence-fill { height: 6px; border-radius: 3px; background: #1a7a45; }
+  .why-badge { display: inline-block; margin: 3px 3px 0 0; padding: 2px 6px; border-radius: 8px; font-size: 10px; background: #e8f0fe; color: #1a3a7a; }
+  .anomaly-row td { background: #fff8e6; }
+  .anomaly-icon { color: #b06000; font-size: 10px; }
+  .footer { padding: 6px 12px; font-size: 10px; color: var(--color-text-secondary); border-top: 0.5px solid var(--color-border-tertiary); display: flex; justify-content: space-between; align-items: center; }
+  .export-btn { font-size: 10px; padding: 3px 8px; border: 0.5px solid var(--color-border-secondary); border-radius: 4px; background: var(--color-background-primary); cursor: pointer; color: var(--color-text-primary); }
+</style>
+
+<div style="border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden;">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div class="header-title">Ministère de la Justice — Système d'Alerte Précoce Budgétaire</div>
+      <div class="header-sub">Exercice 2025 · Données actualisées le 23/04/2025 à 08:14</div>
+    </div>
+    <div style="font-size:10px;opacity:0.5;">v2.0</div>
+  </div>
+
+  <!-- KPI strip -->
+  <div class="kpi-row">
+    <div class="kpi base"><div class="kpi-val">130</div><div class="kpi-lbl">Lignes analysées</div></div>
+    <div class="kpi ok"><div class="kpi-val">128</div><div class="kpi-lbl">OK ≥ 80 %</div></div>
+    <div class="kpi attn"><div class="kpi-val">2</div><div class="kpi-lbl">Attention 60–80 %</div></div>
+    <div class="kpi crit"><div class="kpi-val">0</div><div class="kpi-lbl">Critique &lt; 60 %</div></div>
+    <div class="kpi risk"><div class="kpi-val">0.5 MDH</div><div class="kpi-lbl">Crédits à risque</div></div>
+    <div class="kpi anom"><div class="kpi-val">4 ⚑</div><div class="kpi-lbl">Anomalies LOYO</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="showTab(0,this)">Tableau de bord</div>
+    <div class="tab" onclick="showTab(1,this)">Graphique</div>
+    <div class="tab" onclick="showTab(2,this)">Synthèse par région</div>
+    <div class="tab" onclick="showTab(3,this)">⚑ Anomalies (4)</div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <label>Programme</label>
+    <select><option>Tous</option><option>P300</option><option>P301</option><option>P303</option></select>
+    <label>Région</label>
+    <select><option>Toutes</option><option>MARRAKECH-SAFI</option><option>RABAT-SALÉ-KÉNITRA</option></select>
+    <label>Risque</label>
+    <select><option>Tous</option><option>Attention</option><option>Critique</option></select>
+    <label>Budget</label>
+    <select style="border-color:#1a2e4a;"><option>Tous</option></select>
+    <button class="btn-filter">Filtrer</button>
+    <div class="count">130 ligne(s) affichée(s)</div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Programme ↕</th>
+          <th>Ligne budgétaire ↕</th>
+          <th>Région ↕</th>
+          <th>LF (MDH) ↕</th>
+          <th>T2 réel ↕</th>
+          <th>Trend</th>
+          <th>T4 prévu ↕</th>
+          <th>Confiance</th>
+          <th>Risque ↕</th>
+          <th>MDH à risque ↕</th>
+          <th>Anomalie</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr class="anomaly-row" onclick="selectRow(this,0)">
+          <td>P301 – Perf. Admin.</td>
+          <td>Construction juridictions rég.</td>
+          <td>MARRAKECH-SAFI</td>
+          <td>3.0</td>
+          <td>2.6 %</td>
+          <td><span class="trend-dn">↓ –0.4</span></td>
+          <td>76.2 %</td>
+          <td><svg class="sparkline" viewBox="0 0 52 18"><polyline points="4,14 16,12 28,10 40,6 52,4" fill="none" stroke="#b06000" stroke-width="1.5"/></svg></td>
+          <td><span class="badge badge-attn">Attention</span></td>
+          <td style="color:#b06000;font-weight:500;">0.11</td>
+          <td><span class="anomaly-icon">⚑ Sous-exéc.</span></td>
+        </tr>
+        <tr class="anomaly-row" onclick="selectRow(this,1)">
+          <td>P301 – Perf. Admin.</td>
+          <td>Construction tribunaux pénaux</td>
+          <td>SERVICES COMMUNS</td>
+          <td>22.6</td>
+          <td>2.8 %</td>
+          <td><span class="trend-dn">↓ –0.6</span></td>
+          <td>78.1 %</td>
+          <td><svg class="sparkline" viewBox="0 0 52 18"><polyline points="4,14 16,11 28,9 40,7 52,5" fill="none" stroke="#b06000" stroke-width="1.5"/></svg></td>
+          <td><span class="badge badge-attn">Attention</span></td>
+          <td style="color:#b06000;font-weight:500;">0.42</td>
+          <td><span class="anomaly-icon">⚑ Écart modèle</span></td>
+        </tr>
+        <tr onclick="selectRow(this,2)">
+          <td>P300 – Soutien</td>
+          <td>Construction Centres Juges Résidents</td>
+          <td>SERVICES COMMUNS</td>
+          <td>15.1</td>
+          <td>2.6 %</td>
+          <td><span class="trend-eq">→ 0.0</span></td>
+          <td>80.0 %</td>
+          <td><svg class="sparkline" viewBox="0 0 52 18"><polyline points="4,14 16,11 28,9 40,5 52,3" fill="none" stroke="#1b6b3a" stroke-width="1.5"/></svg></td>
+          <td><span class="badge badge-ok">OK</span></td>
+          <td style="color:var(--color-text-secondary);">0.00</td>
+          <td>—</td>
+        </tr>
+        <tr onclick="selectRow(this,3)">
+          <td>P301 – Perf. Admin.</td>
+          <td>Construction juridictions rég.</td>
+          <td>L'ORIENTAL</td>
+          <td>3.0</td>
+          <td>3.0 %</td>
+          <td><span class="trend-up">↑ +0.3</span></td>
+          <td>80.6 %</td>
+          <td><svg class="sparkline" viewBox="0 0 52 18"><polyline points="4,15 16,11 28,8 40,5 52,3" fill="none" stroke="#1b6b3a" stroke-width="1.5"/></svg></td>
+          <td><span class="badge badge-ok">OK</span></td>
+          <td style="color:var(--color-text-secondary);">0.00</td>
+          <td>—</td>
+        </tr>
+        <tr onclick="selectRow(this,4)">
+          <td>P301 – Perf. Admin.</td>
+          <td>Réhabilitation juridictions régionales</td>
+          <td>CASABLANCA-SETTAT</td>
+          <td>1.6</td>
+          <td>2.6 %</td>
+          <td><span class="trend-eq">→ 0.0</span></td>
+          <td>81.7 %</td>
+          <td><svg class="sparkline" viewBox="0 0 52 18"><polyline points="4,15 16,12 28,9 40,5 52,2" fill="none" stroke="#1b6b3a" stroke-width="1.5"/></svg></td>
+          <td><span class="badge badge-ok">OK</span></td>
+          <td style="color:var(--color-text-secondary);">0.00</td>
+          <td>—</td>
+        </tr>
+        <tr class="anomaly-row" onclick="selectRow(this,5)">
+          <td>P301 – Perf. Admin.</td>
+          <td>Réhabilitation juridictions régionales</td>
+          <td>GUELMIM-OUED NOUN</td>
+          <td>1.6</td>
+          <td>1.2 %</td>
+          <td><span class="trend-dn">↓ –1.1</span></td>
+          <td>84.3 %</td>
+          <td><svg class="sparkline" viewBox="0 0 52 18"><polyline points="4,12 16,10 28,9 40,6 52,3" fill="none" stroke="#b06000" stroke-width="1.5"/></svg></td>
+          <td><span class="badge badge-ok">OK</span></td>
+          <td style="color:var(--color-text-secondary);">0.00</td>
+          <td><span class="anomaly-icon">⚑ Sous-exéc. modérée</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-panel" id="detail">
+    <div style="font-size:12px;font-weight:500;margin-bottom:8px;color:var(--color-text-primary);" id="detail-title">Détail de la ligne sélectionnée</div>
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="detail-card-lbl">T4 prévu (XGBoost)</div>
+        <div class="detail-card-val" id="d-t4">76.2 %</div>
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-top:4px;">IC 95 % : 71.4 % – 81.0 %</div>
+        <div class="confidence-bar"><div class="confidence-fill" id="d-bar" style="width:72%"></div></div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-lbl">Facteurs déterminants (SHAP)</div>
+        <div style="margin-top:4px;" id="d-shap">
+          <span class="why-badge">T2 réel faible</span>
+          <span class="why-badge">Région à risque</span>
+          <span class="why-badge">Délai marché</span>
+        </div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-lbl">Comparaison régionale (T2 moy.)</div>
+        <div class="detail-card-val" id="d-reg">2.6 % <span style="font-size:12px;color:#8b1a1a;">vs 3.1 % nat.</span></div>
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-top:4px;" id="d-hist">Historique Q1 2024 : 2.9 %</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>Modèle XGBoost · RMSE LOYO 0.135 · Entraîné sur 2019–2024</span>
+    <div style="display:flex;gap:6px;">
+      <button class="export-btn">⬇ Excel</button>
+      <button class="export-btn">⬇ PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const details = [
+  { title:"P301 · Construction juridictions · MARRAKECH-SAFI", t4:"76.2 %", bar:"76", shap:["T2 réel faible","Région à risque","Délai marché"], reg:"2.6 % vs 3.1 % nat.", hist:"Historique Q1 2024 : 2.9 %" },
+  { title:"P301 · Construction tribunaux pénaux · SERVICES COMMUNS", t4:"78.1 %", bar:"78", shap:["Faible taux prog.","Complexité marché","Dépassement délai"], reg:"2.8 % vs 3.1 % nat.", hist:"Historique Q1 2024 : 3.4 %" },
+  { title:"P300 · Centres Juges Résidents · SERVICES COMMUNS", t4:"80.0 %", bar:"80", shap:["Exécution normale","Marché attribué","Région stable"], reg:"2.6 % vs 3.1 % nat.", hist:"Historique Q1 2024 : 2.7 %" },
+  { title:"P301 · Construction juridictions · L'ORIENTAL", t4:"80.6 %", bar:"81", shap:["Bonne trajectoire","Engagements forts","Liquidations ok"], reg:"3.0 % vs 3.1 % nat.", hist:"Historique Q1 2024 : 2.8 %" },
+  { title:"P301 · Réhabilitation juridictions · CASABLANCA-SETTAT", t4:"81.7 %", bar:"82", shap:["Exécution normale","Bons engagements","Région leader"], reg:"2.6 % vs 3.1 % nat.", hist:"Historique Q1 2024 : 2.5 %" },
+  { title:"P301 · Réhabilitation juridictions · GUELMIM-OUED NOUN", t4:"84.3 %", bar:"84", shap:["Sous-exéc. T2","Région éloignée","Faible liquidation"], reg:"1.2 % vs 3.1 % nat.", hist:"Historique Q1 2024 : 1.8 %" },
+];
+let sel = null;
+function selectRow(row, idx) {
+  document.querySelectorAll('tr.selected').forEach(r => r.classList.remove('selected'));
+  const panel = document.getElementById('detail');
+  if (sel === idx) { sel = null; panel.classList.remove('show'); return; }
+  sel = idx;
+  row.classList.add('selected');
+  const d = details[idx];
+  document.getElementById('detail-title').textContent = d.title;
+  document.getElementById('d-t4').textContent = d.t4;
+  document.getElementById('d-bar').style.width = d.bar + '%';
+  document.getElementById('d-bar').style.background = parseInt(d.bar) < 80 ? '#b06000' : '#1b6b3a';
+  document.getElementById('d-shap').innerHTML = d.shap.map(s=>`<span class="why-badge">${s}</span>`).join('');
+  document.getElementById('d-reg').innerHTML = d.reg;
+  document.getElementById('d-hist').textContent = d.hist;
+  panel.classList.add('show');
+}
+function showTab(i, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
